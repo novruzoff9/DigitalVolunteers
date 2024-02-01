@@ -18,10 +18,6 @@
             <p class="caption">
                 @Html.Raw(Model.Caption)
             </p>
-            @if (Model.DateTime > DateTime.Now)
-            {
-                <a href="@Model.RegistrationURL">Qeydiyyatdan keç</a>
-            }
         </div>
     </article>
     <footer>

@@ -149,6 +149,10 @@ namespace DigitalVolunteers.Controllers
                 {
                     return Json("Member", JsonRequestBehavior.AllowGet);
                 }
+                else if(user.Department == "Rectorship" || user.Department == "Vice-Rector")
+                {
+                    return Json("Rectorship", JsonRequestBehavior.AllowGet);
+                }
                 return Json("Staff", JsonRequestBehavior.AllowGet);
             }
             else

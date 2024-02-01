@@ -434,13 +434,7 @@ namespace DigitalVolunteers.Controllers
         {
             int sessionid = (int)Session["UserID"];
             var user = UserM.GetByID(sessionid);
-            int currentsessionid = Convert.ToInt16(Session["UserID"]);
             ViewBag.congratulations = "false";
-
-            if (!Session["UserID"].Equals(sessionid))
-            {
-                user = UserM.GetByID(currentsessionid);
-            }
             if (user.BirthDate.Day == DateTime.Today.Day && user.BirthDate.Month == DateTime.Today.Month && 
                 user.LastOnline.Date != DateTime.Today)
             {
@@ -449,6 +443,21 @@ namespace DigitalVolunteers.Controllers
             user.LastOnline = DateTime.Now;
             UserM.Update(user);
             return View(user);
+        }
+
+        public ActionResult Rectorship()
+        {
+            int sessionid = (int)Session["UserID"];
+            var rector = UserM.GetByID(sessionid);
+            //ViewBag.congratulations = "false";
+            //if (user.BirthDate.Day == DateTime.Today.Day && user.BirthDate.Month == DateTime.Today.Month &&
+            //    rector.LastOnline.Date != DateTime.Today.Date)
+            //{
+            //    ViewBag.congratulations = "true";
+            //}
+            rector.LastOnline = DateTime.Now;
+            UserM.Update(rector);
+            return View(rector);
         }
 
         public PartialViewResult UserActivityPoints(int id)
@@ -493,7 +502,7 @@ namespace DigitalVolunteers.Controllers
                 staff.Remove(viceleader);
                 staff.Add(viceleader);
             }
-            staff.Add(leader);
+            if (!(leader == null)) { staff.Add(leader); }
             staff.Reverse();
             return PartialView(staff);
         }
@@ -1047,7 +1056,7 @@ namespace DigitalVolunteers.Controllers
             point.Verified = true;
             PointM.Update(point);
             var user = UserM.GetByID(point.UserID);
-            user.ActivityPoint += point.Point;
+            user.ActivityPoint = user.ActivityPoint + point.Point;
             UserM.Update(user);
             return RedirectToAction("VerifyActivityPoints");
         }

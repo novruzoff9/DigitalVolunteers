@@ -23,8 +23,9 @@
     @{
         string role = "";
         string modelRole = Model.Role;
-        if (Model.Role == "President") { role = "Təşkilat üzrə sədr"; }
-        else if (Model.Role == "Vice-President") { role = "Təşkilat üzrə sədr müavini"; }
+        if (modelRole == "Rector") { role = "Üniversitet Rektoru"; }
+        else if (modelRole == "President") { role = "Təşkilat üzrə sədr"; }
+        else if (modelRole == "Vice-President") { role = "Təşkilat üzrə sədr müavini"; }
         else if (modelRole == "Member") { role = "Üzv"; }
         else if (modelRole == "Leader") { role = "Departament üzrə Rəhbər"; }
         else if (modelRole == "Chairman") { role = "Fakültə üzrə Sədr"; }
@@ -44,12 +45,15 @@
         else if (modelRole == "GDesigner") { role = "Qrafik dizayner"; }
         else if (modelRole == "Secretary") { role = "Katib"; }
         else if (modelRole == "Advisor") { role = "Müşavir"; }
+        else if (modelRole == "Advisor") { role = "Müşavir"; }
+        else if (Model.Department == "Vice-Rector") { role = modelRole + " üzrə Prorektor"; }
     }
     <p id="role">@role</p>
     <p id="username">@Model.UserName</p>
     @{
         string department = "";
-        if (Model.Department == "Secretary") { department = "Katib"; }
+        if (Model.Department == "Vice-Rector") { department = "Prorektor"; }
+        else if (Model.Department == "Secretary") { department = "Katib"; }
         else if (Model.Department == "IT") { department = "İnformasiya Texnologiyaları departamenti"; }
         else if (Model.Department == "SMM") { department = "Sosial Media Marketinq departamenti"; }
         else if (Model.Department == "HR") { department = "İnsan Resursları departamenti"; }
@@ -61,6 +65,7 @@
         else if (Model.Department == "Organizer") { department = "Təşkilati işlər departamenti"; }
         else if (Model.Department == "Security") { department = "Nəzarət və təftiş"; }
         else if (Model.Department == "Management") { department = "İdarə"; }
+        else { department = Model.Department; }
     }
     <p>Departament: <span id="department">@department</span></p>
     @{
@@ -86,7 +91,7 @@
     <p>E-mail: <span id="mail">@Model.EMail</span></p>
     <p>Qeydiyyat tarixi: <span id="signdate">@Model.SignDate.ToString("dd MMM yyyy")</span></p>
     <p>Doğum tarixi: <span id="birthdate">@Model.BirthDate.ToString("dd MMM yyyy")</span></p>
-    <button class="action-button primary"><i class="fas fa-envelope"></i> &nbsp;&nbsp;Xəta bildir</button>
+    @*<button class="action-button primary"><i class="fas fa-envelope"></i> &nbsp;&nbsp;Xəta bildir</button>*@
 </section>
 
 <div id="about">

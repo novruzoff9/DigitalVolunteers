@@ -1,38 +1,35 @@
-﻿@{
-    ViewBag.Title = "Dashboard";
+﻿@model EntityLayer.Concrete.User
+@{
+    ViewBag.Title = "Rectorship";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
 <style>
-    aside ul #dashboard {
-        border-radius: 8px;
-        background-color: #006bce;
+    section#rectordetails {
+        width: calc(30% - 30px);
+        transition: 0.4s;
+        height: 100%;
+        align-items: center;
+        justify-content: center;
     }
 
-        aside ul #dashboard p, aside ul #dashboard i {
-            color: white;
-        }
+    section#rectordetails img {
+        width: 100px;
+        border-radius: 50%;
+    }
 
-        aside ul #dashboard:hover {
-            padding-left: 0;
-        }
-
-            aside ul #dashboard:hover p, aside ul #dashboard:hover i {
-                color: white;
-            }
 
     .change .const {
         color: #080708;
         background-color: #ccc;
     }
+
     .userlist .users .user .main-datas img {
-    width: 50px;
-    height: 50px;
-    margin: auto 0;
-    border-radius: 50%;
+        width: 50px;
+        height: 50px;
+        margin: auto 0;
+        border-radius: 50%;
     }
-
-
 </style>
 
 <link href="~/Style/AdminPanel/APHome.css" rel="stylesheet" />
@@ -40,12 +37,23 @@
 <section id="digi-greeting">
     <img src="~/Images/Digi_greeting.png" alt="">
     <div class="welcome">
-        <p class="hello">Salam @Session["UserFirstName"] Xoş gəlmisən!</p>
-        <p class="digi">Mən Digi. Yaxın zamanda sənə daha yaxın olacağam!</p>
+        @if (Model.Role == "Rector")
+        {
+            <p class="hello">Xoş gəldiniz əziz rektorumuz,<br> @Model.Name @Model.Surname</p>
+        }
+        else if (Model.Department == "Vice-Rector")
+        {
+            <p class="hello">Xoş gəldiniz əziz prorektorumuz,<br> @Model.Name @Model.Surname</p>
+        }
+        <p class="digi">Rəqəmsal Könüllülər Təşkilatı sizi salamlayır.</p>
     </div>
 </section>
 
-@Html.Action("ActiveUsers", "Admin")
+<section id="rectordetails" class="flex-column">
+    <img src="@Model.UserImage" class="" />
+    <p class="fw-bold fs-3">@Model.Name @Model.Surname</p>
+    <p class="fs-5">@Model.Role üzrə Prorektor</p>
+</section>
 
 <div id="counts">
 
@@ -73,20 +81,15 @@
 </div>
 
 
-<div id="newschart" class="half-width">
-    <div id="readingofnews" class="piechart"></div>
-</div>
 
-<div id="corpuschart" class="half-width">
+@*<div id="corpuschart" class="half-width">
     <div id="activityofcorpus" class="piechart"></div>
 </div>
 
 <div id="weeklylogin">
     <div id="loginchart" class="piechart"></div>
-</div>
+</div>*@
 
-
-@Html.Action("LastActivities", "Admin")
 
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 
@@ -94,8 +97,10 @@
     $(document).ready(function () {
 
         if (screen.width > 600) {
-            $("#digi-greeting").height($("#hardworkers").height());
+            $("#rectordetails").height($("#digi-greeting").height());
         }
+
+        $("#rectordetails").css("margin", "15px");
     });
 </script>
 
@@ -174,65 +179,10 @@
         var eventchart = new google.visualization.PieChart(document.getElementById('activityofcorpus'));
 
         eventchart.draw(data, options);
+
     }
 </script>
 
-<script type="text/javascript">
-
-    $(document).ready(function () {
-        $.ajax({
-            type: "Get",
-            url: "/Admin/ChartLists",
-            data: {
-                list: "news"
-            },
-            success: function (newsreadings) {
-                google.charts.setOnLoadCallback(function () {
-                    drawNewsChart(newsreadings);
-                });
-            }
-        });
-    });
-
-    function drawNewsChart(items) {
-
-        var data = new google.visualization.DataTable();
-        data.addColumn('string', 'Xəbər');
-        data.addColumn('number', 'Oxunma sayı');
-        var dataArray = [];
-        $.each(items, function (i, obj) {
-            dataArray.push([obj.Name, obj.NowValue]);
-        });
-        data.addRows(dataArray);
-
-        var view = new google.visualization.DataView(data);
-
-        var options = {
-            title: "Ən çox oxunan 5 xəbər",
-            titleTextStyle: {
-                fontSize: 22
-            },
-            height: 500,
-            //colors: ['#131850', '#37abdc', '#5E17EB', '#006bce'],
-            //["#131850"],
-            //["#37abdc"],
-            //["#5E17EB"],
-            //["#006bce"],
-            //["#2A245E"]
-            bar: { groupWidth: "90%" },
-            legend: { position: "none" },
-            chartArea: {
-                top: 70,
-                width: "85%"
-            }
-        };
-        var columnchart = new google.visualization.ColumnChart(document.getElementById("readingofnews"));
-
-        $(document).ready(function () {
-            columnchart.draw(view, options);
-        });
-    }
-</script>
 
 <script type="text/javascript">
     $(document).ready(function () {
@@ -306,3 +256,4 @@
         });
     }
 </script>
+
