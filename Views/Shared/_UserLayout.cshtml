@@ -1,0 +1,377 @@
+﻿@using BusinessLayer.Concrete
+@using DataAccessLayer.EntityFramework;
+@using EntityLayer.Concrete;
+@{
+    Layout = null;
+    UserManager UserM = new UserManager(new EfUserDAL());
+    int sessionid;
+    User user = new User();
+    try
+    {
+        sessionid = (int)Session["UserID"];
+        user = UserM.GetByID(sessionid);
+    }
+    catch (Exception)
+    {
+        sessionid = 0;
+    }
+}
+
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-M3Y25VW1RJ"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-M3Y25VW1RJ');
+    </script>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Rəqəmsal Könüllülər Təşkilatı</title>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9025664961128837"
+            crossorigin="anonymous"></script>
+    <link rel="icon" type="image/png" href="~/Images/new Logo - white.png" />
+    <link href="~/Style/Home/Mainpage.css" rel="stylesheet" />
+    <link href="~/Style/UIStyle123458.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+          integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ=="
+          crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9025664961128837"
+            crossorigin="anonymous"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous" />
+    <link href="https://fonts.googleapis.com/css2?family=Caramel&display=swap" rel="stylesheet" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Pinyon+Script&display=swap" rel="stylesheet">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+</head>
+
+<body>
+    <style>
+        .header-right img {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+        }
+
+        header .mini-menu {
+            display: none;
+            position: absolute;
+            top: 100px;
+            padding: 20px;
+            border-radius: 8px;
+            background-color: white;
+            box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+            z-index: 5;
+        }
+
+        header .profile-menu {
+            right: 50px;
+        }
+
+            header .profile-menu ul {
+                list-style: none;
+                padding: 0;
+                margin: 0;
+            }
+
+                header .profile-menu ul .menu-line {
+                    margin: 6px 0;
+                }
+
+                header .profile-menu ul li {
+                    padding: 4px 8px;
+                    cursor: pointer;
+                }
+
+                    header .profile-menu ul li a {
+                        display: flex;
+                        flex-direction: row;
+                        align-items: center;
+                    }
+
+                    header .profile-menu ul li i {
+                        color: #212529;
+                    }
+
+                    header .profile-menu ul li p {
+                        font-size: 18px;
+                        margin: 0;
+                        margin-left: 8px;
+                        color: #212529;
+                        font-weight: 500;
+                    }
+
+                    header .profile-menu ul li:not(.profile-details):hover {
+                        background-color: #bcbdc3;
+                    }
+
+                    header .profile-menu ul li:not(.profile-details) {
+                        border-radius: 8px;
+                    }
+
+                    header .profile-menu ul li:not(:first-child) {
+                        margin-top: 6px;
+                    }
+
+                    header .profile-menu ul li:not(:last-child) {
+                        margin-bottom: 6px;
+                    }
+
+                header .profile-menu ul .profile-details {
+                    display: flex;
+                    flex-direction: row;
+                    align-items: center;
+                }
+
+                    header .profile-menu ul .profile-details img {
+                        width: 60px;
+                        height: 60px;
+                        border-radius: 50%;
+                    }
+
+                    header .profile-menu ul .profile-details .name-role {
+                        margin-left: 8px;
+                    }
+
+                        header .profile-menu ul .profile-details .name-role .name {
+                            color: #080708;
+                            font-weight: 500;
+                        }
+
+                        header .profile-menu ul .profile-details .name-role .department {
+                            font-weight: 400;
+                            color: #aaa;
+                        }
+    </style>
+    <header>
+        <div class="header-left">
+            <a href="/Home/Index"><img src="~/Images/new Logo - white.png" alt="" /></a>
+            <i id="menubtn" class="fas fa-bars"></i>
+        </div>
+        <div class="header-mid">
+            <ul>
+                <a href="/Events/Index">
+                <li>Tədbirlər</li>
+                </a>
+                <a href="/Home/About">
+                <li>Haqqında</li>
+                </a>
+                <a href="/News/Index">
+                <li>Xəbərlər</li>
+                </a>
+                <a href="/Staff/Index">
+                <li>Heyət</li>
+                </a>
+            </ul>
+            <a href="/Home/Index"><img src="~/Images/new Logo - white.png" alt="" /></a>
+        </div>
+        @if (sessionid != 0)
+        {
+            <div class="header-right">
+                <img class="profilebtn" width="60px" src="@user.UserImage" />
+            </div>
+
+            <div class="profile-menu mini-menu">
+                <ul>
+                    <li class="profile-details">
+                        <img src="@user.UserImage" alt="">
+                        <div class="name-role">
+                            <p class="name">@user.Name @user.Surname</p>
+                            @{
+                                string modelRole = user.Role;
+                                string role = "";
+                                if (modelRole == "President") { role = "Təşkilat üzrə Sədr"; }
+                                else if (modelRole == "Vice-President") { role = "Təşkilat üzrə Sədr müavini"; }
+                                else if (modelRole == "Chairman") { role = "Fakültə üzrə Sədr"; }
+                                else if (modelRole == "Vice-Chairman") { role = "Sədr müavini"; }
+                                else if (modelRole == "Staff") { role = "Heyət üzvü"; }
+                                else if (modelRole == "Leader") { role = "Departament üzrə Rəhbər"; }
+                                else if (modelRole == "Vice-Chairman") { role = "Fakültə üzrə Sədr müavini"; }
+                                else if (modelRole == "Vice-Leader") { role = "Departament üzrə Rəhbər müavini"; }
+                                else if (modelRole == "HR") { role = "İnsan Resursları"; }
+                                else if (modelRole == "PR") { role = "İctimaiyyətlə əlaqələr"; }
+                                else if (modelRole == "IT") { role = "İnformasiya Texnologiyaları"; }
+                                else if (modelRole == "SMM") { role = "SMM"; }
+                                else if (modelRole == "PM") { role = "Layihə Meneceri"; }
+                                else if (modelRole == "CW") { role = "Copywriter"; }
+                                else if (modelRole == "WWM") { role = "Üzvlərlə iş"; }
+                                else if (modelRole == "Photograph") { role = "Fotoqraf"; }
+                                else if (modelRole == "Photograph/Videograph") { role = "Fotoqraf/Videoqraf"; }
+                                else if (modelRole == "Coordinator") { role = "Koordinator"; }
+                                else if (modelRole == "Security") { role = "Nəzarət və Təftiş"; }
+                                else if (modelRole == "GDesigner") { role = "Qrafik dizayner"; }
+                                else if (modelRole == "Secretary") { role = "Katib"; }
+                                else if (modelRole == "Advisor") { role = "Müşavir"; }
+                                else if (modelRole == "Member") { role = "Üzv"; }
+                            }
+                            <p class="department">@role</p>
+                        </div>
+                    </li>
+                    <hr class="menu-line">
+                    </hr>
+                    <li>
+                        @if (user.Department == "Member")
+                        {
+                            <a href="@Url.Action("UserProfile","Member")">
+                                <i class="fas fa-user"></i>
+                                <p>Profilim</p>
+                            </a>
+                        }
+                        else
+                        {
+                        <a href="@Url.Action("UserProfile","Admin")">
+                            <i class="fas fa-user"></i>
+                            <p>Profilim</p>
+                        </a>
+                        }
+                        </li>
+                    <li>
+                        <a href="/Member/Settings">
+                            <i class="fas fa-cog"></i>
+                            <p>Parametrlər</p>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/Member/QRCode">
+                            <i class="fas fa-qrcode"></i>
+                            <p>QR Kodum</p>
+                        </a>
+                    </li>
+                    <hr class="menu-line">
+                    </hr>
+                    <li>
+                        <a href="/Login/LogOut">
+                            <i class="fas fa-sign-out-alt"></i>
+                            <p>Çıxış</p>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+          }
+          else
+          {
+            <div class="header-right">
+                <a href="/Login/UserLogin">Üzv girişi</a>
+            </div>
+           }
+
+    </header>
+
+    <nav>
+        <ul>
+            <a href="/Events/Index">
+                <li>Tədbirlər</li>
+            </a>
+            <a href="/Home/About">
+                <li>Haqqında</li>
+            </a>
+            <a href="/News/Index">
+                <li>Xəbərlər</li>
+            </a>
+            <a href="/Staff/Index">
+                <li>Heyət</li>
+            </a>
+        </ul>
+    </nav>
+
+    <main>
+        @RenderBody()
+    </main>
+
+    <footer>
+        <div class="creators">
+            <p>
+                Vebsayt
+                <a href="https://www.linkedin.com/in/yagmur-novruzlu-50779a21a/" target="_blank">Yağmur Novruzlu</a> və
+                <a href="https://www.linkedin.com/in/yusif-farajli-87460424a/" target="_blank">Yusif Fərəcli</a>
+                tərəfindən hazırlanmışdır
+            </p>
+        </div>
+        <div class="socialmedia">
+            <p>Sosial şəbəkələrimizdən bizi daha yaxından izləyin</p>
+            <div class="links">
+                <a target="_blank" href="https://www.instagram.com/unecdigitalvolunteers/">
+                    <i class="fab fa-instagram instagram"></i>
+                </a>
+                <a target="_blank" href="https://t.me/reqemsalkonulluler">
+                    <i class="fab fa-telegram-plane telegram"></i>
+                </a>
+                <a target="_blank" href="https://www.facebook.com/unecdg">
+                    <i class="fab fa-facebook facebook"></i>
+                </a>
+                <a target="_blank"
+                   href="https://www.linkedin.com/company/unec-digital-volunteers-organization/mycompany/">
+                    <i class="fab fa-linkedin linkedin"></i>
+                </a>
+                <a target="_blank" href="https://www.youtube.com/unecdigitalvolunteers">
+                    <i class="fab fa-youtube youtube"></i>
+                </a>
+            </div>
+        </div>
+
+    </footer>
+
+
+
+    <script>
+        $(document).ready(function () {
+            console.log(@sessionid);
+            var height = $(window).height();
+            var header = $("body>header");
+            headerh = header.outerHeight();
+
+            if ($("section#home").height() < height - headerh) {
+                $("section#home").height(height - headerh);
+            }
+            if (screen.width < 600) {
+                $("section#home").css("margin-top", headerh + "px");
+            }
+            if (window.innerWidth < 600) {
+                var imgw = $("section#lastevent>.image").width();
+                $("section#lastevent>.image").height(imgw / 16 * 9);
+            }
+
+            $(function () {
+                $(".stat .value").each(function () {
+                    $(this).prop('counter', 0).animate({
+                        counter: $(this).attr("data-value")
+                    },
+                        {
+                            duration: 2000,
+                            step: function (counter) {
+                                $(this).text(Math.ceil(counter));
+                            }
+                        })
+                });
+            });
+
+            $("#menubtn").click(function () {
+                $("nav").toggleClass("mobile-nav");
+                if ($("nav").hasClass("mobile-nav")) {
+                    $("html, body").css("overflow", "hidden");
+                }
+                else {
+                    $("html, body").css("overflow", "auto");
+                }
+            });
+
+            $(".profilebtn").click(function () {
+                $(".notfication-menu").hide();
+                $(".profile-menu").toggle();
+            });
+        });
+    </script>
+</body>
+
+</html>

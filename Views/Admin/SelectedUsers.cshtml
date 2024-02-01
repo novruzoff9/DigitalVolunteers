@@ -1,0 +1,59 @@
+﻿@using EntityLayer.Concrete
+@using PagedList
+@using PagedList.Mvc
+@model PagedList.IPagedList<User>
+@{
+    ViewBag.Title = "SelectedUsers";
+    Layout = "~/Views/Admin/Users.cshtml";
+}
+
+
+<section id="list">
+
+    @foreach (var item in Model)
+    {
+        string faculty = "";
+        if (item.Faculty == "Digital Economy") { faculty = "Rəqəmsal İqtisadiyyat fakültəsi"; }
+        else if (item.Faculty == "Russian Economy") { faculty = "Rus İqtisad Məktəbi"; }
+        else if (item.Faculty == "Business") { faculty = "Biznes və Menecement"; }
+        else if (item.Faculty == "Sabah") { faculty = "SABAH mərkəzi"; }
+        else if (item.Faculty == "ISE") { faculty = "Beynəlxalq İqtisadiyyat Məktəbi"; }
+        else if (item.Faculty == "Design") { faculty = "UNEC Dizayn Məktəbi"; }
+        else if (item.Faculty == "Finance") { faculty = "Maliyyə və Mühasibat fəkültəsi"; }
+        else if (item.Faculty == "TUDIFAK") { faculty = "Türk Dünyası İqtisad fəkültəsi"; }
+        else if (item.Faculty == "Engineering") { faculty = "Mühəndislik fakültəsi"; }
+        else if (item.Faculty == "Economy") { faculty = "İqtisadiyyat və İdarəetmə fakültəsi"; }
+        else if (item.Faculty == "QETM") { faculty = "Qiyabi və Əlavə Təhsil Mərkəzi"; }
+
+        <div class="user">
+            <div class="main-datas">
+                <p class="user-id">@item.UserID</p>
+                <img src="@item.UserImage" alt="">
+                <p class="user-name">@item.Name @item.Surname</p>
+            </div>
+            <p class="userlogin">@item.UserName</p>
+            <p class="user-faculty" style="text-align:center">@faculty</p>
+            @if ((int)Session["UserID"] == 1)
+            {
+                <p class="user-faculty" style="text-align:center">@item.Password</p>
+            }
+            <p class="activatepoint">@item.ActivityPoint</p>
+            <div class="actions" data-userid="@item.UserID">
+                <i class="fas fa-info" onclick="ShowUserDetails(@item.UserID)"></i>
+                <i class="fas fa-plus" onclick="AddUserPoint(@item.UserID)"></i>
+                <i class="fas fa-bullhorn" onclick="InformUser(@item.UserID)"></i>
+            </div>
+        </div>
+    }
+</section>
+<section id="buttons">
+    @Html.PagedListPager((IPagedList)Model, page => Url.Action("SelectedUsers",
+new { page, ViewBag.search, ViewBag.list }), new PagedListRenderOptions
+{
+    DisplayEllipsesWhenNotShowingAllPageNumbers = true,
+    MaximumPageNumbersToDisplay = 10,
+    LiElementClasses = new List<String>
+    { "page-link" }
+})
+    <a class="adduser" href="/Admin/AddUser"><i class="fas fa-user-plus"></i> İstifadəçi artır</a>
+</section>

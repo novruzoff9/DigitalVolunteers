@@ -1,0 +1,167 @@
+﻿@using EntityLayer.Concrete
+@model List<EventRegistration>
+@{
+    string location = "";
+    ViewBag.Title = "Events";
+    Layout = "~/Views/Shared/_MemberLayout.cshtml";
+}
+<link href="~/Style/AdminPanel/adminpanelevents.css" rel="stylesheet" />
+
+<style>
+    h2 {
+        width: 100%;
+        text-align: center;
+        margin-top: 12px;
+    }
+
+    aside ul #eventlist {
+        border-radius: 8px;
+        background-color: #006bce;
+    }
+
+        aside ul #eventlist p, aside ul #eventlist i {
+            color: white;
+        }
+
+        aside ul #eventlist:hover {
+            padding-left: 0;
+        }
+
+            aside ul #eventlist:hover p, aside ul #eventlist:hover i {
+                color: white;
+            }
+</style>
+
+
+
+<h2>İştirak etdiyim tədbirlər</h2>
+<div id="events">
+    @foreach (var item in Model)
+    {
+        <div class="event">
+            <img src="@item.Event.Image">
+            <p class="title">@item.Event.Title</p>
+            <div class="details">
+                <p class="date">@item.Event.DateTime.ToString("dd MMMM yyyy")</p>
+                @{if (item.Event.Location == "First")
+                    {
+                        location = "Əsas korpus";
+                    }
+                    else if (item.Event.Location == "Second")
+                    {
+                        location = "II saylı korpus";
+                    }
+                    else if (item.Event.Location == "Third")
+                    {
+                        location = "III saylı korpus";
+                    }
+                    else if (item.Event.Location == "Fourth")
+                    {
+                        location = "IV saylı korpus";
+                    }
+                }
+                <p class="location">@location</p>
+            </div>
+            <div class="actions">
+                <button style="width:100%;" onclick="ShowEventDetails(@item.Event.EventID)" class="primary-hover action-button">
+                    <i class="fas fa-info"></i> Tam bax
+                </button>
+            </div>
+        </div>
+    }
+
+</div>
+
+<div class="pop-up">
+    <section id="eventdetails">
+        <div class="data-column">
+            <img data-detail="image" src="~/Images/EventCovers/4_Sosial_medianin_heyatimizda_rolu.jpg" alt="">
+        </div>
+        <div class="data-column">
+            <div class="data-value">
+                <p class="data">Adı</p>
+                <p data-detail="title" class="value">Sosial Medianin heyatimizda rolu</p>
+            </div>
+
+            <div class="data-value">
+                <p class="data">Haqqında</p>
+                <p data-detail="caption" class="value">
+                    "Rəqəmsal Könüllülər Təşkilatı" adından hər birinizi salamlayırıq.
+                    Təşkilatımız daha bir təlim ilə qarşınızdadır.
+                    ”Sosial medianın həyatımızda rolu və rəqəmsal məzmun istehsalçısı” adlı layihəmizə davam
+                    edirik.
+                    🗣️ Layihəmizin növbəti qonağı tanınmış sosial media blogger,video məzmun istehsalçısı,
+                    youtuber Günel Rəhimova
+                    tələbələrimizə sosial medianın həyatımızda necə rol oynadığı haqqında öz fikirlərini və
+                    təcrübələrini bölüşəcək.
+                    *Görüş yalnız UNEC tələbələri üçündür.
+                </p>
+            </div>
+        </div>
+
+        <div class="data-column">
+            <div class="data-value">
+                <p class="data">Tarix</p>
+                <p data-detail="date" class="value">31 oktyabr 2022 12:00</p>
+            </div>
+
+            <div class="data-value">
+                <p class="data">Qeydiyyat Linki</p>
+                <p data-detail="registrationurl" class="value">www.digitalvolunteersdemo.cf</p>
+            </div>
+
+            <div class="data-value">
+                <p class="data">Məkan</p>
+                <p data-detail="location" class="value">III saylı korpus</p>
+            </div>
+        </div>
+
+        <div class="data-column close">
+            <i class="fas fa-times"></i>
+            <button class="action-button primary">Düzəliş et</button>
+        </div>
+    </section>
+</div>
+
+<script>
+
+    $("#eventdetails .data-column").height($(".data-column").parent().height());
+    $("#eventdetails").parent().css("display", "none");
+
+    function ShowEventDetails(id) {
+        eventid = id;
+        $.ajax({
+            type: "GET",
+            url: "/Member/EventByID/" + eventid,
+            success: function (result) {
+                ShowEventData(result);
+            }
+        });
+        function ShowEventData(item) {
+            console.log(item);
+            var event = item;
+            $("img[data-detail='image']").attr("src", event.Image);
+            $("p[data-detail='title'").text(event.Title);
+            $("p[data-detail='caption'").text(event.Caption);
+            //var datetime = event.DateTime.substring(6, 19);
+            //var time = new Date(datetime).toLocaleString("az");
+            ////$("p[data-detail='date'").text(event.DateTime);
+            //$("p[data-detail='date'").text(time);
+            $("p[data-detail='registrationurl'").text(event.RegistrationURL);
+            if (event.Location == "First") eventlocation = "Əsas korpus";
+            else if (event.Location == "Second") eventlocation = "II saylı korpus";
+            else if (event.Location == "Third") eventlocation = "III saylı korpus";
+            else if (event.Location == "Fourth") eventlocation = "IV saylı korpus";
+            $("p[data-detail='location'").text(eventlocation);
+
+            $("#eventdetails").parent().css("display", "flex");
+            $("#eventdetails").css("height", "max-content");
+
+        }
+    };
+    $("#eventdetails i").click(function () {
+        $("#eventdetails").parent().css("display", "none");
+    });
+
+</script>
+

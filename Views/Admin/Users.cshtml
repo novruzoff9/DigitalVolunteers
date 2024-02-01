@@ -1,0 +1,921 @@
+﻿@using EntityLayer.Concrete
+@using DataAccessLayer.EntityFramework
+@using PagedList
+@using PagedList.Mvc
+@using BusinessLayer.Concrete
+@model PagedList.IPagedList<User>
+@{
+    UserManager UserM = new UserManager(new EfUserDAL());
+    ViewBag.Title = "Users";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    var users = UserM.GetList();
+    double a = users.Count() / 1 * 100;
+    string txt = "+" + a + "%";
+    int smm = users.Where(x => x.Department == "SMM").Count();
+    int pr = users.Where(x => x.Department == "PR").Count();
+    int hr = users.Where(x => x.Department == "HR").Count();
+    int it = users.Where(x => x.Department == "IT").Count();
+}
+<link href="~/Style/AdminPanel/APUserList1231.css" rel="stylesheet" />
+<style>
+    label{
+        color: #ff331f;
+        display: none;
+    }
+    .properties{
+        width: 65% !important;
+    }
+
+    .statistics{
+        justify-content: center !important;
+    }
+
+    .result{
+        width: calc(35% - 20px) !important;
+    }
+
+    #activitypoint input[type=range] {
+        width: 100%;
+        accent-color: #006bce;
+        cursor: pointer;
+    }
+
+
+    aside ul #userlist {
+        border-radius: 8px;
+        background-color: #006bce;
+    }
+
+        aside ul #userlist p, aside ul #userlist i {
+            color: white;
+        }
+
+        aside ul #userlist:hover {
+            padding-left: 0;
+        }
+
+            aside ul #userlist:hover p, aside ul #userlist:hover i {
+                color: white;
+            }
+
+    .page-link {
+        background-color: #fff;
+        border-radius: 8px;
+        margin: 0 2px;
+        color: red;
+        cursor: pointer;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 40px;
+        height: 40px;
+        font-weight: 500;
+    }
+
+        .page-link a {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+    .active {
+        background-color: #006bce;
+        color: #fff;
+        cursor: default;
+    }
+
+        .active:hover {
+            background-color: #006bce;
+            color: #fff;
+            cursor: default;
+        }
+
+    .pagination li:not(.active) a {
+        color: #006bce;
+    }
+
+    .pagination li:not(.active):hover {
+        background-color: #006bce;
+        color: #fff;
+    }
+
+        .pagination li:not(.active):hover a {
+            color: #fff;
+        }
+</style>
+
+<div id="counts">
+    <section id="usercount">
+        <i class="fas fa-user"></i>
+        <div class="statistics">
+            <div class="change">
+                <p class="increase">@txt</p>
+            </div>
+            <div class="data-value">
+                <p class="value">@users.Count nəfər</p>
+                <p class="data">İstifadəçi</p>
+            </div>
+            <div class="last-month">
+                <p>Keçən il: <span>1</span></p>
+            </div>
+        </div>
+    </section>
+    <section id="smmcount">
+        <i class="fas fa-pencil-ruler"></i>
+        <div class="statistics">
+            @*<div class="change">
+                <p class="increase">+20%</p>
+            </div>*@
+            <div class="data-value">
+                <p class="value">@smm nəfər</p>
+                <p class="data">SMM departamenti</p>
+            </div>
+            @*<div class="last-month">
+                <p>Keçən il: <span>92</span></p>
+            </div>*@
+        </div>
+    </section>
+    <section id="hrcount">
+        <i class="fas fa-people-carry"></i>
+        <div class="statistics">
+            @*<div class="change">
+                <p class="increase">+45%</p>
+            </div>*@
+            <div class="data-value">
+                <p class="value">@hr nəfər</p>
+                <p class="data">HR departamenti</p>
+            </div>
+            @*<div class="last-month">
+                <p>Keçən il: <span>23</span></p>
+            </div>*@
+        </div>
+    </section>
+    <section id="prcount">
+        <i class="fas fa-handshake"></i>
+        <div class="statistics">
+            @*<div class="change">
+                <p class="increase">+24%</p>
+            </div>*@
+            <div class="data-value">
+                <p class="value">@pr nəfər</p>
+                <p class="data">PR departamenti</p>
+            </div>
+            @*<div class="last-month">
+                <p>Keçən il: <span>17</span></p>
+            </div>*@
+        </div>
+    </section>
+    @*<section id="itcount">
+        <i class="fas fa-desktop"></i>
+        <div class="statistics">
+            <div class="change">
+                <p class="increase">@txt</p>
+            </div>
+            <div class="data-value">
+                <p class="value">@it</p>
+                <p class="data">İT</p>
+            </div>
+            <div class="last-month">
+                <p>Keçən il: <span>1</span></p>
+            </div>
+        </div>
+    </section>*@
+</div>
+
+<section id="filter">
+    <div class="search-user">
+        <input type="text" placeholder="İstifadəçi axtar">
+    </div>
+    <div id="role" class="select">
+        <div class="selected-value">
+            <p>Vəzifə</p>
+            <i class="fas fa-chevron-down"></i>
+        </div>
+        <div class="possible-select">
+            <ul>
+                <li class="search-role search-select">
+                    <input type="text">
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div id="faculty" class="select">
+        <div class="selected-value">
+            <p>Fakültə</p>
+            <i class="fas fa-chevron-down"></i>
+        </div>
+        <div class="possible-select">
+            <ul>
+                <li class="search-faculty search-select">
+                    <input type="text">
+                </li>
+            </ul>
+        </div>
+    </div>
+    @*<div id="sorting" class="select">
+        <div class="selected-value">
+            <p>Sıralama</p>
+            <i class="fas fa-chevron-down"></i>
+        </div>
+        <div class="possible-select">
+            <ul>
+                <li class="search-faculty search-select">
+                    <input type="text">
+                </li>
+            </ul>
+        </div>
+    </div>*@
+</section>
+
+@RenderBody()
+
+
+
+<div class="pop-up">
+    <section id="userdetails">
+        <div class="data-column">
+            <img data-detail="image" src="~/Images/ProfilePictures/1_Yagmur_Novruzlu.jpg" alt="">
+        </div>
+        <div class="data-column">
+            <div class="data-value">
+                <p class="data">İstifadəçi</p>
+                <p data-detail="name" class="value">Yağmur Novruzlu</p>
+            </div>
+
+            <div class="data-value">
+                <p class="data">İstifadəçi adı</p>
+                <p data-detail="username" class="value username">novruzoff</p>
+            </div>
+
+            <div class="data-value">
+                <p class="data">Fakültə</p>
+                <p data-detail="faculty" class="value">Rəqəmsal İqtisadiyyat</p>
+            </div>
+
+            <div class="data-value">
+                <p class="data">İxtisas</p>
+                <p data-detail="profession" class="value">İnformasiya Texnologiyaları</p>
+            </div>
+        </div>
+
+        <div class="data-column">
+            <div class="data-value">
+                <p class="data">Departament</p>
+                <p data-detail="department" class="value">İT</p>
+            </div>
+
+            <div class="data-value">
+                <p class="data">Vəzifəsi</p>
+                <p data-detail="role" class="value">Rəhbər</p>
+            </div>
+
+            <div class="data-value">
+                <p class="data">Qrup nömrəsi</p>
+                <p data-detail="group" class="value">570-1</p>
+            </div>
+
+            <div class="data-value">
+                <p class="data">Kurs</p>
+                <p data-detail="course" class="value">2</p>
+            </div>
+
+        </div>
+
+        <div class="data-column">
+            <div class="data-value">
+                <p class="data">Telefon</p>
+                <p data-detail="phone" class="value">070-310-80-88</p>
+            </div>
+
+            <div class="data-value">
+                <p class="data">E-mail</p>
+                <p data-detail="mail" class="value">yagmrnov2@gmail.com</p>
+            </div>
+
+            <div class="data-value">
+                <p class="data">Aktivlik balı</p>
+                <p data-detail="activity" class="value">0</p>
+            </div>
+
+            <div class="data-value">
+                <p class="data">Doğum tarixi</p>
+                <p data-detail="signdate" class="value">19 sentyabr 2023</p>
+            </div>
+        </div>
+
+        <div class="data-column close">
+            <i class="fas fa-times"></i>
+            <button id="update-user-btn" data-userid="" class="action-button primary">Düzəliş et</button>
+        </div>
+    </section>
+</div>
+
+<div class="pop-up">
+    <section id="activitypoint">
+        <div class="data-row">
+            <input type="hidden" value=""/>
+            <img src="~/Images/ProfilePictures/defaultPP.jpg" />
+            <p class="name">Yağmur Novruzlu</p>
+            <div class="data-value">
+                <p class="value active-point">57</p>
+                <p class="data">Hazırki bal</p>
+            </div>
+            <i class="fas fa-times"></i>
+        </div>
+        <div class="calculate">
+            <div class="data-column properties">
+                <label for="addingpoint" class="activityrangelbl">*Aktivlik balı 0 ola bilməz!</label>
+                <input id="addingpoint" type="range" min="-10" max="10">
+                <label for="Activitytxt" class="activitytxtlbl">*Aktivlik balı üçün açıqlama yazılmalıdır!</label>
+                <textarea placeholder="Aktivlik balı üçün açıqlama" name="" id="Activitytxt" cols="8" rows="8"></textarea>
+            </div>
+            <div class="data-column result">
+                <div class="data-value">
+                    <p class="value adding-point">0</p>
+                    <p class="data">Artırılacaq bal</p>
+                </div>
+
+                <div class="data-value">
+                    <p class="value result-point">xx</p>
+                    <p class="data">Nəticə</p>
+                </div>
+
+                <button id="addpointbtn" class="action-button primary">Artır</button>
+            </div>
+        </div>
+
+
+    </section>
+</div>
+
+<div class="pop-up">
+    <section id="inform-user">
+        <div class="content">
+            <h3>İstifadəçiyə xəbərdarlıq göndər</h3>
+            <div id="reciever-user">
+                <img src="~/Images/ProfilePictures/1_Yagmur_Novruzlu.jpg" alt="">
+                <div class="name-username">
+                    <p class="username">novruzoff</p>
+                    <p class="name">Novruzlu Yagmur</p>
+                </div>
+            </div>
+            <textarea placeholder="Məlumat göndər" name="InformText" id="InformText" cols="30"
+                      rows="10"></textarea>
+            <div class="buttons">
+                <button id="cancelinformation" class="action-button danger-link">Ləğv et</button>
+                <button id="sendinformation" class="action-button primary">Göndər</button>
+            </div>
+        </div>
+    </section>
+</div>
+
+<script>
+    var departmentusers;
+
+    function ShowUsers(users) {
+        var $content = $('#list').empty();
+
+        $(users).each(function (i, el) {
+            var faculty;
+            if (el.Faculty == "Digital Economy") { faculty = "Rəqəmsal İqtisadiyyat"; }
+            else if (el.Faculty == "Economy") { faculty = "İqtisadiyyat və İdarəetmə"; }
+            else if (el.Faculty == "Engineering") { faculty = "Mühəndislik"; }
+            else if (el.Faculty == "Design") { faculty = "Dizayn"; }
+            else if (el.Faculty == "Sabah") { faculty = "SABAH"; }
+
+            //if (i < 10) {
+                $content.append(
+                    '<div class="user">' +
+                    '<div class="main-datas">' +
+                    '<p class="user-id">' + el.UserID + '</p>' +
+                    '<img src = ' + el.UserImage + '>' +
+                    '<p class="user-name">' + el.Name + " " + el.Surname + '</p>' +
+                    '</div>' +
+                    '<p class="userlogin">' + el.UserName + '</p>' +
+                    '<p class="user-faculty">' + faculty + '</p >' +
+                    '<p class="activatepoint">' + el.ActivityPoint + '</p >' +
+                    '<div class="actions" data-userid=' + el.UserID + '>' +
+                    '<i class="fas fa-info" onclick="ShowUserDetails(' + el.UserID + ')"></i>' +
+                    '<i class= "fas fa-plus" onclick="AddUserPoint(' + el.UserID + ')" ></i >' +
+                    '<i class="fas fa-bullhorn" onclick="InformUser(' + el.UserID + ')" ></i>' +
+                    '</div > '
+                );
+            //}
+
+        });
+
+
+        var height = $(document).height();
+        $("aside").height(height);
+    }
+
+    $("#usercount").click(function () {
+        var listparameter = "all";
+        var url = '@Url.Action("SelectedUsers", "Admin")' + '?search=none' + '&list=' + listparameter;
+
+        window.location.href = url;
+    });
+
+    $("#smmcount").click(function () {
+        var listparameter = "SMM";
+        var url = '@Url.Action("SelectedUsers", "Admin")' + '?search=department' + '&list=' + listparameter;
+
+        window.location.href = url;
+    });
+
+    $("#hrcount").click(function () {
+        var listparameter = "HR";
+        var url = '@Url.Action("SelectedUsers", "Admin")' + '?search=department' + '&list=' + listparameter;
+
+        window.location.href = url;
+    });
+
+    $("#prcount").click(function () {
+        var listparameter = "PR";
+        var url = '@Url.Action("SelectedUsers", "Admin")' + '?search=department' + '&list=' + listparameter;
+
+        window.location.href = url;
+    });
+
+
+    var userdetailsheight = $("#userdetails").height();
+    $("#userdetails").parent().css("display", "none");
+    $("#activitypoint").parent().css("display", "none");
+    $("#inform-user").parent().css("display", "none");
+
+    var height = $(document).height();
+    $(".pop-up").height(height);
+
+    $("#userdetails .data-column").height($(".data-column").parent().height());
+
+    //İstifadəçi məlumatlarına baxmaq
+
+    function ShowUserDetails(id){
+        userid = id;
+        $("#userdetails").height(userdetailsheight);
+        $("#userdetails .data-column").height("380px");
+        $.ajax({
+            type: "GET",
+            url: "/Admin/UserByID/" + userid,
+            success: function (result) {
+                showUserData(result);
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                console.log(xhr.status);
+            }
+        });
+
+        function showUserData(user) {
+            $("#userdetails").parent().css("display", "flex");
+
+            $("img[data-detail='image']").attr("src", user.UserImage);
+            $("p[data-detail='name']").text(user.Name + " " + user.Surname);
+            $("p[data-detail='username']").text(user.UserName);
+
+            if (user.Faculty == "Digital Economy") { user.Faculty = "Rəqəmsal İqtisadiyyat fakültəsi"; }
+            else if (user.Faculty == "Russian Economy") { user.Faculty = "Rus İqtisad Məktəbi"; }
+            else if (user.Faculty == "Business") { user.Faculty = "Biznes və Menecement"; }
+            else if (user.Faculty == "Sabah") { user.Faculty = "SABAH mərkəzi"; }
+            else if (user.Faculty == "ISE") { user.Faculty = "Beynəlxalq İqtisadiyyat Məktəbi"; }
+            else if (user.Faculty == "Design") { user.Faculty = "UNEC Dizayn Məktəbi"; }
+            else if (user.Faculty == "Finance") { user.Faculty = "Maliyyə və Mühasibat fəkültəsi"; }
+            else if (user.Faculty == "TUDIFAK") { user.Faculty = "Türk Dünyası İqtisad fəkültəsi"; }
+            else if (user.Faculty == "Engineering") { user.Faculty = "Mühəndislik fakültəsi"; }
+            else if (user.Faculty == "Economy") { user.Faculty = "İqtisadiyyat və İdarəetmə fakültəsi"; }
+            else if (user.Faculty == "QETM") { user.Faculty = "Qiyabi və Əlavə Təhsil Mərkəzi"; }
+
+            $("p[data-detail='faculty']").text(user.Faculty);
+            $("p[data-detail='group']").text(user.Group);
+            $("p[data-detail='profession']").text(user.Profession);
+            var entrance = user.EntranceYear;
+            year = new Date().getFullYear();
+            month = new Date().getMonth() + 1;
+            course = year - entrance;
+            if (month >= 9) { course += 1; }
+            $("p[data-detail='course']").text(course);
+
+            let department = "";
+            if (user.Department == "Secretary") { department = "Katib"; }
+            else if (user.Department == "IT") { department = "İnformasiya Texnologiyaları departamenti"; }
+            else if (user.Department == "SMM") { department = "Sosial Media Marketinq departamenti"; }
+            else if (user.Department == "HR") { department = "İnsan Resursları departamenti"; }
+            else if (user.Department == "PR") { department = "İctimaiyyətlə Əlaqələr departamenti"; }
+            else if (user.Department == "WWM") { department = "Üzvlərlə iş"; }
+            else if (user.Department == "WWF") { department = "Fakültələrlə iş"; }
+            else if (user.Department == "FS") { department = "Fakültə heyəti"; }
+            else if (user.Department == "ICD") { department = "Beynəlxalq əməkdaşlıq departamenti"; }
+            else if (user.Department == "Organizer") { department = "Təşkilati işlər departamenti"; }
+            else if (user.Department == "Security") { department = "Nəzarət və təftiş"; }
+            else if (user.Department == "Management") { department = "İdarə"; }
+            $("p[data-detail='department']").text(department);
+
+            
+            let modelRole = user.Role;
+            let role = "";
+            if (modelRole == "President") { role = "Təşkilat üzrə Sədr"; }
+            else if (modelRole == "Vice-President") { role = "Təşkilat üzrə Sədr müavini"; }
+            else if (modelRole == "Leader") { role = "Rəhbər"; }
+            else if (modelRole == "Chairman") { role = "Fakültə üzrə Sədr"; }
+            else if (modelRole == "Vice-Chairman") { role = "Rəhbər müavini"; }
+            else if (modelRole == "Staff") { role = "Heyət üzvü"; }
+            else if (modelRole == "Leader") { role = "Departament üzrə Rəhbər"; }
+            else if (modelRole == "Vice-Chairman") { role = "Fakültə üzrə Sədr müavini"; }
+            else if (modelRole == "Vice-Leader") { role = "Departament üzrə Rəhbər müavini"; }
+            else if (modelRole == "HR") { role = "İnsan Resursları"; }
+            else if (modelRole == "PR") { role = "İctimaiyyətlə əlaqələr"; }
+            else if (modelRole == "IT") { role = "İnformasiya Texnologiyaları"; }
+            else if (modelRole == "SMM") { role = "SMM"; }
+            else if (modelRole == "PM") { role = "Layihə Meneceri"; }
+            else if (modelRole == "CW") { role = "Copywriter"; }
+            else if (modelRole == "WWM") { role = "Üzvlərlə iş"; }
+            else if (modelRole == "Photograph") { role = "Fotoqraf"; }
+            else if (modelRole == "Photograph/Videograph") { role = "Fotoqraf/Videoqraf"; }
+            else if (modelRole == "Coordinator") { role = "Koordinator"; }
+            else if (modelRole == "Security") { role = "Nəzarət və Təftiş"; }
+            else if (modelRole == "GDesigner") { role = "Qrafik dizayner"; }
+            else if (modelRole == "Secretary") { role = "Katib"; }
+            else if (modelRole == "Advisor") { role = "Müşavir"; }
+
+            $("p[data-detail='role']").text(role);
+            $("p[data-detail='activity']").text(user.ActivityPoint);
+            $("p[data-detail='phone']").text("+994" + user.PhoneNumber);
+            $("p[data-detail='mail']").text(user.EMail);
+            $("p[data-detail='signdate']").text(user.Password);
+            $("#update-user-btn").attr("data-userid", user.UserID);
+        }
+    }
+
+    $("#update-user-btn").click(function () {
+        var userid = $(this).attr("data-userid");
+        var url = '@Url.Action("UpdateUser", "Admin")' + '?id=' + userid;
+
+        window.location.href = url;
+    });
+    $("#userdetails i").click(function () {
+        $("#userdetails").parent().css("display", "none");
+    });
+
+    //İstifadəçiyə aktivlik balı artırmaq
+    $("#addingpoint").change(function () {
+        var point = $(this).val();
+        let activepoint = Number($(".active-point").text());
+        $(".adding-point").text(point);
+        var resultpoint = activepoint + Number(point);
+        $(".result-point").text(resultpoint);
+    });
+    function AddUserPoint(id) {
+        userid = id;
+        $.ajax({
+            type: "GET",
+            url: "/Admin/UserByID/" + userid,
+            success: function (result) {
+                showUserActivityData(result);
+            }
+        });
+
+        function showUserActivityData(user) {
+            $("#activitypoint").parent().css("display", "flex");
+            $("#addingpoint").val(0);
+            $("p.adding-point").text(0);
+            $("#activitypoint img").attr("src", user.UserImage);
+            $("p.name").text(user.Name + " " + user.Surname);
+            $("p.active-point").text(user.ActivityPoint);
+            $(".result-point").text($(".active-point").text());
+            $("input[type='hidden']").val(user.UserID);
+        }
+    }
+    $("#activitypoint i").click(function () {
+        $("#activitypoint").parent().css("display", "none");
+    });
+
+    //İstifadəçiyə xəbərdarlıq etmək
+    function InformUser(id) {
+        userid = id;
+        $.ajax({
+            type: "GET",
+            url: "/Admin/UserByID/" + userid,
+            success: function (result) {
+                ShowUserInform(result);
+            }
+        });
+
+        function ShowUserInform(user) {
+            $("#inform-user").parent().css("display", "flex");
+            $("body").css("overflow", "auto");
+            $("#reciever-user img").attr("src", user.UserImage);
+            $("p.username").text(user.Name, " ", user.Surname);
+            $("p.name").text(user.UserName);
+        }
+    }
+    $("#cancelinformation").click(function () {
+        $("#inform-user").parent().css("display", "none");
+        $("body").css("overflow", "auto");
+    });
+
+
+</script>
+
+<script>
+    let departments = ["sədr", "smm", "hr", "pr"];
+    let roles = ["Üzv", "Rəhbər", "Sədr", "Sədr müavini", "İnsan Resursları", "İctimaiyyətlə əlaqələr", "İnformasiya Texnologiyaları",
+        "SMM", "Layihə Meneceri", "Copywriter", "Üzvlərlə iş", "Fotoqraf/Videoqraf", "Koordinator",
+        "Nəzarət və Təftiş", "Qrafik dizayner", "Katib", "Müşavir"];
+    let faculties = ["Rəqəmsal İqtisadiyyat", "Rus İqtisad Məktəbi", "Biznes və Menecement", "SABAH mərkəzi",
+        "Beynəlxalq İqtisadiyyat Məktəbi", "UNEC Dizayn Məktəbi", "Maliyyə və Mühasibat fəkültəsi", "Türk Dünyası İqtisad fəkültəsi",
+        "Mühəndislik fakültəsi", "İqtisadiyyat və İdarəetmə", "Qiyabi və Əlavə Təhsil Mərkəzi"];
+    let sortings = ["Aktivlik balı"]
+
+
+
+    roles.forEach(role => {
+        $("#role ul").append(
+            $("<li class='suggest-select'>").append(
+                $("<p>").text(role)
+            )
+        );
+    });
+
+    faculties.forEach(faculty => {
+        $("#faculty ul").append(
+            $("<li class='suggest-select'>").append(
+                $("<p>").text(faculty)
+            )
+        );
+    });
+
+    sortings.forEach(role => {
+        $("#sorting ul").append(
+            $("<li class='suggest-select'>").append(
+                $("<p>").text(role)
+            )
+        );
+    });
+
+    $(".selected-value").click(function () {
+        $(this).find("i").toggleClass("fa-chevron-up", "fa-chevron-down");
+        $(this).siblings(".possible-select").toggle();
+        $(this).parent().siblings(".select").children(".possible-select").hide();
+        $(this).parent().siblings(".select").find("i").removeClass("fa-chevron-up");
+        $(this).parent().siblings(".select").find("i").addClass("fa-chevron-down");
+    });
+
+    $(".select li.suggest-select").click(function () {
+        var selection = $(this).children("p").text();
+
+        var selectBox = $(this).parent().parent().siblings(".selected-value");
+        selectBox.children("p").text(selection);
+
+        $(this).parent().parent().toggle();
+    });
+
+    $("li.search-role>input").keyup(function () {
+        let value = $(this).val();
+        value = value.toLowerCase();
+        $("#role ul li.suggest-select").remove();
+
+        if (value != "") {
+            let searchroles = roles.filter(x => x.includes(value));
+            searchroles.forEach(role => {
+                $("#role ul").append(
+                    $("<li class='suggest-select'>").append(
+                        $("<p>").text(role)
+                    )
+                );
+            });
+        }
+        else {
+            roles.forEach(role => {
+                $("#role ul").append(
+                    $("<li class='suggest-select'>").append(
+                        $("<p>").text(role)
+                    )
+                );
+            });
+        }
+
+
+        $(".select li.suggest-select").click(function () {
+            var selection = $(this).children("p").text();
+
+            var selectBox = $(this).parent().parent().siblings(".selected-value");
+            selectBox.children("p").text(selection);
+
+            $(this).parent().parent().toggle();
+        });
+
+        $("#role li.suggest-select").click(function () {
+            var selection = $(this).children("p").text();
+            if (selection == "Rəhbər") { role = "Leader"; }
+            else if (selection == "Sədr") { role = "Chairman"; }
+            console.log(role);
+
+            var $content = $('#list').empty();
+            $.ajax({
+                type: "GET",
+                url: "/Admin/RoleUser/",
+                data: { role: role },
+                success: function (result) {
+                    ShowUsers(result);
+                }
+            });
+        });
+    });
+
+    $("li.search-faculty>input").keyup(function () {
+        let value = $(this).val();
+        value = value.charAt(0).toUpperCase() + value.slice(1);
+        $("#faculty ul li.suggest-select").remove();
+
+        if (value != "") {
+            let searchfaculties = faculties.filter(x => x.includes(value));
+            searchfaculties.forEach(faculty => {
+                $("#faculty ul").append(
+                    $("<li class='suggest-select'>").append(
+                        $("<p>").text(faculty)
+                    )
+                );
+            });
+        }
+        else {
+            faculties.forEach(faculty => {
+                $("#faculty ul").append(
+                    $("<li class='suggest-select'>").append(
+                        $("<p>").text(faculty)
+                    )
+                );
+            });
+        }
+
+
+        $(".select li.suggest-select").click(function () {
+            var selection = $(this).children("p").text();
+
+            var selectBox = $(this).parent().parent().siblings(".selected-value");
+            selectBox.children("p").text(selection);
+
+            $(this).parent().parent().toggle();
+        });
+
+        $("#faculty li.suggest-select").click(function () {
+            var selection = $(this).children("p").text();
+            if (selection == "Rəqəmsal İqtisadiyyat") { faculty = "Digital Economy"; }
+            else if (selection == "İqtisadiyyat və İdarəetmə") { faculty = "Economy"; }
+            else if (selection == "Mühəndislik") { faculty = "Engineering"; }
+            else if (selection == "Dizayn") { faculty = "Design"; }
+            else if (selection == "SABAH") { faculty = "Sabah"; }
+            console.log(faculty);
+
+            var $content = $('#list').empty();
+            $.ajax({
+                type: "GET",
+                url: "/Admin/FacultyUser/",
+                data: { faculty: faculty },
+                success: function (result) {
+                    ShowUsers(result);
+                }
+            });
+        });
+    });
+    $("#faculty li.suggest-select").click(function () {
+        var selection = $(this).children("p").text();
+        if (selection == "Rəqəmsal İqtisadiyyat") { faculty = "Digital Economy"; }
+        else if (selection == "Rus İqtisad Məktəbi") { faculty = "Russian Economy"; }
+        else if (selection == "Biznes və Menecement") { faculty = "Business"; }
+        else if (selection == "SABAH mərkəzi") { faculty = "Sabah"; }
+        else if (selection == "Beynəlxalq İqtisadiyyat Məktəbi") { faculty = "ISE"; }
+        else if (selection == "UNEC Dizayn Məktəbi") { faculty = "Design"; }
+        else if (selection == "Maliyyə və Mühasibat fəkültəsi") { faculty = "Finance"; }
+        else if (selection == "Türk Dünyası İqtisad fəkültəsi") { faculty = "TUDIFAK"; }
+        else if (selection == "Mühəndislik fakültəsi") { faculty = "Engineering"; }
+        else if (selection == "İqtisadiyyat və İdarəetmə") { faculty = "Economy"; }
+        else if (selection == "Qiyabi və Əlavə Təhsil Mərkəzi") { faculty = "QETM"; }
+
+        var url = '@Url.Action("SelectedUsers", "Admin")' + '?search=faculty' + '&list=' + faculty;
+
+        window.location.href = url;
+
+        //var $content = $('#list').empty();
+        //$.ajax({
+        //    type: "GET",
+        //    url: "/Admin/FacultyUser/",
+        //    data: { faculty: faculty },
+        //    success: function (result) {
+        //        ShowUsers(result);
+        //    }
+        //});
+    });
+    $("#role li.suggest-select").click(function () {
+        var selection = $(this).children("p").text();
+
+        if (selection == "Üzv") { role = "Member"; }
+        else if (selection == "Rəhbər") { role = "Leader"; }
+        else if (selection == "Sədr") { role = "Chairman"; }
+        else if (selection == "Sədr müavini") { role = "Vice-Chairman"; }
+        else if (selection == "İnsan Resursları") { role = "HR"; }
+        else if (selection == "İctimaiyyətlə əlaqələr") { role = "PR"; }
+        else if (selection == "İnformasiya Texnologiyaları") { role = "IT"; }
+        else if (selection == "SMM") { role = "SMM"; }
+        else if (selection == "Layihə Meneceri") { role = "PM"; }
+        else if (selection == "Copywriter") { role = "CW"; }
+        else if (selection == "Üzvlərlə iş") { role = "WWM"; }
+        else if (selection == "Fotoqraf/Videoqraf") { role = "Photograph/Videograph"; }
+        else if (selection == "Koordinator") { role = "Coordinator"; }
+        else if (selection == "Nəzarət və Təftiş") { role = "Security"; }
+        else if (selection == "Qrafik dizayner") { role = "GDesigner"; }
+        else if (selection == "Katib") { role = "Secretary"; }
+        else if (selection == "Müşavir") { role = "Advisor"; }
+
+        var url = '@Url.Action("SelectedUsers", "Admin")' + '?search=role' + '&list=' + role;
+
+        window.location.href = url;
+        //var $content = $('#list').empty();
+        //$.ajax({
+        //    type: "GET",
+        //    url: "/Admin/RoleUser/",
+        //    data: { role: role },
+        //    success: function (result) {
+        //        ShowUsers(result);
+        //    }
+        //});
+    });
+
+    $.ajax({
+        type: "GET",
+        url: "/Admin/DepartmentUser/All",
+        success: function (result) {
+            users = result;
+        }
+    });
+
+    $(".search-user>input").keyup(function () {
+        var searching = $(this).val();
+        $content = $("#list").empty();
+        var searchresults = users.filter(x => x.UserName.includes(searching));
+
+        //Json əsasında isifadəçilər gətirilsinnnn!!
+        //Json əsasında isifadəçilər gətirilsinnnn!!
+        //Json əsasında isifadəçilər gətirilsinnnn!!
+        //Json əsasında isifadəçilər gətirilsinnnn!!
+
+        setTimeout(function () {
+            ShowUsers(searchresults);
+        }, 50);
+    });
+</script>
+
+<script>
+    $("#addpointbtn").click(function () {
+        if ($("#addingpoint").val() == 0) {
+            $(".properties label.activityrangelbl").toggle();
+        }
+        else {
+            $(".properties label.activityrangelbl").css("display", "none");
+
+        }
+        if ($("#Activitytxt").val() == "") {
+            $("#Activitytxt").css("border", "1px solid #ff331f");
+            $(".properties label.activitytxtlbl").toggle();
+        }
+        else {
+            $("#Activitytxt").css("border", "1px solid #006bce");
+            $(".properties label.activitytxtlbl").css("display", "none");
+        }
+        
+        if ($("#Activitytxt").val() != "" && $("#addingpoint").val() != 0) {
+            var text = $("#Activitytxt").val();
+            var point = Number($("#addingpoint").val());
+            var userid = Number($("input[type='hidden']").val());
+
+
+            $.ajax({
+                type: 'POST',
+                url: '/Admin/AddPoint',
+                data: {
+                    userid: userid,
+                    text: text,
+                    point: point
+                },
+                dataType: 'json',
+                success: function (result) {
+                    alert(result);
+                    $("#activitypoint").parent().css("display", "none");
+                },
+                error: function () {
+                    alert("Olmadiye qaqa");
+                }
+            });
+        }
+    });
+</script>
+<!--
+
+$("#channel").append(
+    <div class="actions">
+        <i class="fas fa-info"></i>
+        <i class="fas fa-plus"></i>
+        <i class="fas fa-bullhorn"></i>
+    </div>
+</div>
+);-->

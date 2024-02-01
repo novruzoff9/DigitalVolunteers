@@ -1,0 +1,38 @@
+﻿@using EntityLayer.Concrete
+@model List<User>
+
+<header>
+    <p>İdarə heyəti</p>
+</header>
+<article>
+    <div class="members">
+        @foreach (var item in Model)
+        {
+            <div class="member">
+                <img src="@item.UserImage" alt="">
+                <div class="member-info">
+                    <p class="name">@item.Name @item.Surname</p>
+                    @{
+                        string department = "";
+                        if (item.Role == "President") { department = "Təşkilat üzrə Sədr"; }
+                        else if (item.Role == "Vice-President") { department = "Təşkilat üzrə Sədr müavini"; }
+                        else if (item.Role == "Chairman") { department = "Fakültə üzrə Sədr"; }
+                        else if (item.Role == "Vice-Chairman") { department = "Fakültə üzrə Sədr müavini"; }
+                        else if (item.Department == "Working with faculties") { department = "Fakültələrlə iş üzrə rəhbər"; }
+                        else if (item.Role == "Leader") { department = item.Department + " üzrə Rəhbər"; }
+                        else if (item.Role == "Vice-Leader") { department = item.Department + " üzrə Rəhbər müavini"; }
+                    }
+                    @if (department != "")
+                    {
+                        <p class="position">@department</p>
+                    }
+                    else
+                    {
+                        <p class="position">@item.Role</p>
+                    }
+                </div>
+            </div>
+        }
+    </div>
+</article>
+

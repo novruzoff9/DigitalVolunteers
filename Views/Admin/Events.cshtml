@@ -1,0 +1,180 @@
+﻿@using EntityLayer.Concrete
+@model List<Event>
+@{
+    string location = "";
+    ViewBag.Title = "Events";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<link href="~/Style/AdminPanel/APEvents23423.css" rel="stylesheet" />
+
+<style>
+    aside ul #eventlist {
+        border-radius: 8px;
+        background-color: #006bce;
+    }
+
+        aside ul #eventlist p, aside ul #eventlist i {
+            color: white;
+        }
+
+        aside ul #eventlist:hover {
+            padding-left: 0;
+        }
+
+            aside ul #eventlist:hover p, aside ul #eventlist:hover i {
+                color: white;
+            }
+
+    .yellow-hover {
+        background-color: #189177;
+        border: 1px solid #189177;
+    }
+
+        .yellow-hover:hover {
+            color: #189177 !important;
+            background-color: transparent;
+        }
+</style>
+
+<div id="events">
+    <a href="/Admin/AddEvent" id="addevent">
+        <i class="fas fa-calendar-plus"></i>
+        <p>Tədbir artır</p>
+    </a>
+    @foreach (var item in Model)
+    {
+        <div class="event">
+            <img src="@item.Image">
+            <p class="title">@item.Title</p>
+            <div class="details">
+                <p class="date">@item.DateTime.ToString("dd MMMM yyyy")</p>
+                @{
+                    if (item.Location == "FirstBig") { location = "Əsas korpus, Böyük"; }
+                    else if (item.Location == "FirstHA") { location = "Əsas korpus, Heydər Əliyev"; }
+                    else if (item.Location == "FirstWhite") { location = "Əsas korpus, Ağ zal"; }
+                    else if (item.Location == "FirstSmall") { location = "Əsas korpus, Kiçik"; }
+                    else if (item.Location == "SecondBig") { location = "II korpus, Böyük"; }
+                    else if (item.Location == "SecondSmall") { location = "II  korpus, Kiçik"; }
+                    else if (item.Location == "ThirdBig") { location = "III korpus, Böyük"; }
+                    else if (item.Location == "ThirdSmall") { location = "III korpus, Kiçik"; }
+                    else if (item.Location == "Fourth") { location = "IV korpus"; }
+                }
+                <p class="location">@location</p>
+            </div>
+            <div class="actions">
+                <a href="/Admin/UpdateEvent/@item.EventID" class="success-hover action-button"><i class="fas fa-edit"></i> Düzəlt</a>
+                <button onclick="ShowEventDetails(@item.EventID)" class="primary-hover action-button">
+                    <i class="fas fa-info"></i> Tam
+                    bax
+                </button>
+                <a href="/Admin/EventGallery/@item.EventID" class="warning-hover action-button"><i class="fas fa-images"></i> Qalareya</a>
+                <a href="/Admin/EventParticipiants/@item.EventID" class="secondary-hover action-button"><i class="fas fa-users"></i> İştirakçılar</a>
+                <a href="/Admin/EventReviews/@item.EventID" class="yellow-hover action-button"><i class="fas fa-comments"></i> Rəylər</a>
+                @if (DateTime.Now.AddHours(-1) < item.DateTime)
+                {
+                    <a href="/Admin/QRScaner/@item.EventID" class="danger-hover action-button"><i class="fas fa-qrcode"></i> QR Skan</a>
+                }
+            </div>
+        </div>
+    }
+
+</div>
+
+<div class="pop-up">
+    <section id="eventdetails">
+        <div class="data-column">
+            <img data-detail="image" src="~/Images/EventCovers/4_Sosial_medianin_heyatimizda_rolu.jpg" alt="">
+        </div>
+        <div class="data-column">
+            <div class="data-value">
+                <p class="data">Adı</p>
+                <p data-detail="title" class="value">Sosial Medianin heyatimizda rolu</p>
+            </div>
+
+            <div class="data-value">
+                <p class="data">Haqqında</p>
+                <p data-detail="caption" class="value">
+                    "Rəqəmsal Könüllülər Təşkilatı" adından hər birinizi salamlayırıq.
+                    Təşkilatımız daha bir təlim ilə qarşınızdadır.
+                    ”Sosial medianın həyatımızda rolu və rəqəmsal məzmun istehsalçısı” adlı layihəmizə davam
+                    edirik.
+                    🗣️ Layihəmizin növbəti qonağı tanınmış sosial media blogger,video məzmun istehsalçısı,
+                    youtuber Günel Rəhimova
+                    tələbələrimizə sosial medianın həyatımızda necə rol oynadığı haqqında öz fikirlərini və
+                    təcrübələrini bölüşəcək.
+                    *Görüş yalnız UNEC tələbələri üçündür.
+                </p>
+            </div>
+        </div>
+
+        <div class="data-column">
+            <div class="data-value">
+                <p class="data">Tarix</p>
+                <p data-detail="date" class="value">31 oktyabr 2022 12:00</p>
+            </div>
+
+            <div class="data-value">
+                <p class="data">Qeydiyyat Linki</p>
+                <p data-detail="registrationurl" class="value">www.digitalvolunteersdemo.cf</p>
+            </div>
+
+            <div class="data-value">
+                <p class="data">Məkan</p>
+                <p data-detail="location" class="value">III saylı korpus</p>
+            </div>
+        </div>
+
+        <div class="data-column close">
+            <i class="fas fa-times"></i>
+            <button class="action-button primary">Düzəliş et</button>
+        </div>
+    </section>
+</div>
+
+<script>
+
+    const addevent = document.querySelector("#addevent i");
+    var elementWidth = addevent.offsetWidth ;
+    addevent.style.height = (elementWidth - 44) + "px";
+    addevent.style.fontSize = (elementWidth - 144) + "px";
+
+    
+
+    $("#eventdetails .data-column").height($(".data-column").parent().height());
+    $("#eventdetails").parent().css("display", "none");
+
+    function ShowEventDetails(id) {
+        eventid = id;
+        $.ajax({
+            type: "GET",
+            url: "/Admin/EventByID/" + eventid,
+            success: function (result) {
+                ShowEventData(result);
+            }
+        });
+        function ShowEventData(event) {
+            $("img[data-detail='image']").attr("src", event.Image);
+            $("p[data-detail='title'").text(event.Title);
+            $("p[data-detail='caption'").text(event.Caption);
+            var datetime = event.DateTime.substring(6, 19);
+            var time = new Date(datetime).toLocaleString("az");
+            //$("p[data-detail='date'").text(event.DateTime);
+            $("p[data-detail='date'").text(time);
+            $("p[data-detail='registrationurl'").text(event.RegistrationURL);
+            if (event.Location == "First") eventlocation = "Əsas korpus";
+            else if (event.Location == "Second") eventlocation = "II saylı korpus";
+            else if (event.Location == "Third") eventlocation = "III saylı korpus";
+            else if (event.Location == "Fourth") eventlocation = "IV saylı korpus";
+            $("p[data-detail='location'").text(eventlocation);
+
+            $("#eventdetails").parent().css("display", "flex");
+            $("#eventdetails").css("height", "max-content");
+
+        }
+    };
+    $("#eventdetails i").click(function () {
+        $("#eventdetails").parent().css("display", "none");
+    });
+
+</script>

@@ -1,0 +1,28 @@
+﻿@using EntityLayer.Concrete
+@model List<News>
+<div class="slider">
+    <div class="slides">
+        <div class="slide">
+            <img id="last-clone" src="@Model[4].NewsImage" alt="">
+            <p>@Model[4].NewsTitle</p>
+        </div>
+        @foreach (var item in Model)
+        {
+            <div class="slide">
+                <img src="@item.NewsImage" alt="">
+                <p>@item.NewsTitle</p>
+            </div>
+        }
+        <div class="slide">
+            <img id="first-clone" src="@Model[0].NewsImage" alt="">
+            <p>@Model[0].NewsTitle</p>
+        </div>
+    </div>
+    <div class="slide-navigation">
+        <button id="slide-right">Prev</button>
+        <button id="slide-left">Next</button>
+        <label for="slide-right" class="navigation-btn"><i class="fas fa-chevron-left"></i></label>
+        <label for="slide-left" class="navigation-btn"><i class="fas fa-chevron-right"></i></label>
+    </div>
+    <div class="slider-progressbar"></div>
+</div>

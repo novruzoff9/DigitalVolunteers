@@ -1,0 +1,50 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_UserLayout.cshtml";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>NoPermission</title>
+    <style>
+        body {
+            background-color: #f1f0f6 !important
+        }
+        div.nopermission {
+            margin: 50px 0;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+        img{
+            width: 80%;
+            max-width: 400px;
+        }
+        p.title {
+            font-weight: 500;
+            font-size: 80px;
+            text-align: center;
+        }
+        p.description {
+            font-weight: 500;
+            font-size: 26px;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    
+    <div class="nopermission">
+        <p class="title">403</p>
+        <p class="description">Təəssüf ki, sizin bu səhifəyə girmə icazəniz yoxdur :(</p>
+        <img src="~/Images/Digi_wrackedbg.png"/>
+        <a class="action-button primary-hover" href="/Home/Index"> Əsas səhifəyə qayıt</a>
+    </div>
+</body>
+</html>

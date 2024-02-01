@@ -1,0 +1,267 @@
+﻿<!DOCTYPE html>
+
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rəqəmsal Kabinet</title>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9025664961128837"
+            crossorigin="anonymous"></script>
+    <link rel="icon" type="image/png" href="~/Images/new Logo - white.png" />
+    <link href="~/Style/AdminPanel/AdminPage122.css" rel="stylesheet" />
+    <link href="~/Style/Member/UserPanel1564.css" rel="stylesheet" />
+    <link href="~/Style/UIStyle1569.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+          integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ=="
+          crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9025664961128837"
+            crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+@using DataAccessLayer.Concrete;
+@using DataAccessLayer.EntityFramework
+@using EntityLayer.Concrete
+@using BusinessLayer.Concrete
+@using System.Web
+@{
+    UserManager UserM = new UserManager(new EfUserDAL());
+    int userid = Session["UserID"].ToString().AsInt();
+    var user = UserM.GetByID(userid);
+}
+<body>
+
+    <style>
+        header .profile-menu ul li:not(.profile-details):hover {
+            background-color: #e1e0e6 !important;
+        }
+
+        body {
+            overflow-x: hidden;
+        }
+
+        aside {
+            position: fixed;
+            height: 1000px;
+        }
+
+            aside ul {
+                position: fixed;
+                width: 220px;
+            }
+
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+    </style>
+
+    <style>
+        .pop-up {
+            width: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+            .pop-up section {
+                position: fixed;
+                top: 50%;
+                transform: translateY(-50%);
+                height: -moz-max-content;
+                height: max-content;
+                box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+                padding: 20px;
+                border-radius: 20px;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                background-color: #fff;
+            }
+
+                .pop-up section h2 {
+                    font-size: 28px;
+                    color: #212529;
+                }
+    </style>
+
+    <header>
+        <i id="menubtn" class="fas fa-bars"></i>
+        <div class="header-center">
+            <a href="/Member/Home">
+                <img src="~/Images/new Logo - white.png" />
+            </a>
+        </div>
+        <div class="header-right">
+            @*<i class="fas fa-bell notficationbtn"></i>*@
+            <img class="profilebtn" src="@user.UserImage" alt="">
+        </div>
+        <div class="profile-menu mini-menu">
+            <ul>
+                <li class="profile-details">
+                    <img src="@user.UserImage" alt="">
+                    <div class="name-role">
+                        <p class="name">@user.Name @user.Surname</p>
+                        @{
+                            string modelRole = user.Role;
+                            string role = "";
+                            if (modelRole == "Member") { role = "Üzv"; }
+                        }
+                        <p class="department">@role</p>
+                    </div>
+                </li>
+                <hr class="menu-line">
+                </hr>
+                <li>
+                    <a href="@Url.Action("UserProfile","Member")">
+                        <i class="fas fa-user"></i>
+                        <p>Profilim</p>
+                    </a>
+                </li>
+                <li>
+                    <a href="/Member/Settings">
+                        <i class="fas fa-cog"></i>
+                        <p>Parametrlər</p>
+                    </a>
+                </li>
+                <li>
+                    <a href="/Member/QRCode">
+                        <i class="fas fa-qrcode"></i>
+                        <p>QR Kodum</p>
+                    </a>
+                </li>
+                <li>
+                    <a href="/Home/Index">
+                        <i class="fas fa-globe"></i>
+                        <p>Sayta keçid</p>
+                    </a>
+                </li>
+                <hr class="menu-line">
+                </hr>
+                <li>
+                    <a href="/Login/LogOut">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <p>Çıxış</p>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <div class="notfication-menu mini-menu">
+            <p class="empty">Bildiriş yoxdur</p>
+        </div>
+    </header>
+
+
+    <aside>
+        <ul>
+            <li id="dashboard">
+                <a href="/Member/Home">
+                    <i class="fas fa-home"></i>
+                    <p>Əsas səhifə</p>
+                </a>
+            </li>
+            <li id="eventlist">
+                <a href="/Member/Events">
+                    <i class="fas fa-calendar-day"></i>
+                    <p>Tədbirlərim</p>
+                </a>
+            </li>
+            <li id="reviewspage">
+                <a href="/Member/Reviews">
+                    <i class="fas fa-comments"></i>
+                    <p>Rəylərim</p>
+                </a>
+            </li>
+        </ul>
+    </aside>
+
+    
+    <main>
+        @RenderBody()
+    </main>
+
+
+    <script>
+
+        var height = $(document).height();
+        $(".pop-up").height(height + 80);
+
+        $(document).ready(function () {
+            var width = $(document).width();
+            width -= $("aside").width();
+            width -= $("#profile").width();
+            width -= 101;
+            $("#content").width(width);
+
+            if ($("aside").hasClass("small-menu") == false) {
+                var mainWidth = $("main").width();
+                mainWidth -= 250;
+                if (screen.width > 600) {
+                    $("main").width(mainWidth);
+                    $("main").css("margin-left", "250px");
+                }
+            }
+
+            var userlistheight = $("#user-list").outerHeight();
+            $("#counts").innerHeight(userlistheight);
+
+        });
+
+        $("#menubtn").click(function () {
+            $("aside").toggleClass("small-menu");
+            $(".notfication-menu").hide();
+            $(".profile-menu").hide();
+            if (screen.width > 600) {
+                if ($("aside").hasClass("small-menu")) {
+                    var width = $("main").width();
+                    width += 170;
+                    $("main").width(width);
+                    $("main").css("margin-left", "80px");
+                    $("aside ul").width("50px");
+                }
+                else {
+                    $("main").css("margin-left", "250px");
+                    var width = $("main").width();
+                    width -= 170;
+                    $("main").width(width);
+                    $("aside ul").width("220px");
+                }
+            }
+            else {
+                if ($("aside").hasClass("small-menu")) {
+                    $("aside").height($(document).height());
+                }
+                else {
+                    $("aside").height(0);
+                }
+            }
+        });
+
+        $(".profilebtn").click(function () {
+            $(".notfication-menu").hide();
+            $(".profile-menu").toggle();
+        });
+
+        $(".notficationbtn").click(function () {
+            $(".profile-menu").hide();
+            $(".notfication-menu").toggle();
+        });
+
+
+    </script>
+
+</body>
+
+</html>

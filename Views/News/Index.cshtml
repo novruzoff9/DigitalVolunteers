@@ -1,0 +1,180 @@
+﻿@using EntityLayer.Concrete
+@using PagedList
+@using PagedList.Mvc
+@model PagedList.IPagedList<News>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_UserLayout.cshtml";
+}
+
+<link href="~/Style/Home/News123.css" rel="stylesheet" />
+
+<style>
+
+    #buttons {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        margin: 30px 0;
+    }
+
+    .page-link {
+        background-color: #fff;
+        border-radius: 8px;
+        margin: 0 2px;
+        color: red;
+        cursor: pointer;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 40px;
+        height: 40px;
+        font-weight: 500;
+    }
+
+        .page-link a {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+    .active {
+        background-color: #006bce;
+        color: #fff;
+        cursor: default;
+    }
+
+        .active:hover {
+            background-color: #006bce;
+            color: #fff;
+            cursor: default;
+        }
+
+    .pagination li:not(.active) a {
+        color: #006bce;
+    }
+
+    .pagination li:not(.active):hover {
+        background-color: #006bce;
+        color: #fff;
+    }
+
+        .pagination li:not(.active):hover a {
+            color: #fff;
+        }
+
+    .secondary {
+        background-color: #5e17eb !important;
+    }
+</style>
+
+<style>
+    .image {
+        position: relative;
+        width: 100%;
+        height: 0;
+        padding-top: 56.25%;
+        overflow: hidden;
+    }
+
+        .image img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+    p.title {
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        white-space: none;
+        text-overflow: ellipsis;
+    }
+</style>
+
+@Html.Action("Slider", "News")
+
+@Html.Action("TrendNews", "News")
+
+<section id="last-news">
+    <header>
+        <p>Son xəbərlər</p>
+    </header>
+    <article>
+        @foreach (var item in Model)
+        {
+            <div class="news">
+                <a href="/News/NewsDetails/@item.NewsID">
+                    <div class="image">
+                        <img src="@item.NewsImage" alt="">
+                    </div>
+                    <div class="details">
+                        <p class="date"><i class="fas fa-calendar-day"></i> @item.NewsCreated.ToString("dd MMMM yyyy")</p>
+                        <p class="view"><i class="fas fa-eye"></i> @item.Reading baxış</p>
+                    </div>
+                    <p class="title">
+                        @item.NewsTitle
+                    </p>
+                </a>
+            </div>
+        }
+
+    </article>
+</section>
+
+<section id="buttons">
+    @Html.PagedListPager((IPagedList)Model, page => Url.Action("Index", "News",
+new { page }), new PagedListRenderOptions
+{
+    DisplayEllipsesWhenNotShowingAllPageNumbers = true,
+    MaximumPageNumbersToDisplay = 10,
+    LiElementClasses = new List<String>
+    { "page-link" }
+})
+</section>
+
+<script>
+
+    $(document).ready(function () {
+
+        var firstnews = $(".news:first");
+        var newslist = $(".news");
+
+        $.each(newslist, function (i, news) {
+            if ($(news).offset().top > firstnews.offset().top) {
+                $(this).css("margin-top", "20px");
+            }
+        });
+
+
+        var newsimglist = $(".news .image");
+
+        $.each(newsimglist, function (i, container) {
+            var image = container.querySelector('img');
+
+            var containerAspectRatio = 16 / 9;
+            var imageAspectRatio = image.naturalWidth / image.naturalHeight;
+
+            if (imageAspectRatio > containerAspectRatio) {
+                var newWidth = container.offsetHeight * imageAspectRatio;
+                var xOffset = (newWidth - container.offsetWidth) / 2;
+                image.style.width = newWidth + 'px';
+                image.style.left = -xOffset + 'px';
+            } else {
+                var newHeight = container.offsetWidth / imageAspectRatio;
+                var yOffset = (newHeight - container.offsetHeight) / 2;
+                image.style.height = newHeight + 'px';
+                image.style.top = -yOffset + 'px';
+            }
+        });
+    });
+
+</script>
+
+<script src="/Scripts/Slider.js"></script>

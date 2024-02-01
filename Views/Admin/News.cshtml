@@ -1,0 +1,171 @@
+﻿@using EntityLayer.Concrete
+@model List<News>
+@{
+    ViewBag.Title = "News";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<link href="~/Style/AdminPanel/adminpanelevents.css" rel="stylesheet" />
+<style>
+    aside ul #newslist {
+        border-radius: 8px;
+        background-color: #006bce;
+    }
+
+        aside ul #newslist p, aside ul #newslist i {
+            color: white;
+        }
+
+        aside ul #newslist:hover {
+            padding-left: 0;
+        }
+
+            aside ul #newslist:hover p, aside ul #newslist:hover i {
+                color: white;
+            }
+</style>
+
+<style>
+    .image {
+        position: relative;
+        width: 100%;
+        height: 0;
+        padding-top: 56.25% !important;
+        overflow: hidden;
+    }
+
+        .image img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+    p.title {
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        white-space: none;
+        text-overflow: ellipsis;
+    }
+</style>
+
+<div id="events">
+    <a href="/Admin/AddNews" id="addevent">
+        <i class="fas fa-plus"></i>
+        <p>Xəbər artır</p>
+    </a>
+    @foreach (var item in Model)
+    {
+        <div class="event">
+            <div class="image">
+                <img src="@item.NewsImage" alt="">
+            </div>
+            <p class="title">@item.NewsTitle</p>
+            <div class="details">
+                <p class="date">@item.NewsCreated.ToString("dd MMMM yyyy")</p>
+            </div>
+            <div class="actions">
+                <a href="/Admin/UpdateNews/@item.NewsID" class="success-hover action-button"><i class="fas fa-edit"></i> Düzəlt</a>
+                <button onclick="ShowEventDetails(@item.NewsID)" class="primary-hover action-button">
+                    <i class="fas fa-info"></i> Tam
+                    bax
+                </button>
+                <a href="#" class="warning-hover action-button"><i class="fas fa-images"></i> Qalareya</a>
+            </div>
+        </div>
+    }
+
+</div>
+
+<div class="pop-up">
+    <section id="eventdetails">
+        <div class="data-column">
+            <img data-detail="image" src="~/Images/EventCovers/4_Sosial_medianin_heyatimizda_rolu.jpg" alt="">
+        </div>
+        <div class="data-column">
+            <div class="data-value">
+                <p class="data">Adı</p>
+                <p data-detail="title" class="value">Sosial Medianin heyatimizda rolu</p>
+            </div>
+
+            <div class="data-value">
+                <p class="data">Haqqında</p>
+                <p data-detail="caption" class="value">
+
+                </p>
+            </div>
+        </div>
+
+        <div class="data-column">
+            <div class="data-value">
+                <p class="data">Tarix</p>
+                <p data-detail="date" class="value">31 oktyabr 2022 12:00</p>
+            </div>
+
+        </div>
+
+        <div class="data-column close">
+            <i class="fas fa-times"></i>
+            <button class="action-button primary">Düzəliş et</button>
+        </div>
+    </section>
+</div>
+
+<script>
+    const addevent = document.querySelector("#addevent i");
+    var elementWidth = addevent.offsetWidth;
+    addevent.style.height = (elementWidth - 44) + "px";
+    addevent.style.fontSize = (elementWidth - 144) + "px";
+
+    $("#eventdetails .data-column").height($(".data-column").parent().height());
+    $("#eventdetails").parent().css("display", "none");
+    function ShowEventDetails(id) {
+        eventid = id;
+        $.ajax({
+            type: "GET",
+            url: "/Admin/NewsByID/" + eventid,
+            success: function (result) {
+                ShowEventData(result);
+            }
+        });
+        function ShowEventData(event) {
+            $("img[data-detail='image']").attr("src", event.NewsImage);
+            $("p[data-detail='title'").text(event.NewsTitle);
+            $("p[data-detail='caption'").text(event.NewsCaption);
+            //var datetime = event.DateTime.substring(6, 19);
+            //var time = new Date(datetime).toLocaleString("az");
+            //$("p[data-detail='date'").text(event.DateTime);
+            //$("p[data-detail='date'").text(time);
+
+            $("#eventdetails").parent().css("display", "flex");
+            $("#eventdetails").css("height", "max-content");
+
+        }
+    };
+    $("#eventdetails i").click(function () {
+        $("#eventdetails").parent().css("display", "none");
+    });
+
+    var newsimglist = $(".image");
+
+    $.each(newsimglist, function (i, container) {
+        var image = container.querySelector('img');
+
+        var containerAspectRatio = 16 / 9;
+        var imageAspectRatio = image.naturalWidth / image.naturalHeight;
+
+        if (imageAspectRatio > containerAspectRatio) {
+            var newWidth = container.offsetHeight * imageAspectRatio;
+            var xOffset = (newWidth - container.offsetWidth) / 2;
+            image.style.width = newWidth + 'px';
+            image.style.left = -xOffset + 'px';
+        } else {
+            var newHeight = container.offsetWidth / imageAspectRatio;
+            var yOffset = (newHeight - container.offsetHeight) / 2;
+            image.style.height = newHeight + 'px';
+            image.style.top = -yOffset + 'px';
+        }
+    });
+</script>

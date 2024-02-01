@@ -1,0 +1,33 @@
+﻿@using EntityLayer.Concrete
+@model List<EventRegistration>
+@{
+    ViewBag.Title = "EventReviews";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<link href="~/Style/AdminPanel/APEvents23423.css" rel="stylesheet" />
+
+<div id="reviews">
+    @foreach (var item in Model)
+    {
+        <div class="review">
+            <div class="user-datas">
+                <img class="eventpic" src="@item.User.UserImage" alt="">
+                <p class="name">@item.User.Name @item.User.Surname</p>
+            </div>
+            <div class="star">
+                @for (int i = 0; i < item.Rating; i++)
+                {
+                    <i class="fas fa-star"></i>
+                }
+                @for (int i = 0; i < 5 - item.Rating; i++)
+                {
+                    <i class="far fa-star"></i>
+                }
+            </div>
+            <div class="comment">
+                <p>@item.Review</p>
+            </div>
+        </div>
+    }
+</div>

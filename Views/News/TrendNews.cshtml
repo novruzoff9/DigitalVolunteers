@@ -1,0 +1,27 @@
+﻿@using EntityLayer.Concrete
+@model List<News>
+
+<section id="last-news">
+    <header>
+        <p>Aylıq Trend xəbərlər</p>
+    </header>
+    <article>
+        @foreach (var item in Model)
+        {
+            <div class="news">
+                <a href="/News/NewsDetails/@item.NewsID">
+                    <div class="image">
+                        <img src="@item.NewsImage" alt="">
+                    </div>
+                    <div class="details">
+                        <p class="date"><i class="fas fa-calendar-day"></i> @item.NewsCreated.ToString("dd MMMM yyyy")</p>
+                        <p class="view"><i class="fas fa-eye"></i> @item.Reading baxış</p>
+                    </div>
+                    <p class="title">
+                        @item.NewsTitle
+                    </p>
+                </a>
+            </div>
+        }
+    </article>
+</section>

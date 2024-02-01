@@ -1,0 +1,252 @@
+﻿@using EntityLayer.Concrete
+@model List<DailyLogin>
+@{
+    ViewBag.Title = "DailyLogins";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<link href="~/Style/AdminPanel/DailyLogins123.css" rel="stylesheet" />
+
+<style>
+    aside ul #dailylogins {
+        border-radius: 8px;
+        background-color: #006bce;
+    }
+
+        aside ul #dailylogins p, aside ul #dailylogins i {
+            color: white;
+        }
+
+        aside ul #dailylogins:hover {
+            padding-left: 0;
+        }
+
+            aside ul #dailylogins:hover p, aside ul #dailylogins:hover i {
+                color: white;
+            }
+    select {
+        padding: 6px 10px;
+        border-radius: 8px;
+        border: 2px solid #87898f;
+        outline: none;
+    }
+
+        select:focus {
+            border: 2px solid #0162e8;
+        }
+</style>
+
+<div class="for-ranges">
+    <section>
+        <p class="value">@ViewBag.daily</p>
+        <p class="range">Gündəlik giriş sayı</p>
+        <p class="date">@ViewBag.today</p>
+    </section>
+    <section>
+        <p class="value">@ViewBag.weekly</p>
+        <p class="range">Həftəlik giriş sayı</p>
+        <p class="date">@ViewBag.thisweek-dən</p>
+    </section>
+    <section>
+        <p class="value">@ViewBag.monthly</p>
+        <p class="range">Aylıq giriş sayı</p>
+        <p class="date">@ViewBag.ThisMonth ayı</p>
+    </section>
+</div>
+<div id="daily_logins"></div>
+
+<div class="logins">
+    <section id="filter" class="flex-row justify-content-around">
+        @{ 
+            string date = ViewBag.date;
+            string membertype = ViewBag.membertype;
+        } 
+        <input id="dateoflogins" type="date" value="@date">
+        <select id="membertype" name="membertype">
+            @if (membertype == "All")
+            {
+                <option selected value="All">Hər kəs</option>
+            }
+            else
+            {
+                <option value="All">Hər kəs</option>
+            }
+            @if (membertype == "Staff")
+            {
+                <option selected value="Staff">Heyət üzvləri</option>
+            }
+            else
+            {
+                <option value="Staff">Heyət üzvləri</option>
+            }
+            @if (membertype == "Member")
+            {
+                <option selected value="Member">Üzvlər</option>
+            }
+            else
+            {
+                <option value="Member">Üzvlər</option>
+            }
+
+        </select>
+        <button id="find" class="action-button primary">Axtar</button>
+    </section>
+    <section id="list">
+        @foreach (var item in Model)
+        {
+            string faculty = "";
+            if (item.User.Faculty == "Digital Economy") { faculty = "Rəqəmsal İqtisadiyyat fakültəsi"; }
+            else if (item.User.Faculty == "Russian Economy") { faculty = "Rus İqtisad Məktəbi"; }
+            else if (item.User.Faculty == "Business") { faculty = "Biznes və Menecement"; }
+            else if (item.User.Faculty == "Sabah") { faculty = "SABAH mərkəzi"; }
+            else if (item.User.Faculty == "ISE") { faculty = "Beynəlxalq İqtisadiyyat Məktəbi"; }
+            else if (item.User.Faculty == "Design") { faculty = "UNEC Dizayn Məktəbi"; }
+            else if (item.User.Faculty == "Finance") { faculty = "Maliyyə və Mühasibat fəkültəsi"; }
+            else if (item.User.Faculty == "TUDIFAK") { faculty = "Türk Dünyası İqtisad fəkültəsi"; }
+            else if (item.User.Faculty == "Engineering") { faculty = "Mühəndislik fakültəsi"; }
+            else if (item.User.Faculty == "Economy") { faculty = "İqtisadiyyat və İdarəetmə fakültəsi"; }
+
+            <div class="user">
+                <div class="main-datas">
+                    <p class="user-id">@item.UserID</p>
+                    <img src="@item.User.UserImage" alt="">
+                    <p class="user-name">@item.User.Name @item.User.Surname</p>
+                </div>
+                <p class="userlogin">@item.User.UserName</p>
+                <p class="user-faculty" style="text-align:center">@faculty</p>
+                <p class="activatepoint">@item.User.ActivityPoint</p>
+                <div class="actions" data-userid="@item.User.UserID">
+                    <i class="fas fa-info" onclick="ShowUserDetails(@item.UserID)"></i>
+                </div>
+            </div>
+        }
+    </section>
+</div>
+
+<script>
+    $("#find").click(function () {
+        var value = $("#dateoflogins").val();
+        var date = value;
+        var membertype = $("#membertype").val();
+        var url = '@Url.Action("DailyLogins", "Admin")' + '?date=' + date + '&membertype=' + membertype;
+
+        window.location.href = url;
+    });
+
+</script>
+
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $.ajax({
+            type: "Get",
+            url: "/Admin/DailyLoginChart",
+            success: function (logins) {
+                google.charts.load('current',
+                    { 'packages': ['corechart'] });
+                google.charts.setOnLoadCallback(function () {
+                    drawChart(logins);
+                });
+            }
+        });
+    });
+
+    function drawChart(items) {
+
+        var data = new google.visualization.DataTable();
+        data.addColumn('string', 'Gün');
+        data.addColumn('number', 'Üzv');
+        data.addColumn('number', 'Heyət');
+
+        var dataArray = [];
+        $.each(items, function (i, obj) {
+            dataArray.push([obj.Name, obj.NowValue, obj.PreviusValue]);
+        });
+        data.addRows(dataArray);
+
+        var options = {
+            title: 'Üzvlərin və idarə heyətinin gündəlik girişi',
+            titleTextStyle: {
+                fontSize: 22
+            },
+            chartArea: {
+                top: 70,
+                width: '90%',
+                height: '70%'
+            },
+            backgroundColor: {
+                fill: "#006bce"
+            },
+            height: 500,
+            legend: { position: 'bottom' },
+            hAxis: { title: 'Tarix', titleTextStyle: { color: '#333' } },
+            vAxis: { minValue: 0 }
+        };
+
+        var chart = new google.visualization.AreaChart(document.getElementById('daily_logins'));
+
+            options.hAxis = {
+                textStyle: {
+                    fontSize: 16,
+                    color: '#080708',
+                }
+            }
+            options.vAxis = {
+                textStyle: {
+                    fontSize: 16,
+                    color: '#080708',
+                }
+            }
+            options.legend.textStyle = {
+                color: "#080708"
+            }
+            options.backgroundColor = "#fff";
+            options.titleTextStyle.color = "#080708";
+        
+
+        $(document).ready(function () {
+            chart.draw(data, options);
+        });
+
+        $(".themebtn").click(function () {
+            if ($(this).hasClass("fa-sun")) {
+                options.hAxis = {
+                    textStyle: {
+                        color: '#080708',
+                    }
+                }
+                options.vAxis = {
+                    textStyle: {
+                        color: '#080708',
+                    }
+                }
+                options.legend.textStyle = {
+                    color: "#080708"
+                }
+                options.backgroundColor = "#fff";
+                options.titleTextStyle.color = "#080708";
+                chart.draw(data, options);
+            }
+            else {
+                options.hAxis = {
+                    textStyle: {
+                        color: '#fff',
+                    }
+                }
+                options.vAxis = {
+                    textStyle: {
+                        color: '#fff',
+                    }
+                }
+                options.legend.textStyle = {
+                    color: "#fff"
+                }
+                options.backgroundColor = "#141824";
+                options.titleTextStyle.color = "#fff";
+                chart.draw(data, options);
+            }
+        });
+    }
+</script>

@@ -1,0 +1,137 @@
+﻿@model EntityLayer.Concrete.User
+@{
+    ViewBag.Title = "QRCode";
+    Layout = "~/Views/Shared/_MemberLayout.cshtml";
+}
+
+<style>
+    #QRCode {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        align-items: center;
+        justify-content: center;
+        margin-top: 20px;
+        position: relative;
+    }
+
+        #QRCode .details {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            align-items: center;
+            justify-content: center;
+        }
+
+            #QRCode .details p {
+                color: black;
+                font-size: 20px;
+            }
+
+                #QRCode .details p:first-child {
+                    font-weight: 500;
+                }
+
+        #QRCode .qr {
+            width: 80%;
+            flex-direction: column;
+            align-items: center;
+            background-color: white;
+            border-radius: 20px;
+        }
+
+            #QRCode .qr .qrcode {
+                position: relative;
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                border-radius: 20px;
+            }
+
+                #QRCode .qr .qrcode img {
+                    width: 100%;
+                    max-width: 500px;
+                }
+
+            #QRCode .qr .logo {
+                display: none;
+                position: absolute;
+                top: 50%;
+                transform: translateY(-50%);
+                background-color: white;
+                width: 110px;
+                padding: 10px;
+            }
+
+                #QRCode .qr .logo img {
+                    width: 100%;
+                }
+
+            #QRCode .qr p {
+                text-align: center;
+                margin: 0 0 20px 0;
+                padding: 0 5px;
+            }
+
+        #QRCode .download {
+            display: flex;
+            flex-direction: row;
+            width: 80%;
+            justify-content: space-between;
+            margin-top: 10px;
+            box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+            padding: 20px;
+            border-radius: 20px;
+            align-items: center;
+            background-color: #fff;
+        }
+
+            #QRCode .download i {
+                width: 24px;
+                font-size: 24px;
+            }
+
+            #QRCode .download p {
+                width: calc(100% - 24px);
+                text-align: center;
+                margin: 0;
+                font-weight: 500;
+                font-size: 22px;
+            }
+    /*# sourceMappingURL=ProfileQRCode.css.map */
+</style>
+
+<div id="QRCode">
+    <div class="details">
+        <p class="name">@Model.Name @Model.Surname</p>
+        @{
+            string faculty = "";
+            if (Model.Faculty == "Digital Economy") { faculty = "Rəqəmsal İqtisadiyyat fakültəsi"; }
+            else if (Model.Faculty == "Russian Economy") { faculty = "Rus İqtisad Məktəbi"; }
+            else if (Model.Faculty == "Business") { faculty = "Biznes və Menecement"; }
+            else if (Model.Faculty == "Sabah") { faculty = "SABAH mərkəzi"; }
+            else if (Model.Faculty == "ISE") { faculty = "Beynəlxalq İqtisadiyyat Məktəbi"; }
+            else if (Model.Faculty == "Design") { faculty = "UNEC Dizayn Məktəbi"; }
+            else if (Model.Faculty == "Finance") { faculty = "Maliyyə və Mühasibat fəkültəsi"; }
+            else if (Model.Faculty == "TUDIFAK") { faculty = "Türk Dünyası İqtisad fəkültəsi"; }
+            else if (Model.Faculty == "Engineering") { faculty = "Mühəndislik fakültəsi"; }
+            else if (Model.Faculty == "Economy") { faculty = "İqtisadiyyat və İdarəetmə fakültəsi"; }
+        }
+        <p class="faculty">@faculty</p>
+    </div>
+    <div class="qr">
+        <div class="qrcode">
+            <img src="@ViewBag.qrcodeimg" alt="">
+            <div class="logo">
+                <img src="~/Images/new Logo.png" alt="">
+            </div>
+        </div>
+
+        <p>Tədbirdə iştirakınızı təsdiq etmək üçün kodu oxutdurun.</p>
+    </div>
+    <a class="download" href="@ViewBag.qrcodeimg" download="UserQrCode">
+        <i class="fas fa-download"></i>
+        <p>Endir</p>
+    </a>
+</div>

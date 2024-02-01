@@ -1,0 +1,106 @@
+﻿@model EntityLayer.Concrete.Event
+@using System.Web;
+@{
+    string location = "";
+    if (Model.Location == "First")
+    {
+        location = "UNEC, Əsas tədris binası";
+    }
+    else if (Model.Location == "SecondBig")
+    {
+        location = "UNEC, II tədris binası. Böyük akt zalı";
+    }
+    else if (Model.Location == "Second")
+    {
+        location = "UNEC, II tədris binası. Kiçik akt zalı";
+    }
+    else if (Model.Location == "ThirdBig")
+    {
+        location = "UNEC, III tədris binası. Böyük akt zalı";
+    }
+    else if (Model.Location == "ThirdSmall")
+    {
+        location = "UNEC, III tədris binası. Kiçik akt zalı";
+    }
+    else if (Model.Location == "Fourth")
+    {
+        location = "UNEC, IV tədris binası";
+    }
+}
+<section id="nextevent">
+    <div class="shadow">
+    </div>
+    <div class="details">
+        <p class="name">Növbəti tədbir</p>
+        <p class="date-view">
+            <i class="fas fa-calendar-alt"></i>@Model.DateTime.ToString("dd MMM yyyy HH:mm") |
+            <i class="fas fa-map-marker-alt"></i>@location
+        </p>
+        <p class="nomination">@Model.Title</p>
+        <p class="caption">
+            @Html.Raw(Model.Caption)
+        </p>
+        <a href="@Model.RegistrationURL"
+           class="sign">Qeydiyyatdan keç</a>
+    </div>
+    <div class="right-side">
+        <div class="img">
+            <img src="@Model.Image" alt="">
+        </div>
+        <div class="countdown">
+            <div class="time day">
+                <p class="number"></p>
+                <p class="text">Gün</p>
+            </div>
+            <div class="time hour">
+                <p class="number"></p>
+                <p class="text">Saat</p>
+            </div>
+            <div class="time minute">
+                <p class="number"></p>
+                <p class="text">Dəqiqə</p>
+            </div>
+            <div class="time second">
+                <p class="number"></p>
+                <p class="text">Saniyə</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+@{
+    string datedayjs = Model.DateTime.ToString("yyyy-MM-dd");
+    string dateclockjs = Model.DateTime.ToString("HH:mm");
+    string datejs = "&quot;" + datedayjs + "T" + dateclockjs + ":00" + "&quot;";
+    datejs = HttpUtility.HtmlDecode(datejs);
+}
+
+<script>
+    $(document).ready(function () {
+        console.log(@Html.Raw(datejs));
+        var month = 0,
+        day = 0,
+        hour = 0,
+        minute = 0,
+        second = 0;
+
+        setInterval(function () {
+            var nowdate = new Date(),
+                eventdate = new Date(@Html.Raw(datejs));
+            var difference = eventdate.getTime() - nowdate.getTime();
+            day = Math.floor(difference / (1000 * 3600 * 24));
+            hour = Math.floor(difference / (1000 * 3600)) - day * 24;
+            minute =
+                Math.floor(difference / (1000 * 60)) -
+                Math.floor(difference / (1000 * 3600)) * 60;
+            second =
+                Math.floor(difference / 1000) -
+                Math.floor(difference / (1000 * 60)) * 60;
+
+            $(".countdown>.day>.number").text(day);
+            $(".countdown>.hour>.number").text(hour);
+            $(".countdown>.minute>.number").text(minute);
+            $(".countdown>.second>.number").text(second);
+        }, 1000);
+    });
+</script>

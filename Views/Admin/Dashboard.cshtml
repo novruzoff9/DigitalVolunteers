@@ -1,0 +1,309 @@
+﻿
+@{
+    ViewBag.Title = "Dashboard";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<style>
+    aside ul #dashboard {
+        border-radius: 8px;
+        background-color: #006bce;
+    }
+
+        aside ul #dashboard p, aside ul #dashboard i {
+            color: white;
+        }
+
+        aside ul #dashboard:hover {
+            padding-left: 0;
+        }
+
+            aside ul #dashboard:hover p, aside ul #dashboard:hover i {
+                color: white;
+            }
+
+    .change .const {
+        color: #080708;
+        background-color: #ccc;
+    }
+    .userlist .users .user .main-datas img {
+    width: 50px;
+    height: 50px;
+    margin: auto 0;
+    border-radius: 50%;
+    }
+
+
+</style>
+
+<link href="~/Style/AdminPanel/APHome.css" rel="stylesheet" />
+
+<section id="digi-greeting">
+    <img src="~/Images/Digi_greeting.png" alt="">
+    <div class="welcome">
+        <p class="hello">Salam @Session["UserFirstName"] Xoş gəlmisən!</p>
+        <p class="digi">Mən Digi. Yaxın zamanda sənə daha yaxın olacağam!</p>
+    </div>
+</section>
+
+@Html.Action("ActiveUsers", "Admin")
+
+<div id="counts">
+
+    @Html.Action("Statistics", "Admin", new { @table = "user" })
+
+    @Html.Action("Statistics", "Admin", new { @table = "news" })
+
+    @Html.Action("Statistics", "Admin", new { @table = "event" })
+
+    <section id="admincount">
+        <i class="fas fa-users"></i>
+        <div class="statistics">
+            <div class="change">
+                <p class="increase">+5%</p>
+            </div>
+            <div class="data-value">
+                <p class="value">126</p>
+                <p class="data">Heyət üzvü</p>
+            </div>
+            <div class="last-month">
+                <p>Keçən ay: <span>120</span></p>
+            </div>
+        </div>
+    </section>
+</div>
+
+
+<div id="newschart" class="half-width">
+    <div id="readingofnews" class="piechart"></div>
+</div>
+
+<div id="corpuschart" class="half-width">
+    <div id="activityofcorpus" class="piechart"></div>
+</div>
+
+<div id="weeklylogin">
+    <div id="loginchart" class="piechart"></div>
+</div>
+
+
+@Html.Action("LastActivities", "Admin")
+
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+<script>
+    $(document).ready(function () {
+
+        if (screen.width > 600) {
+            $("#digi-greeting").height($("#hardworkers").height());
+        }
+    });
+</script>
+
+<script type="text/javascript">
+
+
+    google.charts.load('current', {
+        'packages': ['corechart']
+    });
+    $(document).ready(function () {
+        $.ajax({
+            type: "Get",
+            url: "/Admin/ChartLists",
+            data: {
+                list: "events"
+            },
+            success: function (eventscounts) {
+                google.charts.load('current', {
+                    'packages': ['corechart']
+                });
+                google.charts.setOnLoadCallback(function () {
+                    drawEventsChart(eventscounts);
+                });
+            }
+        });
+    });
+
+
+    function drawEventsChart(items) {
+
+        var data = new google.visualization.DataTable();
+        data.addColumn('string', 'Korpus');
+        data.addColumn('number', 'Tədbir sayı');
+        var dataArray = [];
+        $.each(items, function (i, obj) {
+            dataArray.push([obj.Name, obj.NowValue]);
+        });
+        data.addRows(dataArray);
+
+        var options = {
+            title: 'Korpusda keçirilən tədbirlər',
+            titleTextStyle: {
+                fontSize: 22
+            },
+            height: 500,
+            pieHole: 0.4,
+            slices: {
+                0: { color: '#131850' },
+                1: { color: '#37abdc' },
+                2: { color: '#5E17EB' },
+                3: { color: '#006bce' },
+            },
+            legend: {
+                alignment: 'center',
+                textStyle: {
+                    fontSize: 16,
+                    bold: true
+                }
+            },
+            pieSliceTextStyle: {
+                fontSize: 16
+            },
+            chartArea: {
+                left: 20,
+                width: "70%",
+                height: "70%",
+            }
+
+        };
+        if (screen.width <= 600) {
+            options.legend.position = "bottom";
+            options.legend.maxLines = 4;
+            options.chartArea.width = "90%";
+        }
+
+        var eventchart = new google.visualization.PieChart(document.getElementById('activityofcorpus'));
+
+        eventchart.draw(data, options);
+    }
+</script>
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $.ajax({
+            type: "Get",
+            url: "/Admin/ChartLists",
+            data: {
+                list: "news"
+            },
+            success: function (newsreadings) {
+                google.charts.setOnLoadCallback(function () {
+                    drawNewsChart(newsreadings);
+                });
+            }
+        });
+    });
+
+    function drawNewsChart(items) {
+
+        var data = new google.visualization.DataTable();
+        data.addColumn('string', 'Xəbər');
+        data.addColumn('number', 'Oxunma sayı');
+        var dataArray = [];
+        $.each(items, function (i, obj) {
+            dataArray.push([obj.Name, obj.NowValue]);
+        });
+        data.addRows(dataArray);
+
+        var view = new google.visualization.DataView(data);
+
+        var options = {
+            title: "Ən çox oxunan 5 xəbər",
+            titleTextStyle: {
+                fontSize: 22
+            },
+            height: 500,
+            //colors: ['#131850', '#37abdc', '#5E17EB', '#006bce'],
+            //["#131850"],
+            //["#37abdc"],
+            //["#5E17EB"],
+            //["#006bce"],
+            //["#2A245E"]
+            bar: { groupWidth: "90%" },
+            legend: { position: "none" },
+            chartArea: {
+                top: 70,
+                width: "85%"
+            }
+        };
+        var columnchart = new google.visualization.ColumnChart(document.getElementById("readingofnews"));
+
+        $(document).ready(function () {
+            columnchart.draw(view, options);
+        });
+    }
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $.ajax({
+            type: "Get",
+            url: "/Admin/ChartLists",
+            data: {
+                list: "logins"
+            },
+            success: function (logins) {
+                google.charts.load('current',
+                    { 'packages': ['bar'] });
+                google.charts.setOnLoadCallback(function () {
+                    drawLoginChart(logins);
+                });
+            }
+        });
+    });
+    function drawLoginChart(items) {
+
+        var data = new google.visualization.DataTable();
+        data.addColumn('string', 'Tarix');
+        data.addColumn('number', 'Giriş sayı');
+
+        var dataArray = [];
+        $.each(items, function (i, obj) {
+            dataArray.push([obj.Name, obj.NowValue]);
+        });
+        data.addRows(dataArray);
+
+        var view = new google.visualization.DataView(data);
+        var options = {
+            title: "10 günlük giriş sayı",
+            titleTextStyle: {
+                color: "#ffffff",
+                fontSize: 22
+            },
+            height: 460,
+            colors: ["#37abdc"],
+            bar: { groupWidth: "90%" },
+            legend: { position: "none" },
+            hAxis: {
+                textStyle: {
+                    color: 'white',
+                    bold: true
+                }
+            },
+            vAxis: {
+                textStyle: {
+                    color: 'white',
+                    bold: true
+                }
+            },
+            chartArea: {
+                top: 70,
+                width: "85%",
+            },
+            backgroundColor: {
+                fill: "#006bce"
+            },
+            annotations: {
+                textStyle: {
+                    opacity: 0
+                }
+            }
+        };
+        var loginchart = new google.visualization.ColumnChart(document.getElementById("loginchart"));
+
+        $(document).ready(function () {
+            loginchart.draw(view, options);
+        });
+    }
+</script>

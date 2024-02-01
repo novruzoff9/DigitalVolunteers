@@ -1,0 +1,34 @@
+﻿@using EntityLayer.Concrete
+@model List<User>
+
+<header>
+    <p>Fakültələr üzrə sədrlər</p>
+</header>
+<article id="facultychairmans">
+    <div class="members">
+        @foreach (var item in Model)
+        {
+            <div class="member">
+                <img src="@item.UserImage" alt="">
+                <div class="member-info">
+                    <p class="name">@item.Name @item.Surname</p>
+                    @{ 
+                        string faculty = "";
+                        if (item.Faculty == "Digital Economy") { faculty = "Rəqəmsal İqtisadiyyat"; }
+                        else if (item.Faculty == "Russian Economy") { faculty = "Rus İqtisad Məktəbi"; }
+                        else if (item.Faculty == "Business") { faculty = "Biznes və Menecement"; }
+                        else if (item.Faculty == "Sabah") { faculty = "SABAH"; }
+                        else if (item.Faculty == "ISE") { faculty = "Beynəlxalq İqtisadiyyat Məktəbi"; }
+                        else if (item.Faculty == "Design") { faculty = "UNEC Dizayn Məktəbi"; }
+                        else if (item.Faculty == "Finance") { faculty = "Maliyyə və Mühasibat"; }
+                        else if (item.Faculty == "TUDIFAK") { faculty = "Türk Dünyası İqtisad"; }
+                        else if (item.Faculty == "Engineering") { faculty = "Mühəndislik"; }
+                        else if (item.Faculty == "Economy") { faculty = "İqtisadiyyat və İdarəetmə"; }
+                        else if (item.Faculty == "QETM") { faculty = "Qiyabi və Əlavə Təhsil Mərkəzi"; }
+                    }
+                    <p class="position">"@faculty" fakültəsi üzrə Sədr</p>
+                </div>
+            </div>
+          }
+    </div>
+</article>

@@ -1,0 +1,245 @@
+﻿@model EntityLayer.Concrete.User
+@{
+    ViewBag.Title = "UpdateUser";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<link href="~/Style/AdminPanel/APUserList1231.css" rel="stylesheet" />
+
+<style>
+    .input-butons {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+    }
+
+    #userform .input-tel {
+        position: relative;
+    }
+
+        #userform .input-tel input {
+            padding-left: 60px;
+        }
+
+        #userform .input-tel .telstart {
+            background-color: #87898f;
+            height: 40px;
+            width: 50px;
+            position: absolute;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-top-left-radius: 8px;
+            border-bottom-left-radius: 8px;
+            font-weight: 500;
+            top: 0;
+            left: 0;
+        }
+</style>
+
+@using (Html.BeginForm("UpdateUser", "Admin", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.HiddenFor(x => x.UserID)
+    <section id="userform">
+        <div class="addimage">
+            <input type="file" id="eventimage" onchange="FileUpload()" name="UserImage">
+            <label for="eventimage"><i class="fas fa-image"></i></label>
+        </div>
+        <div class="name">
+            @Html.TextBoxFor(x => x.UserName, new { @readonly = "readonly" })
+            @Html.TextBoxFor(x => x.Name)
+            @Html.TextBoxFor(x => x.Surname)
+            @Html.TextBoxFor(x => x.BirthDate, "{0:yyyy-MM-dd}", new { type = "datetime" })
+        </div>
+        <div class="name">
+            <div class="input-tel">
+                @Html.TextBoxFor(x => x.PhoneNumber, new { type = "number", placeHolder = "Telefon nömrəsi" })
+                <div class="telstart">+994</div>
+            </div>
+            @Html.TextBoxFor(x => x.EMail, new { placeHolder = "E-Mail" })
+            @Html.TextBoxFor(x => x.Group, new { placeHolder = "Qrup nömrəsi" })
+            @Html.TextBoxFor(x => x.EntranceYear, new { type = "number", placeHolder = "Qəbul ili" })
+        </div>
+        <div class="details">
+
+            @{
+                string faculty = "";
+                if (Model.Faculty == "Digital Economy") { faculty = "Rəqəmsal İqtisadiyyat"; }
+                else if (Model.Faculty == "Russian Economy") { faculty = "Rus İqtisad Məktəbi"; }
+                else if (Model.Faculty == "Business") { faculty = "Biznes və Menecement"; }
+                else if (Model.Faculty == "Sabah") { faculty = "SABAH"; }
+                else if (Model.Faculty == "ISE") { faculty = "Beynəlxalq İqtisadiyyat Məktəbi"; }
+                else if (Model.Faculty == "Design") { faculty = "UNEC Dizayn Məktəbi"; }
+                else if (Model.Faculty == "Finance") { faculty = "Maliyyə və Mühasibat"; }
+                else if (Model.Faculty == "TUDIFAK") { faculty = "Türk Dünyası İqtisad"; }
+                else if (Model.Faculty == "Engineering") { faculty = "Mühəndislik"; }
+                else if (Model.Faculty == "Economy") { faculty = "İqtisadiyyat və İdarəetmə"; }
+                else if (Model.Faculty == "QETM") { faculty = "Qiyabi və Əlavə Təhsil Mərkəzi"; }
+            }
+
+            <select name="Faculty" id="" placeholder="Fakültə">
+                <option value="@Model.Faculty" selected>@faculty</option>
+                <option value="Digital Economy">Rəqəmsal İqtisadiyyat</option>
+                <option value="Russian Economy">Rus İqtisad Məktəbi</option>
+                <option value="Business">Biznes və Menecement</option>
+                <option value="Sabah">Sabah</option>
+                <option value="ISE">Beynəlxalq İqtisadiyyat Məktəbi</option>
+                <option value="Design">Dizayn</option>
+                <option value="Finance">Maliyyə və Mühasibat</option>
+                <option value="TUDIFAK">Türk Dünyası İqtisad fəkültəsi</option>
+                <option value="Engineering">Mühəndislik</option>
+                <option value="Economy">İqtisadiyyat və idarəetmə</option>
+            </select>
+            <select name="Profession" placeholder="İxtisas">
+                <option value="@Model.Profession" selected>@Model.Profession</option>
+                <option value="İnformasiya texnologiyaları">İnformasiya texnologiyaları</option>
+                <option value="İnformasiya təhlükəsizliyi">İnformasiya təhlükəsizliyi</option>
+                <option value="Kompüter elmləri">Kompüter elmləri</option>
+                <option value="Kompüter mühəndisliyi">Kompüter mühəndisliyi</option>
+                <option value="Kommunikasiya sistemləri mühəndisliyi">Kommunikasiya sistemləri mühəndisliyi</option>
+                <option value="Sənaye mühəndisliyi">Sənaye mühəndisliyi</option>
+                <option value="Materiallar mühəndisliyi">Materiallar mühəndisliyi</option>
+                <option value="Maşın mühəndisliyi">Maşın mühəndisliyi</option>
+                <option value="Ekologiya mühəndisliyi">Ekologiya mühəndisliyi</option>
+                <option value="Elektrik və elektronika mühəndisliyi">Elektrik və elektronika mühəndisliyi</option>
+                <option value="Qida mühəndisliyi">Qida mühəndisliyi</option>
+                <option value="Maliyyə">Maliyyə</option>
+                <option value="Mühasibat">Mühasibat</option>
+                <option value="Beynəlxalq ticarət və logistika">Beynəlxalq ticarət və logistika</option>
+                <option value="İqtisadiyyat">İqtisadiyyat</option>
+                <option value="Biznesin idarə edilməsi">Biznesin idarə edilməsi</option>
+                <option value="Marketinq">Marketinq</option>
+                <option value="Menecment">Menecment</option>
+                <option value="Statistika">Statistika</option>
+                <option value="Dövlət və bələdiyyə idarəetməsi">Dövlət və bələdiyyə idarəetməsi</option>
+                <option value="Sosial iş">Sosial iş</option>
+                <option value="Ekologiya">Ekologiya</option>
+                <option value="Dizayn">Dizayn</option>
+            </select>
+            <div class="input-butons">
+                <div>
+                    @Html.CheckBoxFor(x => x.FacultyStaff)
+                    @Html.LabelFor(x => x.FacultyStaff)
+                </div>
+                <div>
+                    @Html.CheckBoxFor(x => x.DepartmentStaff)
+                    @Html.LabelFor(x => x.DepartmentStaff)
+                </div>
+            </div>
+            <div class="input-butons">
+                <label>
+                    @Html.RadioButtonFor(x => x.Gender, "Male")
+                    Kişi
+                </label>
+                <label>
+                    @Html.RadioButtonFor(x => x.Gender, "Female")
+                    Qadın
+                </label>
+            </div>
+
+            @{
+                string department = "";
+                if (Model.Department == "Secretary") { department = "Katib"; }
+                else if (Model.Department == "IT") { department = "İnformasiya Texnologiyaları departamenti"; }
+                else if (Model.Department == "SMM") { department = "Sosial Media Marketinq departamenti"; }
+                else if (Model.Department == "HR") { department = "İnsan Resursları departamenti"; }
+                else if (Model.Department == "PR") { department = "İctimaiyyətlə Əlaqələtr departamenti"; }
+                else if (Model.Department == "WWM") { department = "Üzvlərlə iş"; }
+                else if (Model.Department == "WWF") { department = "Fakültələrlə iş"; }
+                else if (Model.Department == "FS") { department = "Fakültə heyəti"; }
+                else if (Model.Department == "ICD") { department = "Beynəlxalq əməkdaşlıq departamenti"; }
+                else if (Model.Department == "Organizer") { department = "Təşkilati işlər departamenti"; }
+                else if (Model.Department == "Security") { department = "Nəzarət və təftiş"; }
+            }
+            <select name="Department" id="" placeholder="Departament">
+                <option value="@Model.Department" selected>@department</option>
+                <option value="Member">Üzv</option>
+                <option value="FS">Fakültə heyəti</option>
+                <option value="Organizer">Təşkilati işlər departamenti</option>
+                <option value="HR">İnsan Resursları departamenti</option>
+                <option value="PR">İctimaiyyətlə əlaqələr departamenti</option>
+                <option value="SMM">SMM departamenti</option>
+                <option value="WWM">Üzvlərlə iş departamenti</option>
+                <option value="WWF">Fakültələrlə iş departamenti</option>
+                <option value="ICD">Beynəlxalq Əməkdaşlıq departamenti</option>
+                <option value="Security">Nəzarət Təftiş Departamenti</option>
+            </select>
+
+            @{
+                string modelRole = Model.Role;
+                string role = "";
+                if (modelRole == "President") { role = "Təşkilat üzrə Sədr"; }
+                else if (modelRole == "Vice-President") { role = "Təşkilat üzrə Sədr müavini"; }
+                else if (modelRole == "Leader") { role = "Rəhbər"; }
+                else if (modelRole == "Chairman") { role = "Fakültə üzrə Sədr"; }
+                else if (modelRole == "Vice-Chairman") { role = "Rəhbər müavini"; }
+                else if (modelRole == "Staff") { role = "Heyət üzvü"; }
+                else if (modelRole == "Leader") { role = "Departament üzrə Rəhbər"; }
+                else if (modelRole == "Vice-Chairman") { role = "Fakültə üzrə Sədr müavini"; }
+                else if (modelRole == "Vice-Leader") { role = "Departament üzrə Rəhbər müavini"; }
+                else if (modelRole == "HR") { role = "İnsan Resursları"; }
+                else if (modelRole == "PR") { role = "İctimaiyyətlə əlaqələr"; }
+                else if (modelRole == "IT") { role = "İnformasiya Texnologiyaları"; }
+                else if (modelRole == "SMM") { role = "SMM"; }
+                else if (modelRole == "PM") { role = "Layihə Meneceri"; }
+                else if (modelRole == "CW") { role = "Copywriter"; }
+                else if (modelRole == "WWM") { role = "Üzvlərlə iş"; }
+                else if (modelRole == "Photograph") { role = "Fotoqraf"; }
+                else if (modelRole == "Photograph/Videograph") { role = "Fotoqraf/Videoqraf"; }
+                else if (modelRole == "Coordinator") { role = "Koordinator"; }
+                else if (modelRole == "Security") { role = "Nəzarət və Təftiş"; }
+                else if (modelRole == "GDesigner") { role = "Qrafik dizayner"; }
+                else if (modelRole == "Secretary") { role = "Katib"; }
+                else if (modelRole == "Advisor") { role = "Müşavir"; }
+            }
+            <select name="Role" id="" placeholder="Rolu">
+                <option value="@Model.Role" selected>@role</option>
+                <option value="Member">Üzv</option>
+                <option value="Leader">Departament üzrə Rəhbər</option>
+                <option value="Vice-Chairman">Fakültə üzrə Sədr müavini</option>
+                <option value="Vice-Leader">Departament üzrə Rəhbər müavini</option>
+                <option value="HR">İnsan Resursları</option>
+                <option value="PR">İctimaiyyətlə əlaqələr</option>
+                <option value="IT">İnformasiya Texnologiyaları</option>
+                <option value="SMM">SMM</option>
+                <option value="PM">Layihə Meneceri</option>
+                <option value="CW">Copywriter</option>
+                <option value="WWM">Üzvlərlə iş</option>
+                <option value="Photograph">Fotoqraf</option>
+                <option value="Photograph/Videograph">Fotoqraf/Videoqraf</option>
+                <option value="Coordinator">Koordinator</option>
+                <option value="Security">Nəzarət və Təftiş</option>
+                <option value="GDesigner">Qrafik dizayner</option>
+                <option value="Secretary">Katib</option>
+                <option value="Advisor">Müşavir</option>
+            </select>
+        </div>
+    </section>
+
+    <section id="buttons">
+        <button class="adduser"><i class="fas fa-user-plus"></i> Təsdiq et</button>
+    </section>
+}
+
+<script>
+    const btn = document.querySelector("#buttons>.adduser");
+    btn.style.width = "130px";
+    const addimage = document.querySelector("#userform>.addimage");
+    var height = addimage.clientHeight;
+    console.log(height);
+    $("#userform>.name").height(height)
+    document.querySelector("#userform>.details").style.height = height + "px";
+
+    function FileUpload() {
+        const label = document.querySelector('label[for="eventimage"]');
+        const fileInput = document.querySelector('#eventimage');
+        console.log(label.innerHTML);
+        if (fileInput.files.length > 0) {
+            label.innerHTML += `Seçilmiş fayl: ${fileInput.files[0].name}`;
+            label.style.borderColor = '#0162e8';
+        }
+        else {
+            label.textContent = 'Choose a file:';
+        }
+    }
+</script>

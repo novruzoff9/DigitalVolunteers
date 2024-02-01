@@ -1,0 +1,130 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+    Layout = "~/Views/Shared/_UserLayout.cshtml";
+}
+
+<link href="~/Style/About1.css" rel="stylesheet" />
+
+<section id="logo-chairman">
+    <article>
+        <div class="logo">
+            <img src="~/Images/new Logo.png" alt="">
+        </div>
+        <div class="chairman">
+            <img src="~/Images/ProfilePictures/3_Ceferisadiq_Ibrahimov.jfif" alt="">
+            <div class="details">
+                <p class="title">Cəfərisadiq İbrahimov</p>
+                <p class="data">Təşkilatın sədri</p>
+            </div>
+        </div>
+    </article>
+
+</section>
+
+<section id="timeline">
+    <header>
+        <p>Əsas tarixlər</p>
+    </header>
+    <article>
+        <div class="line"></div>
+        <div class="event">
+            <div class="circle"></div>
+            <div class="info-box">
+                <div class="date-cap">
+                    <div class="date">Avqust 2021</div>
+                    <div class="caption">Əsasnamə yaranıb</div>
+                </div>
+                <i class="fas fa-file-signature"></i>
+            </div>
+        </div>
+        <div class="event">
+            <div class="circle"></div>
+            <div class="info-box">
+                <div class="date-cap">
+                    <div class="date">31 Dekabr 2021</div>
+                    <div class="caption">Fəaliyyətə başlayıb</div>
+                </div>
+                <i class="far fa-flag"></i>
+            </div>
+        </div>
+        <div class="event">
+            <div class="circle"></div>
+            <div class="info-box">
+                <div class="date-cap">
+                    <div class="date">7 Mart 2022</div>
+                    <div class="caption">İlk tədbir baş tutub</div>
+                </div>
+                <i class="fas fa-chalkboard-teacher"></i>
+            </div>
+        </div>
+        <div class="event">
+            <div class="circle"></div>
+            <div class="info-box">
+                <div class="date-cap">
+                    <div class="date">31 Oktyabr 2022</div>
+                    <div class="caption">Tədbirdə 700+ iştirakçı iştirak edib</div>
+                </div>
+                <i class="fas fa-users"></i>
+            </div>
+        </div>
+    </article>
+
+</section>
+
+<section id="contact">
+    <header>
+        <p>Bizimlə Əlaqə</p>
+    </header>
+    <article>
+        <div class="cards">
+            <a class="card" href="mailto:unecdigitalvolunteers@gmail.com">
+                <i class="fas fa-envelope-open-text"></i>
+                <p>E-mail göndər</p>
+                <p>unecdigitalvolunteers@gmail.com</p>
+            </a>
+            <div class="card">
+                <i class="fas fa-map-marker-alt"></i>
+                <p>Adresimiz</p>
+                <p>Azərbaycan Dövlət İqtisad Universiteti III tədris binası. Murtuza Muxtarov 194</p>
+            </div>
+            <a class="card" href="https://www.instagram.com/unecdigitalvolunteers/" target="_blank">
+                <i class="fab fa-instagram"></i>
+                <p>İnstagramda bizi izləyin</p>
+                <p>&commat;unecdigitalvolunteers</p>
+            </a>
+        </div>
+
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1807.008957995074!2d49.829237228798235!3d40.386366582586895!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x40307d9b9925c3ed%3A0xeee07cb0b400caa2!2sAzerbaycan%20Devlet%20%C4%B0ktisat%20%C3%9Cniversitesi!5e0!3m2!1str!2saz!4v1694129293761!5m2!1str!2saz"
+                width="800" height="450" style="border:0;" allowfullscreen="" loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade"></iframe>
+    </article>
+
+</section>
+
+<section id="esasname">
+    <header>
+        <p>Haqqımızda</p>
+    </header>
+    <article>
+        <p>
+            "Rəqəmsal Könüllülər" Təşkilatına UNEC tələbələri üzv olmaqla texniki sahələrdə könüllü fəaliyyətin
+            iştirakçısı ola bilər. Təşkilatın fəaliyyəti könüllülük, hüquq bərabərliyi və özünü idarəetmə
+            əsasında qurulur.
+        </p>
+        <a href="PDFs/Esasname.pdf" target="_blank">Əsasnamə</a>
+    </article>
+</section>
+
+<script>
+
+        $(document).ready(function () {
+
+            $(".line").height($("#timeline>article").height());
+
+            $(".cards>div.card").click(function () {
+                let maptop = $("#contact>article>iframe").offset().top;
+                $("body, html").animate({ scrollTop: maptop }, 200);
+            });
+        });
+
+</script>

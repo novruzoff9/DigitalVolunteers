@@ -1,0 +1,71 @@
+﻿@model EntityLayer.Concrete.Event
+@{
+    ViewBag.Title = "Event";
+    Layout = "~/Views/Shared/_UserLayout.cshtml";
+}
+
+<link href="~/Style/Home/Event12.css" rel="stylesheet" />
+
+<section id="home">
+    <article>
+        <div class="article-left">
+            <img src="@Model.Image" alt="">
+        </div>
+        <div class="article-right">
+            <p class="title">
+                @Model.Title
+            </p>
+            <p class="caption">
+                @Html.Raw(Model.Caption)
+            </p>
+            @if (Model.DateTime > DateTime.Now)
+            {
+                <a href="@Model.RegistrationURL">Qeydiyyatdan keç</a>
+            }
+        </div>
+    </article>
+    <footer>
+        <div class="footer-data">
+            <i class="fas fa-map-marker-alt data-value"></i>
+            @{
+                string location = "";
+                if (Model.Location == "First")
+                {
+                    location = "UNEC, Əsas tədris binası";
+                }
+                else if (Model.Location == "SecondBig")
+                {
+                    location = "UNEC, II tədris binası. Böyük akt zalı";
+                }
+                else if (Model.Location == "Second")
+                {
+                    location = "UNEC, II tədris binası. Kiçik akt zalı";
+                }
+                else if (Model.Location == "ThirdBig")
+                {
+                    location = "UNEC, III tədris binası. Böyük akt zalı";
+                }
+                else if (Model.Location == "ThirdSmall")
+                {
+                    location = "UNEC, III tədris binası. Kiçik akt zalı";
+                }
+                else if (Model.Location == "Fourth")
+                {
+                    location = "UNEC, IV tədris binası";
+                }
+            }
+
+            <p class="data-name location">@location</p>
+        </div>
+        <div class="footer-data">
+            <i class="fas fa-calendar-alt data-value"></i>
+            <p class="data-name date">@Model.DateTime.ToString("dd MMMM yyyy")</p>
+        </div>
+        <div class="footer-data">
+            <i class="far fa-clock data-value"></i>
+            <p class="data-name time">@Model.DateTime.ToString("HH:mm")</p>
+        </div>
+    </footer>
+</section>
+
+@Html.Action("EventGallery", "Events", Model.EventID)

@@ -1,0 +1,83 @@
+﻿@model EntityLayer.Concrete.Event
+@{
+    ViewBag.Title = "UpdateEvent";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<link href="~/Style/AdminPanel/adminpanelevents.css" rel="stylesheet" />
+@using (Html.BeginForm("UpdateEvent", "Admin", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.HiddenFor(x => Model.EventID)
+    <section id="eventform">
+        <div class="addimage">
+            <input type="file" id="eventimage" onchange="FileUpload()" name="Image">
+            <label for="eventimage"><i class="fas fa-image"></i>@Model.Image</label>
+        </div>
+        <div class="title-caption">
+            @Html.TextBoxFor(x => Model.Title)
+            @Html.TextAreaFor(x => x.Caption, new { @rows = 10 })
+        </div>
+        <div class="details">
+            <div class="d-flex flex-column">
+                <label for="eventtime">Tədbirin keçirilmə vaxtı</label>
+                @Html.TextBoxFor(x => x.DateTime, "{0:yyyy-MM-dd HH:mm}", new { type = "datetime-local", id= "eventtime" })
+            </div>
+            <div class="d-flex flex-column">
+                <label for="eventdeadlinetime">Tədbir üçün son qeydiyyat tarixi</label>
+                @Html.TextBoxFor(x => x.Deadline, "{0:yyyy-MM-dd HH:mm}", new { type = "datetime-local", id = "eventdeadlinetime" })
+            </div>
+            <div class="d-flex flex-column">
+                <label for="ParticipantLimit">Tədbir üçün qeydiyyat limiti sayı</label>
+                @Html.TextBoxFor(x => x.ParticipantLimit, new {id = "ParticipantLimit" })
+            </div>
+            <select name="Location" id="">
+                @{
+                    string location = "";
+                    if (Model.Location == "First") { location = "Əsas korpus, Böyük"; }
+                    else if (Model.Location == "FirstHA") { location = "Əsas korpus, Heydər Əliyev"; }
+                    else if (Model.Location == "FirstWhite") { location = "Əsas korpus, Ağ zal"; }
+                    else if (Model.Location == "FirstSmall") { location = "Əsas korpus, Kiçik"; }
+                    else if (Model.Location == "SecondBig") { location = "II korpus, Böyük"; }
+                    else if (Model.Location == "SecondSmall") { location = "II  korpus, Kiçik"; }
+                    else if (Model.Location == "ThirdBig") { location = "III korpus, Böyük"; }
+                    else if (Model.Location == "ThirdSmall") { location = "III korpus, Kiçik"; }
+                    else if (Model.Location == "Fourth") { location = "IV korpus"; }
+                }
+                <option selected value="@Model.Location">@location</option>
+                <option value="FirstBig">İçərişəhər, Böyük</option>
+                <option value="FirstHA">İçərişəhər, Heydər Əliyev</option>
+                <option value="FirstWhite">İçərişəhər, Ağ zal</option>
+                <option value="FirstSmall">İçərişəhər, Kiçik</option>
+                <option value="SecondBig">Gənclik, Böyük</option>
+                <option value="SecondSmall">Gənclik, Kiçik</option>
+                <option value="ThirdBig">Nizami, Böyük</option>
+                <option value="ThirdSmall">Nizami, Kiçik</option>
+                <option value="Fourth">Semaşko</option>
+            </select>
+        </div>
+    </section>
+    <div class="confirm">
+        <button class="action-button success">Təsdiq et</button>
+    </div>
+}
+
+<script>
+    $(document).ready(function () {
+
+        $("#eventform>div").height($("#eventform").height());
+    });
+
+    function FileUpload() {
+        const label = document.querySelector('label[for="eventimage"]');
+        const fileInput = document.querySelector('#eventimage');
+        console.log(label.innerHTML);
+        if (fileInput.files.length > 0) {
+            label.innerHTML += `Seçilmiş fayl: ${fileInput.files[0].name}`;
+            label.style.borderColor = '#0162e8';
+        }
+        else {
+            label.textContent = 'Choose a file:';
+        }
+    }
+</script>
+

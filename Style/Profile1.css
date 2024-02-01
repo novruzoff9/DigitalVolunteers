@@ -1,0 +1,421 @@
+﻿@media only screen and (min-width: 601px) {
+    #profile {
+        width: calc(30% - 50px);
+        max-width: 400px;
+        min-width: 250px;
+        transition: 0.4s;
+        margin: 25px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding-top: 20px;
+        align-self: flex-start;
+    }
+
+        #profile img {
+            width: 60%;
+            border-radius: 50%;
+            margin-bottom: 12px;
+        }
+
+        #profile p {
+            color: #006bce;
+            text-align: center;
+            font-weight: 500;
+        }
+
+            #profile p span {
+                font-weight: 400;
+                color: black;
+            }
+
+            #profile p#name,
+            #profile p#role {
+                color: #131850;
+                font-weight: 500;
+                font-size: 20px;
+            }
+
+        #profile button {
+            margin-top: 20px;
+        }
+
+        #profile:hover {
+            box-shadow: 0 2.8px 2.2px rgba(0, 0, 0, 0.034), 0 6.7px 5.3px rgba(0, 0, 0, 0.048), 0 12.5px 10px rgba(0, 0, 0, 0.06), 0 22.3px 17.9px rgba(0, 0, 0, 0.072), 0 41.8px 33.4px rgba(0, 0, 0, 0.086), 0 100px 80px rgba(0, 0, 0, 0.12);
+        }
+
+    #about {
+        width: calc(70% - 50px);
+        margin: 25px;
+        align-self: flex-start;
+    }
+
+        #about .header {
+            display: flex;
+            flex-direction: row;
+            margin-bottom: 25px;
+        }
+
+            #about .header .tabbtn {
+                margin: 0;
+                font-size: 20px;
+                font-weight: 500;
+                -webkit-user-select: none;
+                -moz-user-select: none;
+                user-select: none;
+                cursor: pointer;
+                padding: 6px 12px;
+                border-radius: 8px;
+                color: #87898f;
+            }
+
+                #about .header .tabbtn:hover {
+                    color: #006bce;
+                }
+
+            #about .header .activetab {
+                background-color: #0162e8;
+                color: white;
+            }
+
+                #about .header .activetab:hover {
+                    color: white;
+                }
+
+        #about #activity {
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+        }
+
+            #about #activity .activitypoint {
+                padding: 10px 0;
+                width: 100%;
+                display: flex;
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+            }
+
+                #about #activity .activitypoint p {
+                    margin: 0;
+                }
+
+                    #about #activity .activitypoint p.date {
+                        font-weight: 500;
+                        width: 60px;
+                    }
+
+                    #about #activity .activitypoint p.text {
+                        padding: 0 10px;
+                        text-align: center;
+                        width: calc(100% - 120px);
+                    }
+
+                    #about #activity .activitypoint p.point {
+                        font-weight: 500;
+                        color: #006bce;
+                        font-size: 26px;
+                        width: 40px;
+                        text-align: end;
+                    }
+
+                #about #activity .activitypoint:not(:last-child) {
+                    border-bottom: 1px solid #aaa;
+                }
+
+        #about .staff {
+            display: none;
+        }
+
+            #about .staff .users {
+                display: flex;
+                flex-direction: column;
+                margin: 0;
+                padding: 0;
+                list-style: none;
+                align-self: flex-start;
+                width: 100%;
+            }
+
+                #about .staff .users .user {
+                    width: 100%;
+                    display: flex;
+                    flex-direction: row;
+                    align-items: center;
+                    justify-content: space-between;
+                }
+
+                    #about .staff .users .user:not(:first-child) {
+                        margin-top: 5px;
+                    }
+
+                    #about .staff .users .user:not(:last-child) {
+                        margin-bottom: 5px;
+                    }
+
+                    #about .staff .users .user .main-datas {
+                        display: flex;
+                        flex-direction: row;
+                        align-items: center;
+                    }
+
+                        #about .staff .users .user .main-datas img {
+                            width: 50px;
+                            border-radius: 50%;
+                        }
+
+                        #about .staff .users .user .main-datas .details {
+                            display: flex;
+                            flex-direction: column;
+                            margin-left: 10px;
+                            align-self: flex-start;
+                        }
+
+                            #about .staff .users .user .main-datas .details p {
+                                margin: 0;
+                                font-size: 16px;
+                            }
+
+                            #about .staff .users .user .main-datas .details .username {
+                                color: #080708;
+                                font-weight: 500;
+                            }
+
+                            #about .staff .users .user .main-datas .details .department {
+                                color: #aaa;
+                            }
+
+                    #about .staff .users .user .actions {
+                        display: flex;
+                        flex-direction: row;
+                        align-items: center;
+                        justify-content: space-between;
+                    }
+
+                        #about .staff .users .user .actions i {
+                            cursor: pointer;
+                            color: #1e2329;
+                            width: 40px;
+                            height: 40px;
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                            border-radius: 8px;
+                            background-color: #f1f0f6;
+                        }
+
+                            #about .staff .users .user .actions i:not(:first-child) {
+                                margin-left: 5px;
+                            }
+
+                            #about .staff .users .user .actions i:not(:last-child) {
+                                margin-right: 5px;
+                            }
+}
+
+@media only screen and (max-width: 600px) {
+    #profile {
+        width: calc(100% - 30px);
+        min-width: 250px;
+        transition: 0.4s;
+        margin: 15px;
+    }
+
+        #profile img {
+            width: 80%;
+            border-radius: 50%;
+        }
+
+        #profile p {
+            color: #006bce;
+            text-align: center;
+        }
+
+            #profile p span {
+                color: black;
+            }
+
+            #profile p#name {
+                color: #131850;
+                font-weight: 500;
+                font-size: 20px;
+            }
+
+        #profile:hover {
+            box-shadow: 0 2.8px 2.2px rgba(0, 0, 0, 0.034), 0 6.7px 5.3px rgba(0, 0, 0, 0.048), 0 12.5px 10px rgba(0, 0, 0, 0.06), 0 22.3px 17.9px rgba(0, 0, 0, 0.072), 0 41.8px 33.4px rgba(0, 0, 0, 0.086), 0 100px 80px rgba(0, 0, 0, 0.12);
+        }
+
+    #about {
+        width: 100%;
+        margin: 15px;
+        align-self: flex-start;
+    }
+
+        #about .header {
+            display: flex;
+            flex-direction: row;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            justify-content: space-around;
+        }
+
+            #about .header .tabbtn {
+                margin: 0;
+                font-size: 18px;
+                font-weight: 500;
+                -webkit-user-select: none;
+                -moz-user-select: none;
+                user-select: none;
+                cursor: pointer;
+                padding: 6px 10px;
+                border-radius: 8px;
+                color: #87898f;
+                text-align: center;
+            }
+
+                #about .header .tabbtn:hover {
+                    color: #006bce;
+                }
+
+            #about .header .activetab {
+                background-color: #0162e8;
+                color: white;
+            }
+
+                #about .header .activetab:hover {
+                    color: white;
+                }
+
+        #about #activity {
+            display: flex;
+            flex-direction: column;
+        }
+
+            #about #activity .activitypoint {
+                padding: 10px 0;
+                width: 100%;
+                display: flex;
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+            }
+
+                #about #activity .activitypoint p {
+                    margin: 0;
+                }
+
+                    #about #activity .activitypoint p.date {
+                        font-weight: 500;
+                        width: 60px;
+                    }
+
+                    #about #activity .activitypoint p.text {
+                        padding: 0 10px;
+                        text-align: center;
+                        width: calc(100% - 120px);
+                    }
+
+                    #about #activity .activitypoint p.point {
+                        font-weight: 500;
+                        color: #006bce;
+                        font-size: 26px;
+                        width: 40px;
+                        text-align: end;
+                    }
+
+                #about #activity .activitypoint:not(:last-child) {
+                    border-bottom: 1px solid #aaa;
+                }
+
+        #about .staff {
+            display: none;
+        }
+
+            #about .staff .users {
+                display: flex;
+                flex-direction: column;
+                margin: 0;
+                padding: 0;
+                list-style: none;
+                align-self: flex-start;
+                width: 100%;
+            }
+
+                #about .staff .users .user {
+                    width: 100%;
+                    display: flex;
+                    flex-direction: row;
+                    align-items: center;
+                    justify-content: space-between;
+                }
+
+                    #about .staff .users .user:not(:first-child) {
+                        margin-top: 5px;
+                    }
+
+                    #about .staff .users .user:not(:last-child) {
+                        margin-bottom: 5px;
+                    }
+
+                    #about .staff .users .user .main-datas {
+                        display: flex;
+                        flex-direction: row;
+                        align-items: center;
+                    }
+
+                        #about .staff .users .user .main-datas img {
+                            width: 50px;
+                            border-radius: 50%;
+                        }
+
+                        #about .staff .users .user .main-datas .details {
+                            display: flex;
+                            flex-direction: column;
+                            margin-left: 10px;
+                            align-self: flex-start;
+                        }
+
+                            #about .staff .users .user .main-datas .details p {
+                                margin: 0;
+                                font-size: 16px;
+                            }
+
+                            #about .staff .users .user .main-datas .details .username {
+                                color: #080708;
+                                font-weight: 500;
+                            }
+
+                            #about .staff .users .user .main-datas .details .department {
+                                color: #aaa;
+                            }
+
+                    #about .staff .users .user .actions {
+                        display: flex;
+                        flex-direction: row;
+                        align-items: center;
+                        justify-content: space-between;
+                    }
+
+                        #about .staff .users .user .actions i {
+                            cursor: pointer;
+                            color: #1e2329;
+                            width: 40px;
+                            height: 40px;
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                            border-radius: 8px;
+                            background-color: #f1f0f6;
+                        }
+
+                            #about .staff .users .user .actions i:not(:first-child) {
+                                margin-left: 5px;
+                                display: none;
+                            }
+
+                            #about .staff .users .user .actions i:not(:last-child) {
+                                margin-right: 5px;
+                            }
+}
+/*# sourceMappingURL=UserProfile.css.map */

@@ -1,0 +1,134 @@
+﻿
+@{
+    ViewBag.Title = "Home";
+    Layout = "~/Views/Shared/_MemberLayout.cshtml";
+
+}
+
+<style>
+    h2 {
+        width: 100%;
+        text-align: center;
+        margin-top: 12px;
+    }
+
+    aside ul #dashboard {
+        border-radius: 8px;
+        background-color: #006bce;
+    }
+
+        aside ul #dashboard p, aside ul #dashboard i {
+            color: white;
+        }
+
+        aside ul #dashboard:hover {
+            padding-left: 0;
+        }
+
+            aside ul #dashboard:hover p, aside ul #dashboard:hover i {
+                color: white;
+            }
+</style>
+
+<section id="digi-greeting">
+    <img src="~/Images/Digi_greeting.png" alt="">
+    <div class="welcome">
+        <p class="hello">Salam <span id="loginname">İstifadəçi</span>. Xoş gəlmisən!</p>
+        <p class="digi">Mən Digi. Yaxın zamanda sənə daha yaxın olacağam!</p>
+    </div>
+</section>
+<section class="incomings" id="news">
+    <h2>Elanlar</h2>
+    <div class="icon-list">
+        <div class="icon">
+            <i class="fas  fa-bullhorn"></i>
+        </div>
+        <div class="incomings-list">
+            <div class="inform">
+                <p>
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Maiores itaque, praesentium
+                    architecto repellat laborum odio, suscipit aliquid mollitia inventore reprehenderit
+                    porro vitae fugit dolore corporis magni, dignissimos recusandae maxime illum dolorum
+                    similique facilis atque. Odio soluta eius reiciendis delectus animi dicta, suscipit,
+                    totam cupiditate dolorum repudiandae ipsa sunt sequi ratione vero aliquid ex veritatis?
+                    Dignissimos eius quibusdam mollitia alias consequuntur.
+                </p>
+                <p class="date">29.10.2023</p>
+            </div>
+            <div class="inform">
+                <p>
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Maiores itaque, praesentium
+                    architecto repellat laborum odio, suscipit aliquid mollitia inventore reprehenderit
+                    porro vitae fugit dolore corporis magni, dignissimos recusandae maxime illum dolorum
+                    similique facilis atque. Odio soluta eius reiciendis delectus animi dicta, suscipit,
+                    totam cupiditate dolorum repudiandae ipsa sunt sequi ratione vero aliquid ex veritatis?
+                    Dignissimos eius quibusdam mollitia alias consequuntur.
+                </p>
+                <p class="date">17.10.2023</p>
+            </div>
+            <div class="inform">
+                <p>
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Maiores itaque, praesentium
+                    architecto repellat laborum odio, suscipit aliquid mollitia inventore reprehenderit
+                    porro vitae fugit dolore corporis magni, dignissimos recusandae maxime illum dolorum
+                    similique facilis atque. Odio soluta eius reiciendis delectus animi dicta, suscipit,
+                    totam cupiditate dolorum repudiandae ipsa sunt sequi ratione vero aliquid ex veritatis?
+                    Dignissimos eius quibusdam mollitia alias consequuntur.
+                </p>
+                <p class="date">19.09.2023</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="viewall">
+        <a href="#">Hamısına bax <i class="fas fa-arrow-right"></i></a>
+    </div>
+</section>
+
+<section class="incomings" id="informs">
+    <h2>Xəbərdarlıqlar</h2>
+    <div class="icon-list">
+        <div class="icon">
+            <i class="fas warning fa-exclamation-triangle"></i>
+        </div>
+        <div class="incomings-list">
+            <div class="inform">
+                <p>
+                    Data analtika tədbiri üçün qeydiyyatdan keçdiyiniz halda tədbirə gəlmədiniz. Bu hal bir
+                    daha
+                    təkrarlanarsa lazımi tədbirlər görüləcək
+                </p>
+                <p class="date">16.10.2023</p>
+            </div>
+            <div class="inform">
+                <p>Lorem ipsum dolor sit amet.</p>
+                <p class="date">16.10.2023</p>
+            </div>
+            <div class="inform">
+                <p>
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Ab quasi cupiditate aliquid
+                    facere dolorem officiis, velit eius magnam dicta sed eaque, voluptatem aut id
+                    praesentium necessitatibus architecto non labore adipisci repellendus error
+                    exercitationem possimus quos. Neque excepturi minima voluptatibus nisi, delectus
+                    similique placeat. Aut facilis cum earum repudiandae explicabo deleniti excepturi
+                    perspiciatis aspernatur. Magni maxime neque ducimus in officiis earum, labore nisi esse
+                    ratione alias veritatis iusto repudiandae tempora quas iste dolores suscipit molestias?
+                    Voluptatibus pariatur hic quia veniam repudiandae.
+                </p>
+                <p class="date">16.10.2023</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="viewall">
+        <a href="#">Hamısına bax <i class="fas fa-arrow-right"></i></a>
+    </div>
+
+    @if (ViewBag.Review == "true")
+    {
+        @Html.Action("EventReview", "Member")
+    }
+
+
+</section>
+

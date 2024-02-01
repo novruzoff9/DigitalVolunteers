@@ -1,0 +1,253 @@
+﻿@using EntityLayer.Concrete
+@using PagedList
+@using PagedList.Mvc
+@model PagedList.IPagedList<Event>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_UserLayout.cshtml";
+}
+
+<link href="~/Style/Home/Events.css" rel="stylesheet" />
+
+<style>
+
+    #buttons {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        margin: 30px 0;
+    }
+
+    .page-link {
+        background-color: #fff;
+        border-radius: 8px;
+        margin: 0 2px;
+        color: red;
+        cursor: pointer;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 40px;
+        height: 40px;
+        font-weight: 500;
+    }
+
+        .page-link a {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+    .active {
+        background-color: #006bce;
+        color: #fff;
+        cursor: default;
+    }
+
+        .active:hover {
+            background-color: #006bce;
+            color: #fff;
+            cursor: default;
+        }
+
+    .pagination li:not(.active) a {
+        color: #006bce;
+    }
+
+    .pagination li:not(.active):hover {
+        background-color: #006bce;
+        color: #fff;
+    }
+
+        .pagination li:not(.active):hover a {
+            color: #fff;
+        }
+
+    .secondary {
+        background-color: #5e17eb !important;
+    }
+</style>
+
+@Html.Action("BestEvent", "Events")
+
+<section id="events">
+    <header>
+        <p>Tədbirlər</p>
+    </header>
+    <article>
+
+        @foreach (var item in Model)
+        {
+            <div class="event">
+                <img src="@item.Image" alt="" />
+                <p class="header">@item.Title</p>
+                <p class="caption">
+                    @item.Caption
+                </p>
+                <div class="date-time">
+                    <div class="date">
+                        <i class="fas fa-calendar-alt"></i>
+                        <p>@item.DateTime.ToString("dd MMM yyyy")</p>
+                    </div>
+                    <div class="time">
+                        <i class="far fa-clock"></i>
+                        <p>@item.DateTime.ToString("HH:mm")</p>
+                    </div>
+                </div>
+                @if (item.Deadline > DateTime.Now)
+                {
+                    <button data-eventid="@item.EventID" class="secondary">Qeydiyyat</button>
+                }
+                else
+                {
+                    <a href="/Events/Event/@item.EventID">Ətraflı</a>
+                }
+            </div>
+        }
+
+    </article>
+</section>
+
+<section id="buttons">
+    @Html.PagedListPager((IPagedList)Model, page => Url.Action("Index", "Events",
+new { page }), new PagedListRenderOptions
+{
+    DisplayEllipsesWhenNotShowingAllPageNumbers = true,
+    MaximumPageNumbersToDisplay = 8,
+    LiElementClasses = new List<String>
+    { "page-link" }
+})
+</section>
+
+@if (Model.First().DateTime > DateTime.Now)
+{
+    @Html.Action("NextEvent", "Events")
+}
+
+<div class="pop-up">
+    <div id="acceptregistration">
+        <div class="icon">
+            <p class="question">?</p>
+        </div>
+        <div class="data-row">
+            <p>
+                <span>"Tədbir"</span> tədbirində iştirak etmək istədiyinizi təsdiqləyin
+            </p>
+        </div>
+        <div class="data-row">
+            <button class="action-button primary">Təsdiqlə</button>
+            <button class="action-button danger">Ləğv et</button>
+        </div>
+    </div>
+</div>
+
+<div class="pop-up">
+    <div id="accepted">
+        <div class="icon">
+            <i class="fas fa-check"></i>
+        </div>
+        <div class="data-row">
+            <p>
+                <span>"Tədbir"</span> tədbirində iştirakınız uğurla qeydə alındı!
+            </p>
+        </div>
+        <div class="data-row">
+            <button class="action-button primary">Bağla</button>
+        </div>
+    </div>
+</div>
+
+<div class="pop-up">
+    <div id="sessionerror">
+        <div class="icon">
+            <i class="fas fa-times"></i>
+        </div>
+        <div class="data-row">
+            <p>
+                Tədbirdə iştirakınızın qeydə alınması üçün kabinetinizə giriş edin.
+            </p>
+        </div>
+        <div class="data-row">
+            <button class="action-button primary">Bağla</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        var height = $(window).height();
+        var header = $("body>header");
+        var headerh = header.outerHeight();
+
+        if ($("section#lastevent").height() < height) {
+            $("section#lastevent").outerHeight(height - headerh);
+            if (screen.width < 600) {
+                $("section#lastevent").css("margin-top", headerh + "px");
+            }
+            else {
+                $("section#lastevent").css("margin-top", 0);
+            }
+        }
+
+        var height = $(document).height();
+        $(".pop-up").height(height);
+
+        $("#userdetails i").click(function () {
+            $("#userdetails").parent().css("display", "none");
+        });
+
+        $(".event button").click(function () {
+            var eventname = $(this).siblings("p.header").text();
+            var eventid = $(this).attr("data-eventid");
+            $("#acceptregistration").parent().css("display", "flex");
+            $("#acceptregistration button.primary").attr("data-eventid", eventid);
+            $("#acceptregistration p>span").text(eventname);
+            $("#accepted p>span").text(eventname);
+            $("body").css("overflow", "hidden");
+        });
+
+        $("#acceptregistration button.danger").click(function () {
+            $("#acceptregistration").parent().css("display", "none");
+            $("body").css("overflow", "auto");
+        });
+        $("#acceptregistration button.primary").click(function () {
+            $("#acceptregistration").parent().css("display", "none");
+            var eventid = $(this).attr("data-eventid");
+            $.ajax({
+                type: "POST",
+                url: "/Events/Registration",
+                data: {
+                    eventid: eventid
+                },
+                dataType: 'json',
+                success: function (result) {
+                    if (result == "Alredy registrated") {
+                        $("#sessionerror p").text("Siz bu tədbir üçün öncədən qeydiyyatdan keçmisiniz.");
+                        $("#sessionerror").parent().css("display", "flex");
+                    }
+                    else if (result == "Registration Closed") {
+                        $("#sessionerror p").text("Bu tədbir üçün qeydiyyat limiti dolmuşdur.");
+                        $("#sessionerror").parent().css("display", "flex");
+                    }
+                    else {
+                        $("#accepted").parent().css("display", "flex");
+                    }
+
+                },
+                error: function () {
+                    $("#sessionerror").parent().css("display", "flex");
+                }
+            });
+        });
+        $("#accepted button.primary").click(function () {
+            $("#accepted").parent().css("display", "none");
+            $("body").css("overflow", "auto");
+        });
+        $("#sessionerror button.primary").click(function () {
+            $("#sessionerror").parent().css("display", "none");
+            $("body").css("overflow", "auto");
+        });
+    });
+</script>

@@ -1,0 +1,167 @@
+﻿@using EntityLayer.Concrete
+@model List<Event>
+
+
+<link href="~/Style/Home/Events.css" rel="stylesheet" />
+
+
+
+<section id="events">
+    <header>
+        <p>Tədbirlər</p>
+    </header>
+    <article>
+        @foreach (var item in Model)
+        {
+            <div class="event">
+                <img src="@item.Image" alt="" />
+                <p class="header">@item.Title</p>
+                <p class="caption">
+                    @item.Caption
+                </p>
+                <div class="date-time">
+                    <div class="date">
+                        <i class="fas fa-calendar-alt"></i>
+                        <p>@item.DateTime.ToString("dd MMMM yyyy")</p>
+                    </div>
+                    <div class="time">
+                        <i class="far fa-clock"></i>
+                        <p>@item.DateTime.ToString("HH:mm")</p>
+                    </div>
+                </div>
+                @if (item.DateTime > DateTime.Now)
+                {
+                    <button class="action-button secondary" style="background-color: #5e17eb" data-eventid="@item.EventID">Qeydiyyat</button>
+                }
+                else
+                {
+                    <a href="/Events/Event/@item.EventID">Ətraflı</a>
+                }
+            </div>
+        }
+
+
+    </article>
+</section>
+
+<div class="pop-up">
+    <div id="acceptregistration">
+        <div class="icon">
+            <p class="question">?</p>
+        </div>
+        <div class="data-row">
+            <p>
+                <span>"Tədbir"</span> tədbirində iştirak etmək istədiyinizi təsdiqləyin
+            </p>
+        </div>
+        <div class="data-row">
+            <button class="action-button primary">Təsdiqlə</button>
+            <button class="action-button danger">Ləğv et</button>
+        </div>
+    </div>
+</div>
+
+<div class="pop-up">
+    <div id="accepted">
+        <div class="icon">
+            <i class="fas fa-check"></i>
+        </div>
+        <div class="data-row">
+            <p>
+                <span>"Tədbir"</span> tədbirində iştirakınız uğurla qeydə alındı!
+            </p>
+        </div>
+        <div class="data-row">
+            <button class="action-button primary">Bağla</button>
+        </div>
+    </div>
+</div>
+
+<div class="pop-up">
+    <div id="sessionerror">
+        <div class="icon">
+            <i class="fas fa-times"></i>
+        </div>
+        <div class="data-row">
+            <p>
+                Tədbirdə iştirakınızın qeydə alınması üçün kabinetinizə giriş edin.
+            </p>
+        </div>
+        <div class="data-row">
+            <button class="action-button primary">Bağla</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        var height = $(window).height();
+        var header = $("body>header");
+        var headerh = header.outerHeight();
+
+        if ($("section#lastevent").height() < height) {
+            $("section#lastevent").outerHeight(height - headerh);
+            if (screen.width < 600) {
+                $("section#lastevent").css("margin-top", headerh + "px");
+            }
+            else {
+                $("section#lastevent").css("margin-top", 0);
+            }
+        }
+
+        var height = $(document).height();
+        $(".pop-up").height(height);
+        $(".pop-up").css("display", "none");
+
+        $("#userdetails i").click(function () {
+            $("#userdetails").parent().css("display", "none");
+        });
+
+        $(".event button").click(function () {
+            var eventname = $(this).siblings("p.header").text();
+            var eventid = $(this).attr("data-eventid");
+            $("#acceptregistration").parent().css("display", "flex");
+            $("#acceptregistration button.primary").attr("data-eventid", eventid);
+            $("#acceptregistration p>span").text(eventname);
+            $("#accepted p>span").text(eventname);
+            $("body").css("overflow", "hidden");
+        });
+
+        $("#acceptregistration button.danger").click(function () {
+            $("#acceptregistration").parent().css("display", "none");
+            $("body").css("overflow", "auto");
+        });
+        $("#acceptregistration button.primary").click(function () {
+            $("#acceptregistration").parent().css("display", "none");
+            var eventid = $(this).attr("data-eventid");
+            $.ajax({
+                type: "POST",
+                url: "/Events/Registration",
+                data: {
+                    eventid: eventid
+                },
+                dataType: 'json',
+                success: function (result) {
+                    if (result == "Alredy registrated") {
+                        $("#sessionerror p").text("Siz bu tədbir üçün öncədən qeydiyyatdan keçmisiniz.");
+                        $("#sessionerror").parent().css("display", "flex");
+                    }
+                    else {
+                        $("#accepted").parent().css("display", "flex");
+                    }
+                },
+                error: function () {
+                    $("#sessionerror").parent().css("display", "flex");
+                }
+            });
+        });
+        $("#accepted button.primary").click(function () {
+            $("#accepted").parent().css("display", "none");
+            $("body").css("overflow", "auto");
+        });
+        $("#sessionerror button.primary").click(function () {
+            $("#sessionerror").parent().css("display", "none");
+            $("body").css("overflow", "auto");
+        });
+    });
+</script>

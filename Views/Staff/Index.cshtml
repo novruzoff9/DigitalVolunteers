@@ -1,0 +1,17 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_UserLayout.cshtml";
+}
+
+<link href="~/Style/Home/Staff.css" rel="stylesheet" />
+
+<section id="staff">
+
+    @Html.Action("Presidents", "Staff")
+
+    @Html.Action("Leaders", "Staff")
+
+    @Html.Action("FacultyChairmans", "Staff")
+
+</section>

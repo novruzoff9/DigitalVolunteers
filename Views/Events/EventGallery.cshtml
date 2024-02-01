@@ -1,0 +1,13 @@
+﻿@using EntityLayer.Concrete
+@model List <EventGallery>
+<section id="gallery">
+    <header>
+        <p>Qalareya</p>
+    </header>
+    <article>
+        @foreach (var item in Model)
+        {
+            <img src="@item.ImageURL" alt="">
+        }
+    </article>
+</section>

@@ -1,0 +1,69 @@
+﻿@model EntityLayer.Concrete.Event
+@{
+    ViewBag.Title = "AddEvent";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<link href="~/Style/AdminPanel/adminpanelevents.css" rel="stylesheet" />
+@using (Html.BeginForm("AddEvent", "Admin", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <section id="eventform">
+        <div class="addimage">
+            <input type="file" id="eventimage" onchange="FileUpload()" name="Image">
+            <label for="eventimage"><i class="fas fa-image"></i></label>
+        </div>
+        <div class="title-caption">
+            <input type="text" placeholder="Başlıq" name="Title">
+            <textarea name="Caption" id="" cols="30" rows="10" placeholder="Haqqında"></textarea>
+        </div>
+        <div class="details">
+            <div class="d-flex flex-column">
+                <label for="eventtime">Tədbirin keçirilmə vaxtı</label>
+                <input id="eventtime" type="datetime-local" name="DateTime">
+            </div>
+            <div class="d-flex flex-column">
+                <label for="eventdeadlinetime">Tədbir üçün son qeydiyyat tarixi</label>
+                <input id="eventdeadlinetime" type="datetime-local" name="Deadline">
+            </div>
+            <div class="d-flex flex-column">
+                <label for="ParticipantLimit">Tədbir üçün qeydiyyat limiti sayı</label>
+                <input id="ParticipantLimit" type="number" name="ParticipantLimit" value="0" required>
+            </div>
+            <select name="Location" id="">
+                <option hidden selected>Məkan</option>
+                <option value="FirstBig">İçərişəhər, Böyük</option>
+                <option value="FirstHA">İçərişəhər, Heydər Əliyev</option>
+                <option value="FirstWhite">İçərişəhər, Ağ zal</option>
+                <option value="FirstSmall">İçərişəhər, Kiçik</option>
+                <option value="SecondBig">Gənclik, Böyük</option>
+                <option value="SecondSmall">Gənclik, Kiçik</option>
+                <option value="ThirdBig">Nizami, Böyük</option>
+                <option value="ThirdSmall">Nizami, Kiçik</option>
+                <option value="Fourth">Semaşko</option>
+            </select>
+        </div>
+    </section>
+    <div class="confirm">
+        <button class="action-button success">Təsdiq et</button>
+    </div>
+}
+
+<script>
+    $(document).ready(function () {
+
+        $("#eventform>div").height($("#eventform").height());
+    });
+
+    function FileUpload() {
+        const label = document.querySelector('label[for="eventimage"]');
+        const fileInput = document.querySelector('#eventimage');
+        console.log(label.innerHTML);
+        if (fileInput.files.length > 0) {
+            label.innerHTML += `Seçilmiş fayl: ${fileInput.files[0].name}`;
+            label.style.borderColor = '#0162e8';
+        }
+        else {
+            label.textContent = 'Choose a file:';
+        }
+    }
+</script>

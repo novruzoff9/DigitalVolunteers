@@ -1,0 +1,152 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rəqəmsal Kabinet - Giriş</title>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9025664961128837"
+            crossorigin="anonymous"></script>
+    <link rel="icon" type="image/png" href="~/Images/new Logo - white.png" />
+    <link href="~/Style/Login875.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+          integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ=="
+          crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9025664961128837"
+            crossorigin="anonymous"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+</head>
+<body>
+    <style>
+        main section:nth-child(2) form #buttons button {
+            font-family: "Roboto";
+            font-style: normal;
+            font-weight: 700;
+            font-size: 16px;
+            line-height: 19px;
+            width: 100%;
+            outline: none;
+            border: none;
+            border-radius: 6px;
+            padding: 20px 0;
+            background-color: #1286fa;
+            color: white;
+        }
+    </style>
+    <main>
+        <section id="left-side">
+            <p>AZƏRBAYCAN DÖVLƏT İQTİSAD UNİVERSİTETİ <br>RƏQƏMSAL KÖNÜLLÜLƏRİ</p>
+            <video src="~/Images/Digi login.mp4" autoplay loop></video>
+        </section>
+        <section id="right-side">
+            <div class="logos">
+                <a href="/Home/Index">
+                    <img src="~/Images/new Logo.png" alt="">
+                </a>
+                <img src="~/Images/unec logo png.png" alt="">
+            </div>
+            <p>Xoş gəlmişsiniz!</p>
+            <p>Tələbənin Rəqəmsal Kabineti</p>
+            <div id="form">
+                <div class="col-3">
+                    <input id="username" name="UserName" class="effect-1" type="text" placeholder="İstifadəçi adı" required>
+                    <span class="focus-border"></span>
+                    <i class="fas fa-user"></i>
+                </div>
+                <div class="col-3">
+                    <input id="password" name="Password" class="effect-1" type="password" placeholder="Şifrə" required>
+                    <span class="focus-border"></span>
+                    <i class="fas fa-key"></i>
+                </div>
+                <p id="error"></p>
+                <a id="forgotpass" href="/Login/ForgotPassword">Şifrəni unutmusunuz?</a>
+                <div id="buttons">
+                    <button id="login">Daxil ol</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+
+    <script>
+        var height = $(window).height();
+        $("section").css("height", height);
+    </script>
+
+    <script>
+        $("#login").click(function () {
+            var username = $("#username").val();
+            var password = $("#password").val();
+
+            var f = false;
+
+            if (username == "" && password == "") {
+                $("#username ~ .focus-border").css({
+                    "width": "100%",
+                    "background-color": "#ff0000"
+                });
+                $("#password ~ .focus-border").css({
+                    "width": "100%",
+                    "background-color": "#ff0000"
+                });
+                f = true;
+                $("#error").text("*istifadəçi adınızı və şifrənizi daxil edin");
+            }
+
+            else if (username == "") {
+                $("#username ~ .focus-border").css({
+                    "width": "100%",
+                    "background-color": "#ff0000"
+                });
+                f = true;
+                $("#error").text("*istifadəçi adınızı daxil edin");
+            }
+
+            else if (password == "") {
+                $("#password ~ .focus-border").css({
+                    "width": "100%",
+                    "background-color": "#ff0000"
+                });
+                f = true;
+                $("#error").text("*şifrənizi daxil edin");
+            }
+
+            else {
+                $.ajax({
+                    type: "GET",
+                    url: "/Login/Authentication",
+                    data: {
+                        username: username,
+                        password: password
+                    },
+                    dataType: 'json',
+                    success: function (result) {
+                        if (result === "Member") {
+                            window.location.href = "/Member/Home";
+                        }
+                        if (result === "Staff") {
+                            window.location.href = "/Admin/UserProfile";
+                        }
+                        if (result === "Error") {
+                            $("#error").text("*istifadəçi adınız və ya şifrəniz yanlışdır");
+                        }
+                    }
+                });
+            }
+        })
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,47 @@
+﻿@using EntityLayer.Concrete
+@model List<User>
+
+
+<ul class="users">
+    @foreach (var item in Model)
+    {
+        <li class="user">
+            <div class="main-datas">
+                <div class="picname">
+                    <img src="@item.UserImage" alt="">
+                    <div class="details">
+                        <p class="username">@item.Name @item.Surname</p>
+                        @{
+                            string modelRole = item.Role;
+                            string role = "";
+                            if (modelRole == "President") { role = "Təşkilat üzrə Sədr"; }
+                            else if (modelRole == "Vice-President") { role = "Təşkilat üzrə Sədr müavini"; }
+                            else if (modelRole == "Chairman") { role = "Fakültə üzrə Sədr"; }
+                            else if (modelRole == "Vice-Chairman") { role = "Sədr müavini"; }
+                            else if (modelRole == "Staff") { role = "Heyət üzvü"; }
+                            else if (modelRole == "Leader") { role = "Departament üzrə Rəhbər"; }
+                            else if (modelRole == "Vice-Chairman") { role = "Fakültə üzrə Sədr müavini"; }
+                            else if (modelRole == "Vice-Leader") { role = "Departament üzrə Rəhbər müavini"; }
+                            else if (modelRole == "HR") { role = "İnsan Resursları"; }
+                            else if (modelRole == "PR") { role = "İctimaiyyətlə əlaqələr"; }
+                            else if (modelRole == "IT") { role = "İnformasiya Texnologiyaları"; }
+                            else if (modelRole == "SMM") { role = "SMM"; }
+                            else if (modelRole == "PM") { role = "Layihə Meneceri"; }
+                            else if (modelRole == "CW") { role = "Copywriter"; }
+                            else if (modelRole == "WWM") { role = "Üzvlərlə iş"; }
+                            else if (modelRole == "Photograph") { role = "Fotoqraf"; }
+                            else if (modelRole == "Photograph/Videograph") { role = "Fotoqraf/Videoqraf"; }
+                            else if (modelRole == "Coordinator") { role = "Koordinator"; }
+                            else if (modelRole == "Security") { role = "Nəzarət və Təftiş"; }
+                            else if (modelRole == "GDesigner") { role = "Qrafik dizayner"; }
+                            else if (modelRole == "Secretary") { role = "Katib"; }
+                            else if (modelRole == "Advisor") { role = "Müşavir"; }
+                        }
+                        <p class="department">@role</p>
+                    </div>
+                </div>
+                <p class="point">@item.ActivityPoint bal</p>
+            </div>
+        </li>
+    }
+</ul>

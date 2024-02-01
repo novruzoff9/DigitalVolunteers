@@ -1,0 +1,42 @@
+﻿@using EntityLayer.Concrete
+@model List<User>
+
+<header>
+    <p>Rəhbər heyət</p>
+</header>
+<article>
+    <div class="members">
+        @foreach (var item in Model)
+        {
+            <div class="member">
+                <img src="@item.UserImage" alt="">
+                <div class="member-info">
+                    <p class="name">@item.Name @item.Surname</p>
+                    @{
+                        string role = item.Role;
+                        string department = "";
+                        if (item.Role == "Leader") { role = " üzrə Rəhbər"; }
+                        else if (item.Role == "Vice-Leader") { department = item.Department + " üzrə Rəhbər müavini"; }
+                        else if (item.Role == "Chairman") { department = "Fakültə üzrə Sədr"; }
+                        else if (item.Role == "Vice-Chairman") { department = "Fakültə üzrə  Sədr müavini"; }
+                        if (item.Department == "Secretary") { department = "Katib"; }
+                        else if (item.Department == "IT") { department = "İnformasiya Texnologiyaları departamenti" + role; }
+                        else if (item.Department == "SMM") { department = "Sosial Media Marketinq departamenti" + role; }
+                        else if (item.Department == "HR") { department = "İnsan Resursları departamenti" + role; }
+                        else if (item.Department == "PR") { department = "İctimaiyyətlə Əlaqələr departamenti" + role; }
+                        else if (item.Department == "WWM") { department = "Üzvlərlə iş" + role; }
+                        else if (item.Department == "WWF") { department = "Fakültələrlə iş" + role; }
+                        else if (item.Department == "FS") { department = "Fakültə heyəti üzrə " + role; }
+                        else if (item.Department == "ICD") { department = "Beynəlxalq əməkdaşlıq departamenti" + role; }
+                        else if (item.Department == "Organizer") { department = "Təşkilati işlər departamenti" + role; }
+                        else if (item.Department == "Security") { department = "Nəzarət və təftiş" + role; }
+
+                    }
+                    <p class="position">@department</p>
+                </div>
+            </div>
+        }
+    </div>
+</article>
+
+

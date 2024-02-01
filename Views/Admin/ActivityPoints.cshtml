@@ -1,0 +1,188 @@
+﻿@using EntityLayer.Concrete
+@using BusinessLayer.Concrete;
+@using DataAccessLayer.EntityFramework;
+@using PagedList
+@using PagedList.Mvc
+@model PagedList.IPagedList<ActivityPoints>
+@{
+    ViewBag.Title = "ActivityPoints";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    UserManager UserM = new UserManager(new EfUserDAL());
+}
+
+<link href="~/Style/AdminPanel/ActivityPoint144.css" rel="stylesheet" />
+
+<style>
+    aside ul #activitypoints {
+        border-radius: 8px;
+        background-color: #006bce;
+    }
+
+        aside ul #activitypoints p, aside ul #activitypoints i {
+            color: white;
+        }
+
+        aside ul #activitypoints:hover {
+            padding-left: 0;
+        }
+
+            aside ul #activitypoints:hover p, aside ul #activitypoints:hover i {
+                color: white;
+            }
+
+    .page-link {
+        background-color: #fff;
+        border-radius: 8px;
+        margin: 0 2px;
+        color: red;
+        cursor: pointer;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 40px;
+        height: 40px;
+        font-weight: 500;
+    }
+
+        .page-link a {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+    .active {
+        background-color: #006bce;
+        color: #fff;
+        cursor: default;
+    }
+
+        .active:hover {
+            background-color: #006bce;
+            color: #fff;
+            cursor: default;
+        }
+
+    .pagination li:not(.active) a {
+        color: #006bce;
+    }
+
+    .pagination li:not(.active):hover {
+        background-color: #006bce;
+        color: #fff;
+    }
+
+        .pagination li:not(.active):hover a {
+            color: #fff;
+        }
+
+    #verify {
+        width: 100%;
+        display: flex;
+        flex-direction: row-reverse;
+    }
+
+    a.verify {
+        margin: 40px;
+        align-self: flex-end
+    }
+
+        a.verify:hover {
+            color: #fff;
+        }
+    #buttons{
+        width: 100%;
+        display: flex;
+        justify-content: center;
+    }
+</style>
+
+<div id="pointsstatistics">
+    <section id="all">
+        <p class="value">@ViewBag.all</p>
+        <p class="text">Yazılmış aktivlik balı</p>
+    </section>
+    <section id="incresases">
+        <p class="value">@ViewBag.increment</p>
+        <p class="text">Artırılmış aktivlik balı</p>
+    </section>
+    <section id="decrases">
+        <p class="value">@ViewBag.decrement</p>
+        <p class="text">Azaldılmış aktivlik balı</p>
+    </section>
+</div>
+
+<div id="lists">
+
+    <section id="hardworkers" class="userlist">
+        <h2>Ən aktiv 5 üzv</h2>
+        @Html.Action("TopActivityLists", "Admin", new { @list = "actives" })
+    </section>
+
+    <section id="notworkers" class="userlist">
+        <h2>Ən passiv 5 üzv</h2>
+        @Html.Action("TopActivityLists", "Admin", new { @list = "passives" })
+
+    </section>
+</div>
+
+<div id="activitieslist">
+    @foreach (var item in Model)
+    {
+        <section class="user">
+            <div class="main-datas">
+                <div class="d-flex flex-row align-items-center">
+                    <img src="@item.User.UserImage" alt="">
+                    <p class="user-name">@item.User.Name @item.User.Surname</p>
+                </div>
+                @if (item.Point > 0)
+                {
+                    <p class="activitypoint increment">+@item.Point bal</p>
+                }
+                else
+                {
+                    <p class="activitypoint decrement">@item.Point bal</p>
+                }
+            </div>
+            <div class="point-datas">
+                <p class="sub-title">Aktivlik:</p>
+                <p class="activity">
+                    @item.Activity
+                </p>
+                <p class="sub-title align-self-end">Yazıldı:</p>
+                <div class="writer-datas">
+                    @{
+                        var writer = UserM.GetByID(item.WriterID);
+                    }
+                    <img src="@writer.UserImage" alt="">
+                    <p class="writer">@writer.Name @writer.Surname</p>
+                    <p class="date">@item.Date.ToString("dd MMM yyyy")</p>
+                </div>
+            </div>
+        </section>
+    }
+    
+
+</div>
+<div id="buttons">
+    @Html.PagedListPager((IPagedList)Model, page => Url.Action("ActivityPoints",
+new { page, ViewBag.list }), new PagedListRenderOptions
+{
+    DisplayEllipsesWhenNotShowingAllPageNumbers = true,
+    MaximumPageNumbersToDisplay = 12,
+    LiElementClasses = new List<String>
+    { "page-link" }
+})
+</div>
+<div id="verify">
+    @{
+        var userid = (int)Session["UserID"];
+        if (userid == 1 || userid == 3)
+        {
+            <a href="/Admin/VerifyActivityPoints" class="action-button primary verify">Təsdiq gözləyənlər</a>
+
+        }
+    }
+</div>
+

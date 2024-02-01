@@ -1,0 +1,22 @@
+﻿@using EntityLayer.Concrete
+@model List<User>
+@{
+    ViewBag.Title = "EventParticipiants";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<link href="~/Style/AdminPanel/adminpanelevents.css" rel="stylesheet" />
+
+<div id="participiants">
+    @foreach (var item in Model)
+    {
+        <div class="participiant">
+            <img src="@item.UserImage" alt="">
+            <p class="title">@item.Name @item.Surname</p>
+            <div class="actions">
+                <a href="#" class="primary-hover action-button">Tam bax</a>
+            </div>
+        </div>
+    }
+</div>
+

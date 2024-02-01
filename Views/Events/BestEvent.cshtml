@@ -1,0 +1,47 @@
+﻿@model EntityLayer.Concrete.Event
+@{
+    string location = "";
+    if (Model.Location == "First")
+    {
+        location = "UNEC, Əsas tədris binası";
+    }
+    else if (Model.Location == "SecondBig")
+    {
+        location = "UNEC, II tədris binası. Böyük akt zalı";
+    }
+    else if (Model.Location == "Second")
+    {
+        location = "UNEC, II tədris binası. Kiçik akt zalı";
+    }
+    else if (Model.Location == "ThirdBig")
+    {
+        location = "UNEC, III tədris binası. Böyük akt zalı";
+    }
+    else if (Model.Location == "ThirdSmall")
+    {
+        location = "UNEC, III tədris binası. Kiçik akt zalı";
+    }
+    else if (Model.Location == "Fourth")
+    {
+        location = "UNEC, IV tədris binası";
+    }
+}
+
+<section id="lastevent" style="background-image: url(@ViewBag.image);">
+    <div class="shadow"></div>
+    <div class="details">
+        <p class="name">@Model.Title</p>
+        <p class="date-view">
+            <i class="fas fa-calendar-alt"></i>@Model.DateTime.ToString("dd MMMM yyyy") |
+            <i class="fas fa-map-marker-alt"></i> @location
+        </p>
+        <p class="caption">
+            @Html.Raw(Model.Caption)
+        </p>
+        <a href="/Events/Event/@Model.EventID" class="sign">Ətraflı</a>
+    </div>
+    <div class="image">
+        <img src="@ViewBag.image" alt="" />
+    </div>
+
+</section>

@@ -1,0 +1,120 @@
+﻿@using EntityLayer.Concrete
+@model List<User>
+@{
+    ViewBag.Title = "Staffs";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<link href="~/Style/AdminPanel/Staff123.css" rel="stylesheet" />
+<style>
+    aside ul #stafflist {
+        border-radius: 8px;
+        background-color: #006bce;
+    }
+
+        aside ul #stafflist p, aside ul #stafflist i {
+            color: white;
+        }
+
+        aside ul #stafflist:hover {
+            padding-left: 0;
+        }
+
+            aside ul #stafflist:hover p, aside ul #stafflist:hover i {
+                color: white;
+            }
+</style>
+
+@*<h2 class="header">Rəhbər heyət</h2>
+<div class="staffs managementstaff">
+    <a href="#" class="staff">
+        <img src="~/Images/Departments/Management.jpg" alt="">
+        <p class="facultyname">İdarə heyəti</p>
+        <p class="staffcount">Heyət 15 nəfər</p>
+    </a>
+</div>*@
+<h2 class="header">Departament heyətləri</h2>
+<div class="staffs">
+    @*<a href="/Admin/StaffofDepartment?department=IT" class="staff">
+        <img src="~/Images/Departments/IT_department.jpg" alt="">
+        <p class="facultyname">İnformasiya Texnologiyaları departamenti</p>
+        <p class="staffcount">Heyət @Model.Where(x => x.DepartmentStaff == true && x.Department == "IT").Count() nəfər</p>
+    </a>*@
+    <a href="/Admin/StaffofDepartment?department=HR" class="staff">
+        <img src="~/Images/Departments/HR_department.jpg" alt="">
+        <p class="facultyname">İnsan Resursları departamenti</p>
+        <p class="staffcount">Heyət @Model.Where(x => x.DepartmentStaff == true && x.Department == "HR").Count() nəfər</p>
+    </a>
+    <a href="/Admin/StaffofDepartment?department=PR" class="staff">
+        <img src="~/Images/Departments/PR_department.jpg" alt="">
+        <p class="facultyname">İctimaiyyətlə Əlaqələr departamenti</p>
+        <p class="staffcount">Heyət @Model.Where(x => x.DepartmentStaff == true && x.Department == "PR").Count() nəfər</p>
+    </a>
+    <a href="/Admin/StaffofDepartment?department=SMM" class="staff">
+        <img src="~/Images/Departments/SMM_department.jpg" alt="">
+        <p class="facultyname">Sosial Media Marketinq departamenti</p>
+        <p class="staffcount">Heyət @Model.Where(x => x.DepartmentStaff == true && x.Department == "SMM").Count() nəfər</p>
+    </a>
+    <a href="/Admin/StaffofDepartment?department=ICD" class="staff">
+        <img src="~/Images/Departments/ICD_department.png" alt="">
+        <p class="facultyname">Beynəlxalq Əməkdaşlıq departamenti</p>
+        <p class="staffcount">Heyət @Model.Where(x => x.DepartmentStaff == true && x.Department == "ICD").Count() nəfər</p>
+    </a>
+</div>
+<h2 class="header">Fakültə heyətləri</h2>
+<div class="staffs">
+    <a href="/Admin/StaffofFaculty?faculty=Digital Economy" class="staff">
+        <img src="~/Images/Faculties/Reqemsal_Iqtisadiyyat.png" alt="">
+        <p class="facultyname">Rəqəmsal İqtisadiyyat fəkültəsi</p>
+        <p class="staffcount">Heyət @Model.Where(x => x.FacultyStaff == true && x.Faculty == "Digital Economy").Count() nəfər</p>
+    </a>
+    <a href="/Admin/StaffofFaculty?faculty=Russian Economy" class="staff">
+        <img src="~/Images/Faculties/Rus_iqtisad_mektebi.jpg" alt="">
+        <p class="facultyname">Rus İqtisad Məktəbi</p>
+        <p class="staffcount">Heyət @Model.Where(x => x.FacultyStaff == true && x.Faculty == "Russian Economy").Count() nəfər</p>
+    </a>
+    <a href="/Admin/StaffofFaculty?faculty=Business" class="staff">
+        <img src="~/Images/Faculties/Biznes_ve_menecement.png" alt="">
+        <p class="facultyname">Biznes və Menecment</p>
+        <p class="staffcount">Heyət @Model.Where(x => x.FacultyStaff == true && x.Faculty == "Business").Count() nəfər</p>
+    </a>
+    <a href="/Admin/StaffofFaculty?faculty=Sabah" class="staff">
+        <img src="~/Images/Faculties/SABAH.png" alt="">
+        <p class="facultyname">SABAH mərkəzi</p>
+        <p class="staffcount">Heyət @Model.Where(x => x.FacultyStaff == true && x.Faculty == "Sabah").Count() nəfər</p>
+    </a>
+    <a href="/Admin/StaffofFaculty?faculty=ISE" class="staff">
+        <img src="~/Images/Faculties/ISE.png" alt="">
+        <p class="facultyname">International School of Economics</p>
+        <p class="staffcount">Heyət @Model.Where(x => x.FacultyStaff == true && x.Faculty == "ISE").Count() nəfər</p>
+    </a>
+    <a href="/Admin/StaffofFaculty?faculty=Design" class="staff">
+        <img src="~/Images/Faculties/Dizayn.png" alt="">
+        <p class="facultyname">UNEC Dizayn Məktəbi</p>
+        <p class="staffcount">Heyət @Model.Where(x => x.FacultyStaff == true && x.Faculty == "Design").Count() nəfər</p>
+    </a>
+    <a href="/Admin/StaffofFaculty?faculty=Finance" class="staff">
+        <img src="~/Images/Faculties/maliyye_ve_muhsaibat.png" alt="">
+        <p class="facultyname">Maliyyə və Mühasibat fəkültəsi</p>
+        <p class="staffcount">Heyət @Model.Where(x => x.FacultyStaff == true && x.Faculty == "Finance").Count() nəfər</p>
+    </a>
+    <a href="/Admin/StaffofFaculty?faculty=TUDIFAK" class="staff">
+        <img src="~/Images/Faculties/Tudifak.jpg" alt="">
+        <p class="facultyname">Türk Dünyası İqtisad fəkültəsi</p>
+        <p class="staffcount">Heyət @Model.Where(x => x.FacultyStaff == true && x.Faculty == "TUDIFAK").Count() nəfər</p>
+    </a>
+    <a href="/Admin/StaffofFaculty?faculty=Engineering" class="staff">
+        <img src="~/Images/Faculties/Muhendislik.png" alt="">
+        <p class="facultyname">Mühəndislik fəkültəsi</p>
+        <p class="staffcount">Heyət @Model.Where(x => x.FacultyStaff == true && x.Faculty == "Engineering").Count() nəfər</p>
+    </a>
+    <a href="/Admin/StaffofFaculty?faculty=Economy" class="staff">
+        <img src="~/Images/Faculties/Iqtisadiyyat_ve_Idareetme.png" alt="">
+        <p class="facultyname">İqtisadiyyat və İdarəetmə fakültəsi</p>
+        <p class="staffcount">Heyət @Model.Where(x => x.FacultyStaff == true && x.Faculty == "Economy").Count() nəfər</p>
+    </a>
+    <a href="/Admin/StaffofFaculty?faculty=QETM" class="staff">
+        <img src="~/Images/unec logo png.png" alt="">
+        <p class="facultyname">Qiyabi və Əlavə Təhsil Mərkəzi</p>
+        <p class="staffcount">Heyət @Model.Where(x => x.FacultyStaff == true && x.Faculty == "QETM").Count() nəfər</p>
+    </a>
+</div>

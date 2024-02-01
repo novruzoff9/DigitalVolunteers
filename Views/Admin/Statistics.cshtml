@@ -1,0 +1,45 @@
+﻿@model EntityLayer.Objects.DataChange
+
+
+
+<section id="usercount">
+    @if (Model.Name == "İstifadəçi")
+    {
+        <i class="fas fa-user"></i>
+    }
+    else if (Model.Name == "Xəbər")
+    {
+        <i class="fas fa-newspaper"></i>
+    }
+    else if (Model.Name == "Tədbir")
+    {
+        <i class="fas fa-calendar-day"></i>
+    }
+    <div class="statistics">
+        <div class="change">
+            @if (Model.Change.StartsWith("-"))
+            {
+                <p class="decrase">@Model.Change.ToString()%</p>
+            }
+            else if (Model.Change == "NaN")
+            {
+                <p class="decrase">-100%</p>
+            }
+            else if (Model.Change == "0")
+            {
+                <p class="const">---</p>
+            }
+            else
+            {
+            <p class="increase">+@Model.Change%</p>
+            }
+        </div>
+        <div class="data-value">
+            <p class="value">@Model.NowValue</p>
+            <p class="data">@Model.Name</p>
+        </div>
+        <div class="last-month">
+            <p>Keçən ay: <span>@Model.PreviusValue</span></p>
+        </div>
+    </div>
+</section>

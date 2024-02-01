@@ -1,0 +1,112 @@
+﻿
+@{
+    ViewBag.Title = "QRScaner";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<video id="preview"></video>
+
+<div class="pop-up">
+    <section id="noregistration">
+        <p>
+            <span class="username">Test User</span> adlı istifadəçinin <span class="eventname">"Event"</span> tədbirinə
+            qeydiyyatı yoxdur
+        </p>
+        <button class="action-button danger close">Bağla</button>
+    </section>
+</div>
+
+<div class="pop-up">
+    <section id="confirmparticipating">
+        <p>
+            <span class="username">Test User</span> adlı istifadəçinin <span class="eventname">"Event"</span> tədbirində
+            iştiakını təsdiqləyin
+        </p>
+        <input hidden id="userid" value="0" />
+        <div class="d-flex flex-row w-100 justify-content-evenly">
+            <button class="action-button danger close">Bağla</button>
+            <button id="confirmbtn" class="action-button success">Təsdiqlə</button>
+        </div>
+    </section>
+</div>
+
+<input type="hidden" id="eventid" value="@ViewBag.EventID"/>
+<input type="hidden" id="eventname" value="@ViewBag.EventName"/>
+
+<script>
+
+    const eventid = $("#eventid").val();
+    const eventname = $("#eventname").val();
+        document.addEventListener('DOMContentLoaded', function () {
+            const video = document.getElementById('preview');
+
+            instascanScanner = new Instascan.Scanner({ video: video, mirror: false }); // Set mirror to false
+
+            instascanScanner.addListener('scan', function (content) {
+                $.ajax({
+                    type: 'GET',
+                    url: '/Admin/UserByUserName',
+                    data: {
+                        username: content,
+                        eventid: eventid
+                    },
+                    success: function (result) {
+                        $("span.user").text(result.Name + " " + result.Surname);
+                        $("span.eventname").text(eventname);
+                        $("#userid").attr("value", result.UserID);
+                        if (result.Password === "Yes") {
+                            $("#confirmparticipating").parent().css("display", "flex");
+                        }
+                        if (result.Password === "None") {
+                            $("#noregistration").parent().css("display", "flex");
+                        }
+                    }
+                });
+            });
+
+            Instascan.Camera.getCameras().then(function (cameras) {
+                const backCamera = cameras.find(camera => camera.name.includes('back'));
+
+                if (backCamera) {
+                    instascanScanner.start(backCamera);
+                } else if (cameras.length > 0) {
+                    instascanScanner.start(cameras[0]);
+                } else {
+                    console.error('No cameras found.');
+                }
+            }).catch(function (e) {
+                console.error(e);
+            });
+        });
+</script>
+
+<script src="https://rawgit.com/schmich/instascan-builds/master/instascan.min.js"></script>
+
+
+<script>
+    $('#noregistration').parent().css("display", "none");
+    $('#confirmparticipating').parent().css("display", "none");
+    $('#noregistration .close').click(function () {
+        $('#noregistration').parent().css("display", "none");
+    });
+    $('#confirmparticipating .close').click(function () {
+        $('#confirmparticipating').parent().css("display", "none");
+    });
+
+    const registrationid = Number(@ViewBag.registrationID);
+
+    $("#confirmbtn").click(function () {
+        $.ajax({
+            type: 'POST',
+            url: '/Admin/ConfirmParticipating',
+            data: {
+                registrationid: registrationid
+            },
+            success: function (result) {
+                if (result === "success") {
+                    alert("Giriş təsdiqləndi!");
+                }
+            }
+        });
+    });
+</script>

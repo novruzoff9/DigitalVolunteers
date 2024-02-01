@@ -1,0 +1,78 @@
+﻿@model EntityLayer.Concrete.EventRegistration 
+<div class="pop-up">
+    <section id="review">
+        <div class="data-column">
+            <img data-detail="image" src="@Model.Event.Image" alt="">
+        </div>
+        <div class="data-column">
+            <h4>@Model.Event.Title tədbiri barədə fikirləriniz.</h4>
+            <div class="stars">
+                <i class="far fa-star" data-number="1"></i>
+                <i class="far fa-star" data-number="2"></i>
+                <i class="far fa-star" data-number="3"></i>
+                <i class="far fa-star" data-number="4"></i>
+                <i class="far fa-star" data-number="5"></i>
+            </div>
+            <div class="offer">
+                <p>Təklif və iradlarınız:</p>
+                <textarea class="daisy" name="" id="comment" cols="30" rows="10"></textarea>
+                <p id="errormessage"></p>
+            </div>
+        </div>
+        <div class="data-column close">
+            <i class="fas fa-times"></i>
+            <div id="cancel" class="action-button danger-hover">Ləğv et</div>
+            <button id="score" class="action-button primary-hover">Təsdiqlə</button>
+        </div>
+    </section>
+</div>
+<script>
+        $(".close i").click(function () {
+            $("#review").parent().css("display", "none");
+        });
+        $("#cancel").click(function () {
+            $("#review").parent().css("display", "none");
+        });
+        $(".stars i").mouseenter(function () {
+            for (let i = 1; i <= 5; i++) {
+                $(".stars i[data-number=" + i + "]").removeClass("fas");
+                $(".stars i[data-number=" + i + "]").addClass("far");
+            }
+            const num = $(this).attr("data-number");
+            for (let i = 1; i <= num; i++) {
+                $(".stars i[data-number=" + i + "]").removeClass("far");
+                $(".stars i[data-number=" + i + "]").addClass("fas");
+            }
+        });
+        $("#score").click(function () {
+            const textarea = $("#comment");
+            const comment = textarea.val();
+            const star = $(".stars .fas").length;
+            const error = $("#errormessage");
+
+            if (star === 0) {
+                error.text("*Tədbiri ulduz əsasında qiymətləndirin");
+                textarea.css("height", "154px");
+            }
+            else if (comment === "") {
+                error.text("*Tədbir barədə rəy bildirin");
+                textarea.css("height", "154px");
+            }
+            else {
+                $.ajax({
+                    url: "/Member/ApplyReview",
+                    method: "POST",
+                    data: {
+                        registrationid: @Model.RegistrationID,
+                        star: star,
+                        comment: comment
+                    },
+                    success: function (data) {
+                        alert("Rəyiniz qeydə alındı!");
+                    }
+                });
+                $("#review").parent().css("display", "none");
+            }
+        });
+</script>
+

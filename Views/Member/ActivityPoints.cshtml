@@ -1,0 +1,31 @@
+﻿@using EntityLayer.Concrete
+@model List<ActivityPoints>
+
+<section id="activity">
+
+    @if (Model.Count == 0)
+    {
+        <p class="empty">Aktivlik barədə məlumat yoxdur</p>
+    }
+    else
+    {
+        foreach (var item in Model)
+        {
+            string point;
+            if (item.Point > 0)
+            {
+                point = "+" + item.Point.ToString();
+            }
+            else
+            {
+                point = item.Point.ToString();
+            }
+            <div class="activitypoint">
+                <p class="date">@item.Date.ToString("dd MMM")</p>
+                <p class="text">@item.Activity</p>
+
+                <p class="point">@point</p>
+            </div>
+        }
+    }
+</section>

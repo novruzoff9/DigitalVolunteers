@@ -1,0 +1,48 @@
+﻿@model EntityLayer.Concrete.News
+@{
+    ViewBag.Title = "UpdateNews";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<link href="~/Style/AdminPanel/adminpanelevents.css" rel="stylesheet" />
+@using (Html.BeginForm("UpdateNews", "Admin", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.HiddenFor(x => Model.NewsID)
+    <section id="eventform">
+        <div class="addimage">
+            <input type="file" id="eventimage" onchange="FileUpload()" name="Image">
+            <label for="eventimage"><i class="fas fa-image"></i></label>
+        </div>
+        <div class="title-caption">
+            @Html.TextBoxFor(x => Model.NewsTitle)
+            @Html.TextAreaFor(x => x.NewsCaption, new { @rows = 10 })
+        </div>
+        <div class="details">
+            @Html.TextBoxFor(x => x.NewsCreated, "{0:yyyy-MM-dd HH:mm}")
+        </div>
+    </section>
+    <div class="confirm">
+        <button class="action-button success">Təsdiq et</button>
+    </div>
+}
+
+<script>
+    $(document).ready(function () {
+
+        $("#eventform>div").height($("#eventform").height());
+    });
+
+    function FileUpload() {
+        const label = document.querySelector('label[for="eventimage"]');
+        const fileInput = document.querySelector('#eventimage');
+        console.log(label.innerHTML);
+        if (fileInput.files.length > 0) {
+            label.innerHTML += `Seçilmiş fayl: ${fileInput.files[0].name}`;
+            label.style.borderColor = '#0162e8';
+        }
+        else {
+            label.textContent = 'Choose a file:';
+        }
+    }
+</script>
+

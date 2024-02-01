@@ -1,0 +1,98 @@
+﻿@using EntityLayer.Concrete
+@model List<EventGallery>
+@{
+    ViewBag.Title = "EventGallery";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    int eventid = ViewBag.EventID;
+}
+
+<link href="~/Style/AdminPanel/adminpanelevents.css" rel="stylesheet" />
+
+<style>
+    aside ul #eventlist {
+        border-radius: 8px;
+        background-color: #006bce;
+    }
+
+        aside ul #eventlist p, aside ul #eventlist i {
+            color: white;
+        }
+
+        aside ul #eventlist:hover {
+            padding-left: 0;
+        }
+
+            aside ul #eventlist:hover p, aside ul #eventlist:hover i {
+                color: white;
+            }
+</style>
+
+<div id="event-images">
+    <button id="addimage" onclick="AddImageForm()">
+        <i class="fas fa-image"></i>
+        <p>Şəkil artır</p>
+    </button>
+
+    @foreach (var item in Model)
+    {
+        <div class="event-image">
+            <img src="@item.ImageURL" alt="">
+            <div class="actions">
+                <a href="#" class="danger action-button"><i class="fas fa-trash"></i> Sil</a>
+            </div>
+        </div>
+    }
+</div>
+
+<div class="pop-up">
+    <section id="addingimage">
+        @using (Html.BeginForm("AddEventImage", "Admin", FormMethod.Post,
+            new { enctype = "multipart/form-data" }))
+        {
+            <div class="data-column">
+                <div class="addimage">
+                    <input name="files" type="file" id="eventimage" onchange="FileUpload()" multiple>
+                    <label for="eventimage"><i class="fas fa-image"></i></label>
+                    @Html.Hidden("EventID", eventid)
+                </div>
+
+            </div>
+            <div class="data-column close">
+                <i class="fas fa-times"></i>
+                <button class="action-button success">Artır</button>
+            </div>
+        }
+    </section>
+</div>
+
+<script>
+    const addevent = document.querySelector("#addimage i");
+    var elementWidth = addevent.offsetWidth;
+    console.log(elementWidth);
+    addevent.style.height = (elementWidth - 44) + "px";
+    addevent.style.fontSize = (elementWidth - 144) + "px";
+
+
+    function FileUpload() {
+        const label = document.querySelector('label[for="eventimage"]');
+        const fileInput = document.querySelector('#eventimage');
+        if (fileInput.files.length > 0) {
+            label.innerHTML += `Seçilmiş fayl sayı: ${fileInput.files.length}`;
+            label.style.borderColor = '#0162e8';
+            label.style.color = '#0162e8';
+        }
+        else {
+            label.textContent = 'Choose a file:';
+        }
+    }
+
+    $("#addingimage .data-column").height($(".data-column").parent().height());
+
+    $("#addingimage").parent().css("display", "none");
+    function AddImageForm() {
+        $("#addingimage").parent().css("display", "flex");
+    };
+    $("#addingimage i").click(function () {
+        $("#addingimage").parent().css("display", "none");
+    });
+</script>

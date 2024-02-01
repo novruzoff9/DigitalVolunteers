@@ -1,0 +1,13 @@
+﻿
+@{
+    ViewBag.Title = "SendingMail";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>SendingMail</h2>
+
+@using (Html.BeginForm("SendingMail", "Admin"))
+            {
+    <input type="text" name="toemail"/>
+                <button class="adduser"><i class="fas fa-user-plus"></i> Təsdiq et</button>
+            }
