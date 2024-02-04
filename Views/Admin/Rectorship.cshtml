@@ -13,6 +13,7 @@
         justify-content: center;
     }
 
+
     section#rectordetails img {
         width: 100px;
         border-radius: 50%;
@@ -52,7 +53,14 @@
 <section id="rectordetails" class="flex-column">
     <img src="@Model.UserImage" class="" />
     <p class="fw-bold fs-3">@Model.Name @Model.Surname</p>
-    <p class="fs-5">@Model.Role üzrə Prorektor</p>
+    @if (Model.Role == "Rector")
+    {
+        <p class="fs-5">UNEC Rektoru</p>
+    }
+    else if (Model.Department == "Vice-Rector")
+    {
+        <p class="fs-5">@Model.Role üzrə Prorektor</p>
+    }
 </section>
 
 <div id="counts">
@@ -98,6 +106,9 @@
 
         if (screen.width > 600) {
             $("#rectordetails").height($("#digi-greeting").height());
+        }
+        else {
+            $("#rectordetails").css("width", "100%");
         }
 
         $("#rectordetails").css("margin", "15px");

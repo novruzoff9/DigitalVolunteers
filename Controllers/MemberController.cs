@@ -10,6 +10,7 @@ using System.Web;
 using System.Web.Mvc;
 using BusinessLayer.Concrete;
 using DataAccessLayer.EntityFramework;
+using System.Globalization;
 
 namespace Web_DigitalVolunteers.Controllers
 {
@@ -23,6 +24,29 @@ namespace Web_DigitalVolunteers.Controllers
         ActivityPointManager PointM = new ActivityPointManager(new EfActivityPointDAL());
         DailyLoginManager LoginM = new DailyLoginManager(new EfDailyLoginDAL());
         // GET: Member
+
+        protected override void OnActionExecuting(ActionExecutingContext filterContext)
+        {
+            User user = new User();
+            try
+            {
+                user = SessionUser();
+            }
+            catch (Exception)
+            {
+                RedirectToAction("UserLogin", "Login");
+            }
+            if (user.Role != "Member")
+            {
+                filterContext.Result = new RedirectToRouteResult(new System.Web.Routing.RouteValueDictionary(new
+                {
+                    controller = "Home",
+                    action = "NoPermission",
+                }));
+            }
+            DefaultCulture();
+            base.OnActionExecuting(filterContext);
+        }
         public ActionResult Index()
         {
             return View();
@@ -32,23 +56,27 @@ namespace Web_DigitalVolunteers.Controllers
         {
             ViewBag.Review = "false";
             int userid = (int)Session["UserID"];
-            var lastregistration = EventRegistrationM.GetList().LastOrDefault(x => x.UserID == userid && x.Participated == true);
-            var lastevent = EventM.GetByID(lastregistration.EventID);
+            var lastevent = EventM.GetList().Last();
+            var eventregs = EventRegistrationM.ParticipiantsOfEvent(lastevent.EventID);
+            var lastreg = eventregs.FirstOrDefault(x => x.UserID == userid && x.Participated == true);
             var user = UserM.GetByID(userid);
-            if(user.LastOnline < lastevent.DateTime.AddHours(1))
+            if(lastreg != null)
             {
-                ViewBag.Review = "true";
+                if (user.LastOnline < lastevent.DateTime.AddHours(1))
+                {
+                    ViewBag.Review = "true";
+                    ViewBag.Reviewid = lastreg.RegistrationID;
+                }
             }
             user.LastOnline = DateTime.Now;
             UserM.Update(user);
             return View();
         }
 
-        public PartialViewResult EventReview()
+        public PartialViewResult EventReview(int id)
         {
-            int userid = (int)Session["UserID"];
-            var lastregistration = EventRegistrationM.GetList().LastOrDefault(x => x.UserID == userid || x.Participated == true);
-            return PartialView(lastregistration);
+            var reg = EventRegistrationM.GetByID(id);
+            return PartialView(reg);
         }
 
         public JsonResult ApplyReview(int registrationid, int star, string comment)
@@ -164,6 +192,20 @@ namespace Web_DigitalVolunteers.Controllers
             int userid = (int)Session["UserID"];
             var user = UserM.GetByID(userid);
             return user;
+        }
+
+        static void DefaultCulture()
+        {
+            // Specify the culture for Azerbaijan
+            string defaultCultureName = "az-AZ";
+
+            // Create a CultureInfo object for the specified culture
+            CultureInfo defaultCulture = CultureInfo.CreateSpecificCulture(defaultCultureName);
+
+            // Set the default culture for the application
+            CultureInfo.DefaultThreadCurrentCulture = defaultCulture;
+            CultureInfo.DefaultThreadCurrentUICulture = defaultCulture;
+
         }
 
     }

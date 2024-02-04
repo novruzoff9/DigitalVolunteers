@@ -34,6 +34,7 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="UNEC Rəqəmsal könüllülər Təşkilatı">
     <title>Rəqəmsal Könüllülər Təşkilatı</title>
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9025664961128837"
             crossorigin="anonymous"></script>
@@ -214,6 +215,8 @@
                                 else if (modelRole == "Secretary") { role = "Katib"; }
                                 else if (modelRole == "Advisor") { role = "Müşavir"; }
                                 else if (modelRole == "Member") { role = "Üzv"; }
+                                else if (user.Department == "Vice-Rector") { role = modelRole + " üzrə Prorektor"; }
+                                else if (modelRole == "Rector") { role = "UNEC Rektoru"; }
                             }
                             <p class="department">@role</p>
                         </div>
@@ -228,14 +231,21 @@
                                 <p>Profilim</p>
                             </a>
                         }
+                        else if (user.Department == "Vice-Rector" || user.Department == "Rectorship")
+                        {
+                            <a href="@Url.Action("Rectorship","Admin")">
+                                <i class="fas fa-user"></i>
+                                <p>Profilim</p>
+                            </a>
+                        }
                         else
                         {
-                        <a href="@Url.Action("UserProfile","Admin")">
-                            <i class="fas fa-user"></i>
-                            <p>Profilim</p>
-                        </a>
+                            <a href="@Url.Action("UserProfile","Admin")">
+                                <i class="fas fa-user"></i>
+                                <p>Profilim</p>
+                            </a>
                         }
-                        </li>
+                    </li>
                     <li>
                         <a href="/Member/Settings">
                             <i class="fas fa-cog"></i>

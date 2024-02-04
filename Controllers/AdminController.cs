@@ -42,7 +42,15 @@ namespace DigitalVolunteers.Controllers
 
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
-            var user = SessionUser();
+            User user = new User();
+            try
+            {
+                user = SessionUser();
+            }
+            catch (Exception)
+            {
+                RedirectToAction("UserLogin", "Login");
+            }
             if (user.Role == "Member")
             {
                 filterContext.Result = new RedirectToRouteResult(new System.Web.Routing.RouteValueDictionary(new
@@ -53,16 +61,6 @@ namespace DigitalVolunteers.Controllers
             }
             DefaultCulture();
             base.OnActionExecuting(filterContext);
-        }
-
-        protected override void OnActionExecuted(ActionExecutedContext filterContext)
-        {
-            var user = SessionUser();
-            if (user.Role == "Member")
-            {
-                RedirectToAction("NoPermission", "Home");
-            }
-            base.OnActionExecuted(filterContext);
         }
 
         static void DefaultCulture()

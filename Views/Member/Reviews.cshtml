@@ -35,7 +35,7 @@
 <div id="reviews">
     @foreach (var item in Model)
     {
-        <div class="review">
+        <div class="review h-100">
             <div class="user-datas">
                 <img class="eventpic" src="@item.Event.Image" alt="">
                 <p class="name">@item.Event.Title</p>
@@ -53,7 +53,46 @@
             <div class="comment">
                 <p>@item.Review</p>
             </div>
+            <div class="buttons w-100 d-flex justify-content-end">
+                <button data-registrationid="@item.RegistrationID" class="action-button primary editreview">Düzəliş et</button>
+            </div>
         </div>
     }
 </div>
 
+<div id="reviewpopup" class="pop-up">
+</div>
+
+
+<script>
+    $(document).ready(function () {
+        $(".editreview").click(function () {
+            var registrationId = $(this).data("registrationid");
+            $.ajax({
+                url: "/Member/EventReview",
+                method: "GET",
+                data: { id: registrationId },
+                success: function (data) {
+                    $("#reviewpopup").html(data);
+                    $("#review").parent().css("display", "flex");
+                }
+            });
+        });
+    });
+
+    $(".close i").click(function () {
+        $("#review").parent().css("display", "none");
+    });
+    var popup = $("#review");
+    $(document).click(function (event) {
+        if ($("#review").parent().css("display") == "flex") {
+            if (!$("#review").parent().find(event.target).length != 0) {
+                $("#review").parent().css("display", "none");
+                setTimeout(() => { }, 200);
+            }
+        }
+    });
+
+    $("#reviewpopup").css("display", "none");
+
+</script>

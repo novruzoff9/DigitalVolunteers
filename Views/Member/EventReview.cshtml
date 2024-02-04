@@ -1,5 +1,5 @@
 ﻿@model EntityLayer.Concrete.EventRegistration 
-<div class="pop-up">
+
     <section id="review">
         <div class="data-column">
             <img data-detail="image" src="@Model.Event.Image" alt="">
@@ -25,7 +25,7 @@
             <button id="score" class="action-button primary-hover">Təsdiqlə</button>
         </div>
     </section>
-</div>
+
 <script>
         $(".close i").click(function () {
             $("#review").parent().css("display", "none");

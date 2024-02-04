@@ -126,7 +126,9 @@
 
     @if (ViewBag.Review == "true")
     {
-        @Html.Action("EventReview", "Member")
+        <div id="reviewpopup" class="pop-up">
+            @Html.Action("EventReview", "Member", new { @id = ViewBag.Reviewid })
+        </div>
     }
 
 

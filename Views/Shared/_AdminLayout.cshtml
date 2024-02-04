@@ -79,7 +79,8 @@
                             else if (modelRole == "GDesigner") { role = "Qrafik dizayner"; }
                             else if (modelRole == "Secretary") { role = "Katib"; }
                             else if (modelRole == "Advisor") { role = "Müşavir"; }
-                            else if (Model.Department == "Vice-Rector") { role = modelRole + " üzrə Prorektor"; }
+                            else if (user.Department == "Vice-Rector") { role = modelRole + " üzrə Prorektor"; }
+                            else if (user.Role == "Rector") { role = "UNEC Rektoru"; }
                         }
                         <p class="department">@role</p>
                     </div>
@@ -87,10 +88,21 @@
                 <hr class="menu-line">
                 </hr>
                 <li>
-                    <a href="@Url.Action("UserProfile","Admin")">
-                        <i class="fas fa-user"></i>
-                        <p>Profilim</p>
-                    </a>
+                    @if (user.Department == "Vice-Rector" || user.Department == "Rectorship")
+                    {
+                        <a href="@Url.Action("Rectorship","Admin")">
+                            <i class="fas fa-user"></i>
+                            <p>Profilim</p>
+                        </a>
+                    }
+                    else
+                    {
+                        <a href="@Url.Action("UserProfile","Admin")">
+                            <i class="fas fa-user"></i>
+                            <p>Profilim</p>
+                        </a>
+                    }
+
                 </li>
                 <li>
                     <a href="/Admin/Settings">
