@@ -98,7 +98,7 @@
     }
 </style>
 
-@Html.Action("Slider", "News")
+@*@Html.Action("Slider", "News")*@
 
 @Html.Action("TrendNews", "News")
 
@@ -133,14 +133,13 @@
 new { page }), new PagedListRenderOptions
 {
     DisplayEllipsesWhenNotShowingAllPageNumbers = true,
-    MaximumPageNumbersToDisplay = 10,
+    MaximumPageNumbersToDisplay = 15,
     LiElementClasses = new List<String>
     { "page-link" }
 })
 </section>
 
 <script>
-
     $(document).ready(function () {
 
         var firstnews = $(".news:first");
@@ -177,4 +176,4 @@ new { page }), new PagedListRenderOptions
 
 </script>
 
-<script src="/Scripts/Slider.js"></script>
+@*<script src="~/Scripts/Slider.js"></script>*@

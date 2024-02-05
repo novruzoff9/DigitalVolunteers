@@ -25,7 +25,7 @@ namespace Web_DigitalVolunteers.Controllers
         public ActionResult Index(int page = 1)
         {
             var allevents = Enumerable.Reverse(EventM.GetList().OrderBy(x=>x.DateTime));
-            var events = allevents.ToPagedList(page, 8);
+            var events = allevents.ToPagedList(page, 12);
             return View(events);
         }
         public PartialViewResult BestEvent()

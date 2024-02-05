@@ -15,14 +15,14 @@ namespace Web_DigitalVolunteers.Controllers
     public class NewsController : Controller
     {
         // GET: News
-
-
+        
         NewsManager NewsM = new NewsManager(new EfNewsDal());
         NewsReadingManager ReadingM = new NewsReadingManager(new EfNewsReadingsDAL());
+
         public ActionResult Index(int page = 1)
         {
             var allnews = Enumerable.Reverse(NewsM.GetList().OrderBy(x => x.NewsCreated));
-            var news = allnews.ToPagedList(page, 10);
+            var news = allnews.ToPagedList(page, 15);
             return View(news);
         }
 

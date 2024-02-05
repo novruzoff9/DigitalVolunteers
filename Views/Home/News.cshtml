@@ -3,6 +3,34 @@
 
 <div class="list-background"></div>
 
+<style>
+    .news .image {
+        position: relative;
+        width: 100%;
+        height: 0;
+        padding-top: 56.25%;
+        overflow: hidden;
+    }
+
+        .news .image img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+    p.title {
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        white-space: none;
+        text-overflow: ellipsis;
+    }
+</style>
+
 <header>
     <p>Xəbərlər</p>
 </header>
@@ -26,3 +54,40 @@
     }
 
 </article>
+
+<script>
+    $(document).ready(function () {
+
+        var firstnews = $(".news:first");
+        var newslist = $(".news");
+
+        $.each(newslist, function (i, news) {
+            if ($(news).offset().top > firstnews.offset().top) {
+                $(this).css("margin-top", "20px");
+            }
+        });
+
+
+        var newsimglist = $(".news .image");
+
+        $.each(newsimglist, function (i, container) {
+            var image = container.querySelector('img');
+
+            var containerAspectRatio = 16 / 9;
+            var imageAspectRatio = image.naturalWidth / image.naturalHeight;
+
+            if (imageAspectRatio > containerAspectRatio) {
+                var newWidth = container.offsetHeight * imageAspectRatio;
+                var xOffset = (newWidth - container.offsetWidth) / 2;
+                image.style.width = newWidth + 'px';
+                image.style.left = -xOffset + 'px';
+            } else {
+                var newHeight = container.offsetWidth / imageAspectRatio;
+                var yOffset = (newHeight - container.offsetHeight) / 2;
+                image.style.height = newHeight + 'px';
+                image.style.top = -yOffset + 'px';
+            }
+        });
+    });
+
+</script>
