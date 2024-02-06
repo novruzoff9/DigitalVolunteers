@@ -50,5 +50,10 @@ namespace DataAccessLayer.Concrete.Repositories
             addEntity.State = EntityState.Modified;
             c.SaveChanges();
         }
+
+        public List<T> ListByFilter(Expression<Func<T, bool>> filter)
+        {
+            return _object.Where(filter).ToList();
+        }
     }
 }

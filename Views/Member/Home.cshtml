@@ -1,4 +1,4 @@
-﻿
+﻿@model EntityLayer.Concrete.User
 @{
     ViewBag.Title = "Home";
     Layout = "~/Views/Shared/_MemberLayout.cshtml";
@@ -6,11 +6,7 @@
 }
 
 <style>
-    h2 {
-        width: 100%;
-        text-align: center;
-        margin-top: 12px;
-    }
+    
 
     aside ul #dashboard {
         border-radius: 8px;
@@ -35,6 +31,22 @@
     <div class="welcome">
         <p class="hello">Salam <span id="loginname">İstifadəçi</span>. Xoş gəlmisən!</p>
         <p class="digi">Mən Digi. Yaxın zamanda sənə daha yaxın olacağam!</p>
+    </div>
+</section>
+<section id="profile">
+    <img src="@Model.UserImage" />
+    <p class="name">@Model.Name @Model.Surname</p>
+    <p class="profession">@Model.Profession</p>
+    <div class="actions">
+        <a href="/Member/Settings" class="action">
+            <i class="fas fa-cog"></i>
+            <p>Parametrlər</p>
+        </a>
+        <span class="border"></span>
+        <a href="/Member/QRCode" class="action">
+            <i class="fas fa-qrcode"></i>
+            <p>QR Kod</p>
+        </a>
     </div>
 </section>
 <section class="incomings" id="news">

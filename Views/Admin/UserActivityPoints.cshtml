@@ -1,5 +1,11 @@
 ﻿@using EntityLayer.Concrete
+@using BusinessLayer.Concrete;
+@using DataAccessLayer.EntityFramework;
 @model List<ActivityPoints>
+@{
+    UserManager UserM = new UserManager(new EfUserDAL());}
+<link href="~/Style/AdminPanel/ActivityPoint144.css" rel="stylesheet" />
+
 
 <section id="activity">
 

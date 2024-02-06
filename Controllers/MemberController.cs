@@ -70,7 +70,7 @@ namespace Web_DigitalVolunteers.Controllers
             }
             user.LastOnline = DateTime.Now;
             UserM.Update(user);
-            return View();
+            return View(user);
         }
 
         public PartialViewResult EventReview(int id)

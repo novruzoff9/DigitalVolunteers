@@ -282,7 +282,13 @@ namespace DigitalVolunteers.Controllers
             {
                 username = username + (quantity + 1).ToString();
             }
+            username = username.Replace("ə", "e");
+            username = username.Replace("ü", "u");
+            username = username.Replace("ö", "o");
+            username = username.Replace("ç", "c");
+            username = username.Replace("ş", "s");
             item.UserName = username;
+
 
             const string chars = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz123456789";
 
@@ -393,6 +399,10 @@ namespace DigitalVolunteers.Controllers
             {
                 users = UserM.GetList().Where(x => x.Department == list).ToPagedList(page, 10);
             }
+            else if(search == "username")
+            {
+                users = UserM.GetList().Where(x => x.UserName.Contains(list)).ToPagedList(page, 10);
+            }
             return View(users);
         }
 
@@ -403,6 +413,13 @@ namespace DigitalVolunteers.Controllers
             return Json(user, JsonRequestBehavior.AllowGet);
         }
 
+        public JsonResult UsersByUsername(string name)
+        {
+            var users = UserM.GetList();
+            users = users.Where(x => x.UserName.Contains(name)).ToList();
+            if(users.Count > 10) { users = users.GetRange(0, 10); }
+            return Json(users, JsonRequestBehavior.AllowGet);
+        }
 
         [HttpPost]
         public JsonResult AddPoint(int userid, string text, int point)
@@ -433,8 +450,8 @@ namespace DigitalVolunteers.Controllers
             int sessionid = (int)Session["UserID"];
             var user = UserM.GetByID(sessionid);
             ViewBag.congratulations = "false";
-            if (user.BirthDate.Day == DateTime.Today.Day && user.BirthDate.Month == DateTime.Today.Month && 
-                user.LastOnline.Date != DateTime.Today)
+            if (user.BirthDate.DayOfYear == DateTime.Today.DayOfYear && 
+                user.LastOnline.Date != DateTime.Today.Date)
             {
                 ViewBag.congratulations = "true";
             }
@@ -460,7 +477,7 @@ namespace DigitalVolunteers.Controllers
 
         public PartialViewResult UserActivityPoints(int id)
         {
-            var points = PointM.GetList().Where(x => x.UserID == id).ToList();
+            var points = PointM.GetList().Where(x => x.UserID == id && x.Verified == true).ToList();
             points = Enumerable.Reverse(points).ToList();
             return PartialView(points);
         }
@@ -936,7 +953,8 @@ namespace DigitalVolunteers.Controllers
             else { ViewBag.membertype = membertype; }
             var alllogins = LoginM.GetList();
             DateTime dateTime = new DateTime();
-            ViewBag.today = DateTime.Today.Day + "." + DateTime.Today.Month + "." + DateTime.Today.Year;
+            ViewBag.today = DateTime.Today.Day + " " + DateTime.Today.ToString("MMMM", CultureInfo.CreateSpecificCulture("az")) 
+                + " " + DateTime.Today.Year;
             string fullMonthName = DateTime.Today.ToString("MMMM", CultureInfo.CreateSpecificCulture("az"));
             ViewBag.ThisMonth = fullMonthName;
             if (string.IsNullOrEmpty(date))
@@ -969,7 +987,8 @@ namespace DigitalVolunteers.Controllers
 
             if(daysToSubtract == 0) { daysToSubtract = 7; }
             DateTime beginningOfWeek = DateTime.Today.AddDays(-daysToSubtract + 1);
-            ViewBag.thisweek = beginningOfWeek.Day + "." + beginningOfWeek.Month + "." + beginningOfWeek.Year;
+            ViewBag.thisweek = beginningOfWeek.Day + " " + beginningOfWeek.ToString("MMMM", CultureInfo.CreateSpecificCulture("az")) 
+                + " " + beginningOfWeek.Year;
             ViewBag.weekly = alllogins.Where(x => x.LoginDateTime >= beginningOfWeek &&
                 x.LoginDateTime <= beginningOfWeek.AddDays(6)).Count();
 
@@ -983,16 +1002,22 @@ namespace DigitalVolunteers.Controllers
         public JsonResult DailyLoginChart()
         {
             List<DataChange> logins = new List<DataChange>();
+            var loginslist = LoginM.GetList();
             for (int i = 29; i >= 0; i--)
             {
+                DataChange dataChange = new DataChange();
+                DateTime day = DateTime.Today.AddDays(-i);
+                dataChange.Name = day.ToString("dd MMM");
+                foreach (var item in loginslist)
                 {
-                    DataChange dataChange = new DataChange();
-                    DateTime day = DateTime.Today.AddDays(-i);
-                    dataChange.Name = day.ToString("dd MMM");
-                    dataChange.NowValue = LoginM.GetList().Where(x => x.LoginDateTime == day && x.User.Role == "Member").Count();
-                    dataChange.PreviusValue = LoginM.GetList().Where(x => x.LoginDateTime == day && x.User.Role != "Member").Count();
-                    logins.Add(dataChange);
+                    if(item.LoginDateTime < day) { continue; }
+                    if(item.LoginDateTime > day) { break; }
+                    if(item.User.Role == "Member") { dataChange.NowValue++; }
+                    else { dataChange.PreviusValue++; }
                 }
+                //dataChange.NowValue = loginslist.Where(x => x.LoginDateTime == day && x.User.Role == "Member").Count();
+                //dataChange.PreviusValue = loginslist.Where(x => x.LoginDateTime == day && x.User.Role != "Member").Count();
+                logins.Add(dataChange);
             }
             return Json(logins, JsonRequestBehavior.AllowGet);
         }

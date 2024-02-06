@@ -127,9 +127,7 @@ namespace DigitalVolunteers.Controllers
 
         public JsonResult Authentication(string username, string password)
         {
-            var users = UserM.GetList();
-            var user = users.FirstOrDefault(x => x.UserName == username &&
-            x.Password == password);
+            var user = UserM.FindProfile(username, password);
             if (user != null)
             {
                 FormsAuthentication.SetAuthCookie(user.UserName, false);
@@ -137,7 +135,7 @@ namespace DigitalVolunteers.Controllers
                 Session["UserFirstName"] = user.Name;
                 Session["UserSurName"] = user.Surname;
                 Session["UserID"] = user.UserID;
-                var dailylogins = LoginM.DailyLogins();                
+                var dailylogins = LoginM.LoginsofToday();                
                 if(dailylogins.FirstOrDefault(x=> x.UserID == user.UserID) == null)
                 {
                     DailyLogin login = new DailyLogin();

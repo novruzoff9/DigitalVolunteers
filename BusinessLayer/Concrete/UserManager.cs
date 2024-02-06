@@ -36,33 +36,22 @@ namespace BusinessLayer.Concrete
 
         public User GetByID(int id)
         {
-            var user = _UserDal.Get(x => x.UserID == id);
-            //if (user.Faculty == "Digital Economy") { user.Faculty = "Rəqəmsal İqtisadiyyat fakültəsi"; }
-            //else if (user.Faculty == "Russian Economy") { user.Faculty = "Rus İqtisad Məktəbi"; }
-            //else if (user.Faculty == "Business") { user.Faculty = "Biznes və Menecement"; }
-            //else if (user.Faculty == "Sabah") { user.Faculty = "SABAH mərkəzi"; }
-            //else if (user.Faculty == "ISE") { user.Faculty = "Beynəlxalq İqtisadiyyat Məktəbi"; }
-            //else if (user.Faculty == "Design") { user.Faculty = "UNEC Dizayn Məktəbi"; }
-            //else if (user.Faculty == "Finance") { user.Faculty = "Maliyyə və Mühasibat fəkültəsi"; }
-            //else if (user.Faculty == "TUDIFAK") { user.Faculty = "Türk Dünyası İqtisad fəkültəsi"; }
-            //else if (user.Faculty == "Engineering") { user.Faculty = "Mühəndislik fakültəsi"; }
-            //else if (user.Faculty == "Economy") { user.Faculty = "İqtisadiyyat və İdarəetmə fakültəsi"; }
-            return user;
+            return _UserDal.Get(x => x.UserID == id);
         }
 
         public List<User> GetList()
         {
-            var userlist = _UserDal.List();
-            foreach (var item in userlist)
-            {
-                if (item.Role == "Secretary") item.Role = "Təşkilat katibi";
-            }
-            return userlist;
+            return _UserDal.List();
         }
 
         public void Update(User item)
         {
             _UserDal.Update(item);
+        }
+
+        public User FindProfile(string username, string password)
+        {
+            return _UserDal.Get(x => x.UserName == username && x.Password == password);
         }
     }
 }

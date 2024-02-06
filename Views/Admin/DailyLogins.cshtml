@@ -133,6 +133,12 @@
         window.location.href = url;
     });
 
+    if (screen.width < 600) {
+        $("#filter").toggleClass("flex-row", "flex-column");
+        $("#filter input").css("margin-bottom", "8px");
+        $("#filter select").css("margin-bottom", "8px");
+    }
+
 </script>
 
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>

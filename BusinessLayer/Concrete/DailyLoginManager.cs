@@ -48,9 +48,14 @@ namespace BusinessLayer.Concrete
             throw new NotImplementedException();
         }
 
-        public List<DailyLogin> DailyLogins()
+        public List<DailyLogin> LoginsofToday()
         {
             return _DailyLoginDal.List().Where(x => x.LoginDateTime == DateTime.Today).ToList();
+        }
+
+        public List<DailyLogin> LoginsofDate(DateTime date)
+        {
+            return _DailyLoginDal.ListByFilter(x=>x.LoginDateTime == date);
         }
     }
 }

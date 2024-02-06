@@ -511,7 +511,7 @@
             else if (user.Department == "Management") { department = "İdarə"; }
             $("p[data-detail='department']").text(department);
 
-            
+
             let modelRole = user.Role;
             let role = "";
             if (modelRole == "President") { role = "Təşkilat üzrə Sədr"; }
@@ -830,29 +830,32 @@
         var url = '@Url.Action("SelectedUsers", "Admin")' + '?search=role' + '&list=' + role;
 
         window.location.href = url;
-        //var $content = $('#list').empty();
-        //$.ajax({
-        //    type: "GET",
-        //    url: "/Admin/RoleUser/",
-        //    data: { role: role },
-        //    success: function (result) {
-        //        ShowUsers(result);
-        //    }
-        //});
     });
 
-    $.ajax({
-        type: "GET",
-        url: "/Admin/DepartmentUser/All",
-        success: function (result) {
-            users = result;
-        }
-    });
 
     $(".search-user>input").keyup(function () {
         var searching = $(this).val();
+        if (searching.length > 0) {
+            $("div.pagination-container").css("display", "none");
+            $("#buttons").html("<button id='searchbyname' class='action-button primary'>Hamısına bax</button>")
+        }
         $content = $("#list").empty();
-        var searchresults = users.filter(x => x.UserName.includes(searching));
+        $.ajax({
+            type: "GET",
+            url: "/Admin/UsersByUsername?name=" + searching,
+            success: function (result) {
+                setTimeout(function () {
+                    $content = $("#list").empty();
+                    ShowUsers(result);
+                }, 50);
+            }
+        });
+
+        $("#searchbyname").click(function () {
+            var url = '@Url.Action("SelectedUsers", "Admin")' + '?search=username' + '&list=' + searching;
+
+            window.location.href = url;
+        });
 
         //Json əsasında isifadəçilər gətirilsinnnn!!
         //Json əsasında isifadəçilər gətirilsinnnn!!
