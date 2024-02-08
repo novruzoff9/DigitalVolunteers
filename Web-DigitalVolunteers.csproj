@@ -251,6 +251,7 @@
     <Content Include="Style\AdminPanel\Profile234.css" />
     <Content Include="Style\AdminPanel\Settings123.css" />
     <Content Include="Style\AdminPanel\Staff123.css" />
+    <Content Include="Style\AdminPanel\Vacancies156.css" />
     <Content Include="Style\APStaff1.css" />
     <Content Include="Style\Home\Event12.css" />
     <Content Include="Style\Home\Events.css" />
@@ -261,6 +262,7 @@
     <Content Include="Style\Login875.css" />
     <Content Include="Style\mainpage11.css" />
     <Content Include="Style\Member\UserPanel4525.css" />
+    <Content Include="Style\Member\Vacancies156.css" />
     <Content Include="Style\Profile1.css" />
     <Content Include="Style\sign.css" />
     <Content Include="Style\Staff11.css" />
@@ -347,6 +349,14 @@
     <Content Include="Views\Login\ResetPassword.cshtml" />
     <Content Include="Views\News\TrendNews.cshtml" />
     <Content Include="Views\Admin\Rectorship.cshtml" />
+    <Content Include="Views\Member\Vacancies.cshtml" />
+    <Content Include="Views\Member\VacancyDetails.cshtml" />
+    <Content Include="Views\Admin\Vacancies.cshtml" />
+    <Content Include="Views\Admin\AddVacancy.cshtml" />
+    <Content Include="Views\Admin\UpdateVacancy.cshtml" />
+    <Content Include="Views\Member\PrimaryVacancies.cshtml" />
+    <Content Include="Views\Member\AppliedVacancies.cshtml" />
+    <Content Include="Views\Admin\AppliesofVacancy.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -1,0 +1,21 @@
+﻿@using EntityLayer.Concrete
+@model List<VacancyApply>
+
+@foreach (var item in Model)
+{
+    <section class="vacancy">
+        <p class="title">@item.Vacancy.Title</p>
+        <div class="footer d-flex justify-content-between">
+            @if (item.Vacancy.Deadline.Year != 2005)
+            {
+                <p><i class="fas fa-calendar-alt"></i>&nbsp;&nbsp;Son müraciət tarixi: @item.Vacancy.Deadline.ToString("dd MMMM")</p>
+            }
+            else
+            {
+                <p>Bu vakansiya üçün müraciət hər zaman açıqdır</p>
+            }
+            <a href="/Member/VacancyDetails/@item.VacancyID" class="action-button primary">Ətraflı</a>
+        </div>
+    </section>
+}
+

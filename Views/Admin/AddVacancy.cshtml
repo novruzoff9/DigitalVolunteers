@@ -1,0 +1,49 @@
+﻿@model EntityLayer.Concrete.Vacancy
+@{
+    ViewBag.Title = "AddVacancy";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<link href="~/Style/AdminPanel/adminpanelevents.css" rel="stylesheet" />
+@using (Html.BeginForm("AddVacancy", "Admin", FormMethod.Post))
+{
+    <section id="eventform">
+        <div class="title-caption">
+            <input type="text" placeholder="Başlıq" name="Title">
+            <textarea name="Description" id="" cols="30" rows="10" placeholder="Haqqında"></textarea>
+        </div>
+        <div class="details">
+            <div class="d-flex flex-column">
+                <label for="eventdeadlinetime">Vakansiya üçün son qeydiyyat tarixi</label>
+                <input id="eventdeadlinetime" type="datetime-local" name="Deadline">
+            </div>
+            <div class="d-flex flex-row">
+                @Html.CheckBoxFor(x=>x.Primary, new {@id = "setprimary" })
+                <label for="setprimary" class="m-lg-1">Vakansiyanı önə çək</label>
+            </div>
+            <select name="Department" id="">
+                <option hidden selected>Departament</option>
+                <option value="FS-Digital Economy">Rəqəmsal İqitsadiyyat</option>
+                <option value="FirstHA">İçərişəhər, Heydər Əliyev</option>
+                <option value="FirstWhite">İçərişəhər, Ağ zal</option>
+                <option value="FirstSmall">İçərişəhər, Kiçik</option>
+                <option value="SecondBig">Gənclik, Böyük</option>
+                <option value="SecondSmall">Gənclik, Kiçik</option>
+                <option value="ThirdBig">Nizami, Böyük</option>
+                <option value="ThirdSmall">Nizami, Kiçik</option>
+                <option value="Fourth">Semaşko</option>
+            </select>
+        </div>
+    </section>
+    <div class="confirm">
+        <button class="action-button success">Təsdiq et</button>
+    </div>
+}
+
+<script>
+    $(document).ready(function () {
+
+        $("#eventform>div").height($("#eventform").height());
+    });
+</script>
+

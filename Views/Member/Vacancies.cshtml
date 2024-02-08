@@ -1,0 +1,80 @@
+﻿@using EntityLayer.Concrete
+@model List<Vacancy>
+@{
+    ViewBag.Title = "Vacancies";
+    Layout = "~/Views/Shared/_MemberLayout.cshtml";
+}
+
+<link href="~/Style/Member/Vacancies156.css" rel="stylesheet" />
+
+<style>
+
+    aside ul #vacationspage {
+        border-radius: 8px;
+        background-color: #006bce;
+    }
+
+        aside ul #vacationspage p, aside ul #vacationspage i {
+            color: white;
+        }
+
+        aside ul #vacationspage:hover {
+            padding-left: 0;
+        }
+
+            aside ul #vacationspage:hover p, aside ul #vacationspage:hover i {
+                color: white;
+            }
+</style>
+
+<section id="navigation">
+    <div class="tabbtn activetab" data-tab="all">Bütün vakansiyalar</div>
+    <div class="tabbtn" data-tab="applied">Müraciətlərim</div>
+</section>
+<div class="vacancies" id="all">
+    <h2>Önə çəkilmiş vakansiyalar</h2>
+    
+    @Html.Action("PrimaryVacancies", "Member")
+
+    <h2>Bütün vakansiyalar</h2>
+    @foreach (var item in Model)
+    {
+        <section class="vacancy">
+            <p class="title">@item.Title</p>
+            <div class="footer d-flex justify-content-between">
+                @if (item.Deadline.Year != 2005)
+                {
+                    <p><i class="fas fa-calendar-alt"></i>&nbsp;&nbsp;Son müraciət tarixi: @item.Deadline.ToString("dd MMMM")</p>
+                }
+                else
+                {
+                    <p>Bu vakansiya üçün müraciət hər zaman açıqdır</p>
+                }
+                <a href="/Member/VacancyDetails/@item.VacancyID" class="action-button primary">Ətraflı</a>
+            </div>
+        </section>
+    }
+</div>
+<div class="vacancies" id="applied">
+    <h2>Müraciət edilmiş vakansiyalar</h2>
+    @Html.Action("AppliedVacancies", "Member")
+</div>
+
+<script>
+        $(".tabbtn").click(function () {
+            if ($(this).hasClass("activetab")) { return; }
+            else {
+                $(".tabbtn").removeClass("activetab");
+                $(this).addClass("activetab");
+                let value = $(this).attr("data-tab");
+                if (value == "all") {
+                    $("#applied").css("display", "none");
+                    $("#all").css("display", "flex");
+                }
+                else if (value == "applied") {
+                    $("#all").css("display", "none");
+                    $("#applied").css("display", "flex");
+                }
+            }
+        });
+</script>

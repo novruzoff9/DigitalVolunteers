@@ -23,30 +23,10 @@ namespace Web_DigitalVolunteers.Controllers
         EventRegistrationManager EventRegistrationM = new EventRegistrationManager(new EfEventRegistrationDAL());
         ActivityPointManager PointM = new ActivityPointManager(new EfActivityPointDAL());
         DailyLoginManager LoginM = new DailyLoginManager(new EfDailyLoginDAL());
+        VacancyManager VacancyM = new VacancyManager(new EfVacancyDAL());
+        VacancyApplyManager VacancyApplyM = new VacancyApplyManager(new EfVacancyApplyDAL());
         // GET: Member
 
-        protected override void OnActionExecuting(ActionExecutingContext filterContext)
-        {
-            User user = new User();
-            try
-            {
-                user = SessionUser();
-            }
-            catch (Exception)
-            {
-                RedirectToAction("UserLogin", "Login");
-            }
-            if (user.Role != "Member")
-            {
-                filterContext.Result = new RedirectToRouteResult(new System.Web.Routing.RouteValueDictionary(new
-                {
-                    controller = "Home",
-                    action = "NoPermission",
-                }));
-            }
-            DefaultCulture();
-            base.OnActionExecuting(filterContext);
-        }
         public ActionResult Index()
         {
             return View();
@@ -73,6 +53,24 @@ namespace Web_DigitalVolunteers.Controllers
             return View(user);
         }
 
+        #region Events
+        public ActionResult Events()
+        {
+            int userid = (int)Session["UserID"];
+            var events = EventM.GetList();
+            var registrations = EventRegistrationM.GetList().Where(x => x.UserID == userid).ToList();
+            return View(registrations);
+        }
+
+        public JsonResult EventByID(int id)
+        {
+            var eventinfo = EventM.GetByID(id);
+            eventinfo.Caption = System.Web.HttpUtility.HtmlDecode(eventinfo.Caption);
+            return Json(eventinfo, JsonRequestBehavior.AllowGet);
+        }
+        #endregion
+
+        #region Review
         public PartialViewResult EventReview(int id)
         {
             var reg = EventRegistrationM.GetByID(id);
@@ -88,14 +86,6 @@ namespace Web_DigitalVolunteers.Controllers
             return Json("success", JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult Events()
-        {
-            int userid = (int)Session["UserID"];
-            var events = EventM.GetList();
-            var registrations = EventRegistrationM.GetList().Where(x=>x.UserID == userid).ToList();
-            return View(registrations);
-        }
-
         public ActionResult Reviews()
         {
             int userid = (int)Session["UserID"];
@@ -103,14 +93,67 @@ namespace Web_DigitalVolunteers.Controllers
             var registrations = EventRegistrationM.GetList().Where(x => x.UserID == userid).ToList();
             return View(registrations);
         }
+        #endregion
 
-        public JsonResult EventByID(int id)
+        #region Vacancies
+        public ActionResult Vacancies()
         {
-            var eventinfo = EventM.GetByID(id);
-            eventinfo.Caption = System.Web.HttpUtility.HtmlDecode(eventinfo.Caption);
-            return Json(eventinfo, JsonRequestBehavior.AllowGet);
+            var vacancies = VacancyM.GetList().Where(x => x.Primary == false).ToList();
+            return View(vacancies);
         }
 
+        public PartialViewResult PrimaryVacancies()
+        {
+            var vacancies = VacancyM.GetList().Where(x => x.Primary == true).ToList();
+            return PartialView(vacancies);
+        }
+
+        public PartialViewResult AppliedVacancies()
+        {
+            int userid = (int)Session["UserID"];
+            var vacancies = VacancyApplyM.AppliesOfUser(userid);
+
+            return PartialView(vacancies);
+        }
+
+        public ActionResult VacancyDetails(int id)
+        {
+            var vacancy = VacancyM.GetByID(id);
+            int userid = (int)Session["UserID"];
+            var applies = VacancyApplyM.AppliesOfUser(userid);
+            var apply = applies.FirstOrDefault(x => x.VacancyID == id);
+            ViewBag.applied = "false";
+            ViewData["Interview"] = false;
+            ViewData["Enter"] = false;
+            ViewData["Note"] = null;
+            if (apply != null)
+            {
+                ViewBag.applied = "true";
+                ViewData["ApplyDate"] = apply.ApplyDateTime.ToString("dd MMM yyyy");
+                ViewData["Interview"] = apply.Interview;
+                ViewData["InterviewDate"] = apply.InterviewDateTime.ToString("dd MMM yyyy");
+                ViewData["Enter"] = apply.Entered;
+                ViewData["EnterDate"] = apply.EnteringDateTime.ToString("dd MMM yyyy");
+                ViewData["Note"] = apply.Note;
+            }
+            return View(vacancy);
+        }
+
+        public JsonResult ApplytoVacancy(int vacancyid, int userid, string note)
+        {
+            VacancyApply apply = new VacancyApply();
+            apply.VacancyID = vacancyid;
+            apply.UserID = userid;
+            apply.ApplierNote = note;
+            apply.ApplyDateTime = DateTime.Now;
+            apply.InterviewDateTime = DateTime.Now;
+            apply.EnteringDateTime = DateTime.Now;
+            VacancyApplyM.Add(apply);
+            return Json("succes", JsonRequestBehavior.AllowGet);
+        }
+        #endregion
+
+        #region Profile
         public ActionResult UserProfile()
         {
             int sessionid = (int)Session["UserID"];
@@ -149,6 +192,9 @@ namespace Web_DigitalVolunteers.Controllers
             var points = PointM.GetList().Where(x => x.UserID == id).ToList();
             return PartialView(points);
         }
+        #endregion
+
+        #region Settings
 
         public ActionResult Settings()
         {
@@ -186,6 +232,7 @@ namespace Web_DigitalVolunteers.Controllers
 
             return Json("Success", JsonRequestBehavior.AllowGet);
         }
+        #endregion
 
         private User SessionUser()
         {
@@ -206,6 +253,29 @@ namespace Web_DigitalVolunteers.Controllers
             CultureInfo.DefaultThreadCurrentCulture = defaultCulture;
             CultureInfo.DefaultThreadCurrentUICulture = defaultCulture;
 
+        }
+
+        protected override void OnActionExecuting(ActionExecutingContext filterContext)
+        {
+            User user = new User();
+            try
+            {
+                user = SessionUser();
+            }
+            catch (Exception)
+            {
+                RedirectToAction("UserLogin", "Login");
+            }
+            if (user.Role != "Member")
+            {
+                filterContext.Result = new RedirectToRouteResult(new System.Web.Routing.RouteValueDictionary(new
+                {
+                    controller = "Home",
+                    action = "NoPermission",
+                }));
+            }
+            DefaultCulture();
+            base.OnActionExecuting(filterContext);
         }
 
     }

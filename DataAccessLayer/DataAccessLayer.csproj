@@ -65,6 +65,8 @@
     <Compile Include="EntityFramework\EfUserDAL.cs" />
     <Compile Include="EntityFramework\EfEventGalleryDAL.cs" />
     <Compile Include="EntityFramework\EfNewsReadingsDAL.cs" />
+    <Compile Include="EntityFramework\EfVacancyDAL.cs" />
+    <Compile Include="EntityFramework\EfVacancyApplyDAL.cs" />
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

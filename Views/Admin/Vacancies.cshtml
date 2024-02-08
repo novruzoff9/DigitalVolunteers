@@ -1,0 +1,46 @@
+﻿@using EntityLayer.Concrete
+@model List<Vacancy> 
+@{
+    ViewBag.Title = "Vacancies";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<link href="~/Style/AdminPanel/Vacancies156.css" rel="stylesheet" />
+
+<style>
+
+    aside ul #vacationspage {
+        border-radius: 8px;
+        background-color: #006bce;
+    }
+
+        aside ul #vacationspage p, aside ul #vacationspage i {
+            color: white;
+        }
+
+        aside ul #vacationspage:hover {
+            padding-left: 0;
+        }
+
+            aside ul #vacationspage:hover p, aside ul #vacationspage:hover i {
+                color: white;
+            }
+</style>
+
+<div id="vacancies">
+    <a href="/Admin/AddVacancy" class="vacancy" id="addvacancy">
+        <i class="fas fa-notes-medical"></i>
+        <p>Vakansiya artır</p>
+    </a>
+    @foreach (var item in Model)
+    {
+        <section class="vacancy">
+            <p class="title">@item.Title</p>
+            <div class="footer d-flex justify-content-between">
+                <p><i class="fas fa-calendar-alt"></i>&nbsp;&nbsp;@item.CreatedTime.ToString("dd MMMM yyyy")</p>
+                <a href="/Admin/UpdateVacancy/@item.VacancyID" class="action-button success">Düzəliş</a>
+            </div>
+            <a href="/Admin/AppliesofVacancy/@item.VacancyID" class="action-button primary-hover w-100 mt-2">Müraciətlər (@item.Applies.Count)</a>
+        </section>
+    }
+</div>

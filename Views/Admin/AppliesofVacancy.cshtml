@@ -1,0 +1,19 @@
+﻿@using EntityLayer.Concrete
+@model List<VacancyApply>
+@{
+    ViewBag.Title = "AppliesofVacancy";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<link href="~/Style/AdminPanel/Vacancies156.css" rel="stylesheet" />
+<div id="vacancies">
+    @foreach (var item in Model)
+    {
+        <section class="vacancy">
+            <p class="title">@item.User.Name @item.User.Surname</p>
+            <div class="footer d-flex justify-content-between">
+                <p><i class="fas fa-calendar-alt"></i>&nbsp;&nbsp;@item.ApplyDateTime.ToString("dd MMMM yyyy")</p>
+            </div>
+        </section>
+    }
+</div>

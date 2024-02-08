@@ -1,0 +1,61 @@
+﻿@model EntityLayer.Concrete.Vacancy
+@{
+    ViewBag.Title = "UpdateVacancy";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<link href="~/Style/AdminPanel/adminpanelevents.css" rel="stylesheet" />
+@using (Html.BeginForm("UpdateVacancy", "Admin", FormMethod.Post))
+{
+    @Html.HiddenFor(x=>x.VacancyID)
+    <section id="eventform">
+        <div class="title-caption">
+            @Html.TextBoxFor(x=>x.Title)
+            @Html.TextAreaFor(x=>x.Description)
+        </div>
+        <div class="details">
+            <div class="d-flex flex-column">
+                <label for="eventdeadlinetime">Vakansiya üçün son qeydiyyat tarixi</label>
+                @Html.TextBoxFor(x => x.Deadline, "{0:yyyy-MM-dd HH:mm}", new { type = "datetime-local", id = "eventdeadlinetime" })
+            </div>
+            <div class="d-flex flex-row">
+                @Html.CheckBoxFor(x=>x.Primary, new {@id = "setprimary" })
+                <label for="setprimary" class="m-lg-1">Vakansiyanı önə çək</label>
+            </div>
+            <select name="Department" id="">
+                @{
+                    string department = "";
+                    if (Model.Department == "First") { department = "Əsas korpus, Böyük"; }
+                    else if (Model.Department == "FirstHA") { department = "Əsas korpus, Heydər Əliyev"; }
+                    else if (Model.Department == "FirstWhite") { department = "Əsas korpus, Ağ zal"; }
+                    else if (Model.Department == "FirstSmall") { department = "Əsas korpus, Kiçik"; }
+                    else if (Model.Department == "SecondBig") { department = "II korpus, Böyük"; }
+                    else if (Model.Department == "SecondSmall") { department = "II  korpus, Kiçik"; }
+                    else if (Model.Department == "ThirdBig") { department = "III korpus, Böyük"; }
+                    else if (Model.Department == "ThirdSmall") { department = "III korpus, Kiçik"; }
+                    else if (Model.Department == "Fourth") { department = "IV korpus"; }
+                }
+                <option selected value="@Model.Department">@department</option>
+                <option value="FS-Digital Economy">Rəqəmsal İqitsadiyyat</option>
+                <option value="FirstHA">İçərişəhər, Heydər Əliyev</option>
+                <option value="FirstWhite">İçərişəhər, Ağ zal</option>
+                <option value="FirstSmall">İçərişəhər, Kiçik</option>
+                <option value="SecondBig">Gənclik, Böyük</option>
+                <option value="SecondSmall">Gənclik, Kiçik</option>
+                <option value="ThirdBig">Nizami, Böyük</option>
+                <option value="ThirdSmall">Nizami, Kiçik</option>
+                <option value="Fourth">Semaşko</option>
+            </select>
+        </div>
+    </section>
+    <div class="confirm">
+        <button class="action-button success">Təsdiq et</button>
+    </div>
+}
+
+<script>
+    $(document).ready(function () {
+        $("textarea").height(200);
+        $("#eventform>div").height($("#eventform").height());
+    });
+</script>

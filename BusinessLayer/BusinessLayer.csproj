@@ -63,6 +63,8 @@
     <Compile Include="Concrete\NewsReadingManager.cs" />
     <Compile Include="Concrete\PasswordTokenManager.cs" />
     <Compile Include="Concrete\UserManager.cs" />
+    <Compile Include="Concrete\VacancyApplyManager.cs" />
+    <Compile Include="Concrete\VacancyManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

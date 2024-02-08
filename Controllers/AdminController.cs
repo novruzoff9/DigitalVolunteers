@@ -37,6 +37,8 @@ namespace DigitalVolunteers.Controllers
         EventRegistrationManager EventRegistrationM = new EventRegistrationManager(new EfEventRegistrationDAL());
         ActivityPointManager PointM = new ActivityPointManager(new EfActivityPointDAL());
         DailyLoginManager LoginM = new DailyLoginManager(new EfDailyLoginDAL());
+        VacancyManager VacancyM = new VacancyManager(new EfVacancyDAL());
+        VacancyApplyManager VacancyApplyM = new VacancyApplyManager(new EfVacancyApplyDAL());
 
         // GET: Admin
 
@@ -1087,6 +1089,56 @@ namespace DigitalVolunteers.Controllers
 
         #endregion
 
+        #region Vacancies
+        public ActionResult Vacancies()
+        {
+            var vacancies = VacancyM.GetList();
+            vacancies = Enumerable.Reverse(vacancies).ToList();
+            return View(vacancies);
+        }
+
+        public ActionResult AppliesofVacancy(int id)
+        {
+            var applies = VacancyApplyM.AppliesOfVacancy(id);
+            return View(applies);
+        }
+
+        [HttpGet]
+        public ActionResult AddVacancy()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult AddVacancy(Vacancy item)
+        {
+            if(item.Deadline.Date == DateTime.Parse("01/01/0001")) { item.Deadline = new DateTime(2005, 09, 23); }
+            item.CreatedTime = DateTime.Now;
+            VacancyM.Add(item);
+            return RedirectToAction("Vacancies", "Admin");
+        }
+
+        [HttpGet]
+        public ActionResult UpdateVacancy(int id)
+        {
+            var vacancy = VacancyM.GetByID(id);
+            return View(vacancy);
+        }
+
+        [HttpPost]
+        public ActionResult UpdateVacancy(Vacancy item)
+        {
+            var pastvacancy = VacancyM.GetByID(item.VacancyID);
+            pastvacancy.Title = item.Title;
+            pastvacancy.Description = item.Description;
+            pastvacancy.Deadline = item.Deadline;
+            pastvacancy.Department = item.Department;
+            pastvacancy.Primary = item.Primary;
+            VacancyM.Update(pastvacancy);
+            return RedirectToAction("Vacancies", "Admin");
+        }
+
+        #endregion
 
         public ActionResult UpdateAllUsers()
         {

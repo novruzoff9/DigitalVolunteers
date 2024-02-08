@@ -83,6 +83,8 @@
     <Compile Include="Concrete\NewsReading.cs" />
     <Compile Include="Concrete\PasswordTokens.cs" />
     <Compile Include="Concrete\User.cs" />
+    <Compile Include="Concrete\Vacancy.cs" />
+    <Compile Include="Concrete\VacancyApply.cs" />
     <Compile Include="Objects\DataChange.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

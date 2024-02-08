@@ -18,6 +18,8 @@ namespace DataAccessLayer.Concrete
         public DbSet<News> News { get; set; }
         public DbSet<DailyLogin> DailyLogins { get; set; }
         public DbSet<PasswordTokens> PasswordTokens { get; set; }
+        public DbSet<Vacancy> Vacancies { get; set; }
+        public DbSet<VacancyApply> VacancyApplies { get; set; }
         //public DbSet<NewsReading> NewsReadings { get; set; }
     }
 }

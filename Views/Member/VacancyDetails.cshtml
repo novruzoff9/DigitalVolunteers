@@ -1,0 +1,176 @@
+﻿@model EntityLayer.Concrete.Vacancy
+@{
+    ViewBag.Title = "VacancyDetails";
+    Layout = "~/Views/Shared/_MemberLayout.cshtml";
+    string applied = ViewBag.applied;
+    var applyDate = ViewData["ApplyDate"];
+    var interview = ViewData["Interview"];
+    var interviewDate = ViewData["InterviewDate"];
+    var enter = ViewData["Enter"];
+    var enterDate = ViewData["EnterDate"];
+    var note = ViewData["Note"];
+    int sessionid = (int)Session["UserID"];
+    int vacancyid = Model.VacancyID;
+}
+
+
+
+<link href="~/Style/Member/Vacancies156.css" rel="stylesheet" />
+
+<section id="vacancydetails">
+    <h2>@Model.Title</h2>
+    <div class="footer w-100 d-flex justify-content-between">
+        @if (Model.Deadline.Year != 2005)
+        {
+            <p><i class="fas fa-calendar-alt"></i>&nbsp;&nbsp;Son müraciət tarixi: @Model.Deadline.ToString("dd MMMM")</p>
+        }
+        else
+        {
+            <p>Bu vakansiya üçün müraciət hər zaman açıqdır</p>
+        }
+        @if (applied == "false")
+        {
+            <button id="apply" class="action-button primary">Müraciət et</button>
+        }
+        else
+        {
+            <button id="apply" class="action-button danger">Müraciəti sil</button>
+        }
+    </div>
+    @if (applied == "true")
+    {
+        <div id="road" class="d-flex flex-row justify-content-between">
+            <div class="point successpoint">
+                <i class="fas fa-check"></i>
+                <p>Müraciət</p>
+            </div>
+            @if (interview.ToString() == "true") { interview = "successpoint"; }
+            else { interview = ""; }
+            <div class="point @interview">
+                <i class="fas fa-comments"></i>
+                <p>Müsahibə</p>
+            </div>
+            @if (enter.ToString() == "true") { enter = "successpoint"; }
+            else { enter = ""; }
+            <div class="point @enter">
+                <i class="fas fa-handshake"></i>
+                <p>Qəbul</p>
+            </div>
+            <span id="line"></span>
+        </div>
+    }
+
+    <div id="description" class="w-100 mt-2">
+        <h3>Ətraflı</h3>
+        <p>
+            @Model.Description
+        </p>
+    </div>
+</section>
+
+@if (applied == "true")
+{
+    <section id="timeline">
+        <div class="eventtimes">
+            <div class="pointtime">
+                <p>Müraciət tarixi</p>
+                <p class="date">@applyDate</p>
+            </div>
+            <div class="pointtime">
+                <p>Müsahibəyə çağırılma tarixi</p>
+                @if(interview.ToString() != "true") { interviewDate = "-- --- ----"; }
+                <p class="date">@interviewDate</p>
+            </div>
+            <div class="pointtime">
+                <p>Qəbul tarixi</p>
+                @if (enter.ToString() != "true") { enterDate = "-- --- ----"; }
+                <p class="date">@enterDate</p>
+            </div>
+        </div>
+        <div class="note">
+            <h6>Qeyd:</h6>
+            <p>
+                @note
+            </p>
+        </div>
+    </section>
+}
+
+
+<div class="pop-up">
+    <div id="offer">
+        <div class="icon">
+            <p class="question">?</p>
+        </div>
+        <div class="data-row">
+            <p>
+                <span>@Model.Title</span> vakansiyası üzrə müraciətinizi
+                təsdiqləyin.
+            </p>
+        </div>
+        <div class="d-flex flex-column">
+            <label for="ApplyNote">Müraciətlə bağlı əlavə qeydiniz:</label>
+            <input id="ApplyNote" class="m-1 daisy">
+        </div>
+        <div class="data-row w-100 justify-content-around mt-2">
+            <button class="action-button primary">Təsdiqlə</button>
+            <button class="action-button danger">Ləğv et</button>
+        </div>
+    </div>
+</div>
+
+<div class="pop-up">
+    <div id="accepted">
+        <div class="icon">
+            <i class="fas fa-check"></i>
+        </div>
+        <div class="data-row">
+            <p>
+                <span>@Model.Title</span> vakansiyası üzrə müraciətinizi
+                uğurla qeydə alındı!
+            </p>
+        </div>
+        <div class="data-row">
+            <button class="action-button primary">Bağla</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(".pop-up").css("display", "none");
+    $("button#apply").click(function () {
+        var vacancy = $(this).parent().siblings("h2").text();
+        $("#offer").parent().css("display", "flex");
+        $("#offer p>span").text(vacancy);
+        $("#accepted p>span").text(vacancy);
+        $("body").css("overflow", "hidden");
+    });
+
+    $("#offer button.danger").click(function () {
+        $("#offer").parent().css("display", "none");
+        $("body").css("overflow", "auto");
+    });
+    $("#offer button.primary").click(function () {
+        $("#offer").parent().css("display", "none");
+        let note = $("#ApplyNote").val();
+        let sessionid = @sessionid;
+        let vacancyid = @vacancyid;
+        $.ajax({
+            type: 'POST',
+            url: "/Member/ApplytoVacancy",
+            data: {
+                userid: sessionid,
+                note: note,
+                vacancyid: vacancyid
+            },
+            dataType: 'json',
+            success: function () {
+                $("#accepted").parent().css("display", "flex");
+            }
+        });
+    });
+    $("#accepted button.primary").click(function () {
+        $("#accepted").parent().css("display", "none");
+        $("body").css("overflow", "auto");
+    });
+</script>
