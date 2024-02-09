@@ -21,5 +21,6 @@ namespace EntityLayer.Concrete
         public int Participant { get; set; }
         public DateTime Deadline { get; set;}
         public int ParticipantLimit { get; set; }
+        public virtual ICollection<EventRegistration> Registrations { get; set; }
     }
 }

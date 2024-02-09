@@ -2,13 +2,25 @@
 @{
     ViewBag.Title = "VacancyDetails";
     Layout = "~/Views/Shared/_MemberLayout.cshtml";
+
     string applied = ViewBag.applied;
-    var applyDate = ViewData["ApplyDate"];
-    var interview = ViewData["Interview"];
-    var interviewDate = ViewData["InterviewDate"];
-    var enter = ViewData["Enter"];
-    var enterDate = ViewData["EnterDate"];
-    var note = ViewData["Note"];
+    int applyid = 0;
+    string interview = "false";
+    string enter = "false";
+    string applyDate = "";
+    string interviewDate = "";
+    string enterDate = "";
+    string note = "";
+    if (applied == "true")
+    {
+        applyid = (int)ViewData["ApplyID"];
+        applyDate = (string)ViewData["ApplyDate"];
+        interview = ViewData["Interview"].ToString();
+        interviewDate = (string)ViewData["InterviewDate"];
+        enter = ViewData["Enter"].ToString();
+        enterDate = (string)ViewData["EnterDate"];
+        note = (string)ViewData["Note"];
+    }
     int sessionid = (int)Session["UserID"];
     int vacancyid = Model.VacancyID;
 }
@@ -34,7 +46,7 @@
         }
         else
         {
-            <button id="apply" class="action-button danger">Müraciəti sil</button>
+            <button id="deleteapply" class="action-button danger">Müraciəti sil</button>
         }
     </div>
     @if (applied == "true")
@@ -44,13 +56,13 @@
                 <i class="fas fa-check"></i>
                 <p>Müraciət</p>
             </div>
-            @if (interview.ToString() == "true") { interview = "successpoint"; }
+            @if (interview == "true") { interview = "successpoint"; }
             else { interview = ""; }
             <div class="point @interview">
                 <i class="fas fa-comments"></i>
                 <p>Müsahibə</p>
             </div>
-            @if (enter.ToString() == "true") { enter = "successpoint"; }
+            @if (enter == "true") { enter = "successpoint"; }
             else { enter = ""; }
             <div class="point @enter">
                 <i class="fas fa-handshake"></i>
@@ -103,12 +115,12 @@
             <p class="question">?</p>
         </div>
         <div class="data-row">
-            <p>
+            <p id="confirmtext">
                 <span>@Model.Title</span> vakansiyası üzrə müraciətinizi
                 təsdiqləyin.
             </p>
         </div>
-        <div class="d-flex flex-column">
+        <div id="noteforapply" class="d-flex flex-column">
             <label for="ApplyNote">Müraciətlə bağlı əlavə qeydiniz:</label>
             <input id="ApplyNote" class="m-1 daisy">
         </div>
@@ -136,21 +148,38 @@
     </div>
 </div>
 
+<div class="pop-up">
+    <div id="sessionerror">
+        <div class="icon">
+            <i class="fas fa-times"></i>
+        </div>
+        <div class="data-row">
+            <p>
+                Siz bu vakansiya üçün müraciət etmisiniz
+            </p>
+        </div>
+        <div class="data-row">
+            <button class="action-button primary">Bağla</button>
+        </div>
+    </div>
+</div>
+
 <script>
     $(".pop-up").css("display", "none");
     $("button#apply").click(function () {
-        var vacancy = $(this).parent().siblings("h2").text();
+        var vacancy = "@Model.Title";
         $("#offer").parent().css("display", "flex");
         $("#offer p>span").text(vacancy);
         $("#accepted p>span").text(vacancy);
         $("body").css("overflow", "hidden");
+        $("#offer button.primary").addClass("confirmapply");
     });
 
     $("#offer button.danger").click(function () {
         $("#offer").parent().css("display", "none");
         $("body").css("overflow", "auto");
     });
-    $("#offer button.primary").click(function () {
+    $("#offer").on("click", ".confirmapply", function () {
         $("#offer").parent().css("display", "none");
         let note = $("#ApplyNote").val();
         let sessionid = @sessionid;
@@ -164,6 +193,41 @@
                 vacancyid: vacancyid
             },
             dataType: 'json',
+            success: function (result) {
+                if (result == "success") {
+                    $("#accepted").parent().css("display", "flex");
+                }
+                else if (result == "applied") {
+                    $("#sessionerror").parent().css("display", "flex");
+                }
+            }
+        });
+    });
+    $("#accepted button.primary").click(function () {
+        $("#accepted").parent().css("display", "none");
+        $("body").css("overflow", "auto");
+    });
+</script>
+
+<script>
+    $("button#deleteapply").click(function () {
+        var vacancy = "@Model.Title";
+        $("#offer").parent().css("display", "flex");
+        $("#offer p#confirmtext").html("<span>" + vacancy + "</span> vakansiyasına olan müraciətinizi silmək istədiyinizi təsdiqləyin");
+        $("#offer div#noteforapply").attr('style', 'display: none !important');
+        $("#accepted p").html("<span>" + vacancy + "<span> vakansiyasına olan müraciətinizi silindi!");
+        $("body").css("overflow", "hidden");
+        $("#offer button.primary").addClass("deleteapply");
+    });
+    $("#offer").on("click", ".deleteapply", function () {
+        $("#offer").parent().css("display", "none");
+        let applyid = @applyid;
+        $.ajax({
+            type: 'POST',
+            url: "/Member/DeleteApply",
+            data: {
+                applyid: applyid,
+            },
             success: function () {
                 $("#accepted").parent().css("display", "flex");
             }

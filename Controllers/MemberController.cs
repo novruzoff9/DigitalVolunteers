@@ -118,10 +118,9 @@ namespace Web_DigitalVolunteers.Controllers
 
         public ActionResult VacancyDetails(int id)
         {
+            var user = SessionUser();
             var vacancy = VacancyM.GetByID(id);
-            int userid = (int)Session["UserID"];
-            var applies = VacancyApplyM.AppliesOfUser(userid);
-            var apply = applies.FirstOrDefault(x => x.VacancyID == id);
+            var apply = user.VacancyApplies.FirstOrDefault(x => x.VacancyID == id);
             ViewBag.applied = "false";
             ViewData["Interview"] = false;
             ViewData["Enter"] = false;
@@ -129,6 +128,7 @@ namespace Web_DigitalVolunteers.Controllers
             if (apply != null)
             {
                 ViewBag.applied = "true";
+                ViewData["ApplyID"] = apply.ApplyID;
                 ViewData["ApplyDate"] = apply.ApplyDateTime.ToString("dd MMM yyyy");
                 ViewData["Interview"] = apply.Interview;
                 ViewData["InterviewDate"] = apply.InterviewDateTime.ToString("dd MMM yyyy");
@@ -141,6 +141,11 @@ namespace Web_DigitalVolunteers.Controllers
 
         public JsonResult ApplytoVacancy(int vacancyid, int userid, string note)
         {
+            var user = SessionUser();
+            if (user.VacancyApplies.FirstOrDefault(x => x.VacancyID == vacancyid) != null)
+            {
+                return Json("applied", JsonRequestBehavior.AllowGet);
+            }
             VacancyApply apply = new VacancyApply();
             apply.VacancyID = vacancyid;
             apply.UserID = userid;
@@ -150,6 +155,17 @@ namespace Web_DigitalVolunteers.Controllers
             apply.EnteringDateTime = DateTime.Now;
             VacancyApplyM.Add(apply);
             return Json("succes", JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult DeleteApply(int applyid)
+        {
+            var apply = VacancyApplyM.GetByID(applyid);
+            int userid = (int)Session["UserID"];
+            if(apply.UserID == userid)
+            {
+                VacancyApplyM.Delete(apply);
+            }
+            return Json("success", JsonRequestBehavior.AllowGet);
         }
         #endregion
 

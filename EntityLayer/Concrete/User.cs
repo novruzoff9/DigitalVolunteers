@@ -45,5 +45,6 @@ namespace EntityLayer.Concrete
         public int EntranceYear { get; set; }
         public DateTime LastOnline { get; set; }
         public virtual ICollection<ActivityPoints> Points { get; set; }
+        public virtual ICollection<VacancyApply> VacancyApplies { get; set; }
     }
 }
