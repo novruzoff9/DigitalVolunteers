@@ -56,13 +56,13 @@
                 <i class="fas fa-check"></i>
                 <p>Müraciət</p>
             </div>
-            @if (interview == "true") { interview = "successpoint"; }
+            @if (interview == "True") { interview = "successpoint"; }
             else { interview = ""; }
             <div class="point @interview">
                 <i class="fas fa-comments"></i>
                 <p>Müsahibə</p>
             </div>
-            @if (enter == "true") { enter = "successpoint"; }
+            @if (enter == "True") { enter = "successpoint"; }
             else { enter = ""; }
             <div class="point @enter">
                 <i class="fas fa-handshake"></i>
@@ -90,12 +90,12 @@
             </div>
             <div class="pointtime">
                 <p>Müsahibəyə çağırılma tarixi</p>
-                @if(interview.ToString() != "true") { interviewDate = "-- --- ----"; }
+                @if(interview != "successpoint") { interviewDate = "-- --- ----"; }
                 <p class="date">@interviewDate</p>
             </div>
             <div class="pointtime">
                 <p>Qəbul tarixi</p>
-                @if (enter.ToString() != "true") { enterDate = "-- --- ----"; }
+                @if (enter != "successpoint") { enterDate = "-- --- ----"; }
                 <p class="date">@enterDate</p>
             </div>
         </div>

@@ -1110,36 +1110,34 @@ namespace DigitalVolunteers.Controllers
             return View(apply);
         }
 
-        public JsonResult UpdateApply(int applyid, JObject changedValues)
+        [HttpPost]
+        public ActionResult UpdateApply(VacancyApply changedValues)
         {
-            var apply = VacancyApplyM.GetByID(applyid);
-            if (changedValues["InterviewDateTime"] != null)
+            var apply = VacancyApplyM.GetByID(changedValues.ApplyID);
+            int applyid = changedValues.ApplyID;
+            if (changedValues.InterviewDateTime != null)
             {
-                var newInterviewDateTime = changedValues["InterviewDateTime"].ToString();
-                apply.InterviewDateTime = newInterviewDateTime.AsDateTime();
+                apply.InterviewDateTime = changedValues.InterviewDateTime;
             }
 
-            if (changedValues["Interview"] != null)
+            if (changedValues.Interview)
             {
-                var newInterviewValue = (bool)changedValues["Interview"];
-                apply.Interview = newInterviewValue;
+                apply.Interview = changedValues.Interview;
             }
 
-            if (changedValues["Entered"] != null)
+            if (changedValues.Entered)
             {
-                var newEnteredValue = (bool)changedValues["Entered"];
-                apply.Entered = newEnteredValue;
+                apply.Entered = true;
                 apply.EnteringDateTime = DateTime.Now;
             }
 
-            if (changedValues["Note"] != null)
+            if (changedValues.Note != apply.Note)
             {
-                var newNoteValue = changedValues["Note"].ToString();
-                apply.Note = newNoteValue;
+                apply.Note = changedValues.Note;
             }
             VacancyApplyM.Update(apply);
 
-            return Json("success", JsonRequestBehavior.AllowGet);
+            return RedirectToAction("ApplyDetails", "Admin", new { id = applyid });
         }
 
         [HttpGet]

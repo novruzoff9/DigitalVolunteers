@@ -146,42 +146,48 @@
         </section>
 
         <section id="setvalues">
-            @if (Model.InterviewDateTime.Year != 2005)
+            @using (Html.BeginForm("UpdateApply", "Admin", FormMethod.Post, new { @class = "w-100 h-100 d-flex flex-column justify-content-between" }))
             {
-                <div class="d-flex flex-row w-100 justify-content-between align-items-center">
-                    <p style="margin: 0;">Müsahibə üçün tarix:</p>
-                    <input class="daisy" type="datetime-local" name="InterviewDateTime" id="InterviewDateTime">
-                </div>
-            }
-            else if (Model.Interview == false)
-            {
-                <div class="d-flex flex-row w-100 justify-content-between align-items-center">
-                    <label for="cb5" style="margin: 0;">Müsahibəni uğurla tamamladı</label>
-                    <div class="checkbox-wrapper-10">
-                        <input class="tgl tgl-flip" id="cb5" type="checkbox" name="Interview"/>
-                        <label class="tgl-btn" data-tg-off="Xeyr" data-tg-on="Bəli!" for="cb5">
-                        </label>
+                @Html.HiddenFor(x=>x.ApplyID)
+                if (Model.InterviewDateTime == Model.ApplyDateTime)
+                {
+                    <div class="d-flex flex-row w-100 justify-content-between align-items-center">
+                        <p style="margin: 0;">Müsahibə üçün tarix:</p>
+                        @Html.TextBoxFor(x => x.InterviewDateTime, "{0:yyyy-MM-dd HH:mm}", new { type = "datetime-local", 
+                            @class = "daisy", id = "InterviewDateTime" })
                     </div>
-                </div>
-            }
-            else if (Model.Entered == false)
-            {
-                <div class="d-flex flex-row w-100 justify-content-between align-items-center">
-                    <label for="cb6" style="margin: 0;">Heyətə qəbul oldu</label>
-                    <div class="checkbox-wrapper-10">
-                        <input class="tgl tgl-flip" id="cb6" type="checkbox" name="Entered"/>
-                        <label class="tgl-btn" data-tg-off="Xeyr" data-tg-on="Bəli!" for="cb5">
-                        </label>
+                }
+                if (Model.Interview == false && DateTime.Now > Model.InterviewDateTime)
+                {
+                    <div class="d-flex flex-row w-100 justify-content-between align-items-center">
+                        <label for="cb5" style="margin: 0;">Müsahibəni uğurla tamamladı</label>
+                        <div class="checkbox-wrapper-10">
+                            <input type="checkbox" id="cb5" name="Interview" class="tgl tgl-flip" value="true" @(Model.Interview ? "checked" : "")>
+                            <label class="tgl-btn" data-tg-off="Xeyr" data-tg-on="Bəli!" for="cb5">
+                            </label>
+                        </div>
                     </div>
-                </div>
-            }
-            <div class="d-flex flex-column w-100">
+                }
+                else if (Model.Interview == true && Model.Entered == false)
+                {
+                    <div class="d-flex flex-row w-100 justify-content-between align-items-center">
+                        <label for="cb6" style="margin: 0;">Heyətə qəbul oldu</label>
+                        <div class="checkbox-wrapper-10">
+                            <input type="checkbox" id="cb6" name="Entered" class="tgl tgl-flip" value="true" @(Model.Entered ? "checked" : "")>
+                            <label class="tgl-btn" data-tg-off="Xeyr" data-tg-on="Bəli!" for="cb6">
+                            </label>
+                        </div>
+                    </div>
+                }
                 <div class="d-flex flex-column w-100">
-                    <label for="NoteforUser">Müraciətçi üçün qeyd:</label>
-                    @Html.TextAreaFor(x=>x.Note, new {@id = "NoteforUser", @class = "daisy mt-1" })
+                    <div class="d-flex flex-column w-100">
+                        <label for="NoteforUser">Müraciətçi üçün qeyd:</label>
+                        @Html.TextAreaFor(x => x.Note, new { @id = "NoteforUser", @class = "daisy mt-1" })
+                    </div>
+                    <button id="updateapply" class="action-button success mt-2">Təsdiq et</button>
                 </div>
-                <button id="updateapply" class="action-button success mt-2">Təsdiq et</button>
-            </div>
+            }
+
         </section>
     </div>
 </div>
@@ -198,50 +204,6 @@
 
             $('#InterviewDateTime').attr('min', minDatetime);
 
-            var originalValues = {};
-
-            function initOriginalValues() {
-                originalValues.InterviewDateTime = $('#InterviewDateTime').val();
-                originalValues.Interview = $('#cb5').prop('checked');
-                originalValues.Entered = $('#cb6').prop('checked');
-                originalValues.Note = $('#NoteforUser').val();
-            }
-
-            initOriginalValues();
-
-            $('#updateapply').click(function () {
-                var currentValues = {
-                    InterviewDateTime: $('#InterviewDateTime').val(),
-                    Interview: $('#cb5').prop('checked'),
-                    Entered: $('#cb6').prop('checked'),
-                    Note: $('#NoteforUser').val()
-                };
-
-                var changedValues = {};
-                for (var key in currentValues) {
-                    if (currentValues[key] !== originalValues[key]) {
-                        changedValues[key] = currentValues[key];
-                    }
-                }
-
-
-                console.log(changedValues);
-
-                $.ajax({
-                    url: '/Admin/UpdateApply',
-                    method: 'POST',
-                    data: {
-                        applyid : @Model.ApplyID,
-                        changedValues : JSON.stringify(changedValues),
-                    },
-                    contentType: 'application/json',
-                    success: function (response) {
-                        // Handle success response
-                    },
-                    error: function (xhr, status, error) {
-                        // Handle error
-                    }
-                });
-            });
+            
         });
 </script>
