@@ -44,7 +44,7 @@ namespace EntityLayer.Concrete
         public int PhoneNumber { get; set; }
         public int EntranceYear { get; set; }
         public DateTime LastOnline { get; set; }
-        public virtual ICollection<ActivityPoints> Points { get; set; }
+        //public virtual ICollection<ActivityPoints> Points { get; set; }
         public virtual ICollection<VacancyApply> VacancyApplies { get; set; }
     }
 }

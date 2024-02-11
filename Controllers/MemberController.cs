@@ -98,13 +98,13 @@ namespace Web_DigitalVolunteers.Controllers
         #region Vacancies
         public ActionResult Vacancies()
         {
-            var vacancies = VacancyM.GetList().Where(x => x.Primary == false).ToList();
+            var vacancies = VacancyM.GetList().Where(x => x.Primary == false && x.Deadline < DateTime.Now).ToList();
             return View(vacancies);
         }
 
         public PartialViewResult PrimaryVacancies()
         {
-            var vacancies = VacancyM.GetList().Where(x => x.Primary == true).ToList();
+            var vacancies = VacancyM.GetList().Where(x => x.Primary == true && x.Deadline < DateTime.Now).ToList();
             return PartialView(vacancies);
         }
 

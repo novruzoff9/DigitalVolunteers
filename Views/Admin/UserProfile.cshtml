@@ -1,4 +1,6 @@
-﻿@model EntityLayer.Concrete.User
+﻿@using BusinessLayer.Concrete
+@using DataAccessLayer.EntityFramework
+@model EntityLayer.Concrete.User
 @{
     ViewBag.Title = "UserProfile";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
@@ -13,6 +15,8 @@
     }
     string[] romanNumerals = { "", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X" };
     coursth = romanNumerals[course];
+    DailyLoginManager LoginM = new DailyLoginManager(new EfDailyLoginDAL());
+    var userLogins = LoginM.GetList().Where(x => x.UserID == Model.UserID).ToList();
 }
 
 <link href="~/Style/AdminPanel/Profile234.css" rel="stylesheet" />
@@ -109,6 +113,8 @@
 
 
     @Html.Action("UserActivityPoints", "Admin", new { id = Model.UserID })
+
+    <div id="calendar_basic" class="mt-4" style="width: 100%; height: 350px;"></div>
 
     @if (Model.FacultyStaff == true)
     {
@@ -485,4 +491,46 @@
             }
         }
     });
+</script>
+
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script type="text/javascript">
+    google.charts.load("current", { packages: ["calendar"] });
+    google.charts.setOnLoadCallback(drawChart);
+
+    function drawChart() {
+        var dataTable = new google.visualization.DataTable();
+        dataTable.addColumn({ type: 'date', id: 'Date' });
+        dataTable.addColumn({ type: 'number', id: 'Won/Loss' });
+        dataTable.addRows([
+            @foreach (var item in userLogins)
+            {
+                int year = item.LoginDateTime.Year;
+                int month = item.LoginDateTime.Month - 1;
+                int day = item.LoginDateTime.Day;
+
+                @:[new Date(2024, @month, @day), 1],
+            }
+        ]);
+
+        var chart = new google.visualization.Calendar(document.getElementById('calendar_basic'));
+
+        var options = {
+            title: "365 günlük giriş",
+            height: 350,
+            calendar: {
+                monthLabel: {
+                    color: '#131850',
+                    bold : true,
+                },
+                underYearSpace: 10, 
+                yearLabel: {
+                    fontSize: 1
+                }
+            },
+            colorAxis: { minValue: 0, colors: ['#FFFFFF', '#006BCE'] }
+        };
+
+        chart.draw(dataTable, options);
+    }
 </script>
