@@ -80,6 +80,7 @@
     <Compile Include="Concrete\EventGallery.cs" />
     <Compile Include="Concrete\EventRegistration.cs" />
     <Compile Include="Concrete\News.cs" />
+    <Compile Include="Concrete\NewsGallery.cs" />
     <Compile Include="Concrete\NewsReading.cs" />
     <Compile Include="Concrete\PasswordTokens.cs" />
     <Compile Include="Concrete\User.cs" />

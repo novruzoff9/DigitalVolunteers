@@ -19,6 +19,7 @@ namespace EntityLayer.Concrete
         public string NewsCaption { get; set; }
         public DateTime NewsCreated { get; set; }
         public int Reading { get; set; }
+        public virtual ICollection<NewsGallery> Images { get; set; }
 
     }
 }

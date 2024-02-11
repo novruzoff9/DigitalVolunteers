@@ -59,6 +59,7 @@
     <Compile Include="Concrete\EventGalleryManager.cs" />
     <Compile Include="Concrete\EventManager.cs" />
     <Compile Include="Concrete\EventRegistrationManager.cs" />
+    <Compile Include="Concrete\NewsGalleryManager.cs" />
     <Compile Include="Concrete\NewsManager.cs" />
     <Compile Include="Concrete\NewsReadingManager.cs" />
     <Compile Include="Concrete\PasswordTokenManager.cs" />

@@ -35,6 +35,7 @@ namespace DigitalVolunteers.Controllers
         EventManager EventM = new EventManager(new EfEventDAL());
         NewsManager NewsM = new NewsManager(new EfNewsDal());
         EventGalleryManager EventGalleyM = new EventGalleryManager(new EfEventGalleryDAL());
+        NewsGalleryManager NewsGalleryM = new NewsGalleryManager(new EfNewsGalleryDal());
         EventRegistrationManager EventRegistrationM = new EventRegistrationManager(new EfEventRegistrationDAL());
         ActivityPointManager PointM = new ActivityPointManager(new EfActivityPointDAL());
         DailyLoginManager LoginM = new DailyLoginManager(new EfDailyLoginDAL());
@@ -942,6 +943,61 @@ namespace DigitalVolunteers.Controllers
             return RedirectToAction("News");
         }
 
+        public ActionResult NewsGallery(int id)
+        {
+            var images = NewsGalleryM.GetList().Where(x => x.NewsID == id).ToList();
+            ViewBag.NewsID = id;
+            return View(images);
+        }
+
+
+        [HttpPost]
+        public ActionResult AddNewsImage(IEnumerable<HttpPostedFileBase> files, int NewsID)
+        {
+            var sessionuser = SessionUser();
+            bool havepermission = false;
+            if (sessionuser.Department == "SMM" && sessionuser.DepartmentStaff == true)
+            {
+                havepermission = true;
+            }
+            else if (CheckAdmin())
+            {
+                havepermission = true;
+            }
+            if (!havepermission)
+            {
+                return RedirectToAction("NoPermission", "Home");
+            }
+            var newsimagess = NewsGalleryM.GetList().Where(x => x.NewsID == NewsID).ToList();
+            int newid;
+            try
+            {
+                newid = newsimagess.Last().ImageID + 1;
+            }
+            catch (Exception)
+            {
+                newid = 1;
+            }
+            if (files != null && files.Any())
+            {
+                foreach (var file in files)
+                {
+
+                    if (file != null && file.ContentLength > 0)
+                    {
+                        NewsGallery item = new NewsGallery();
+                        string filename = Path.GetFileName(file.FileName);
+                        string address = "~/Images/NewsGallery/" + NewsID + "_" + newid + "_" + filename;
+                        file.SaveAs(Server.MapPath(address));
+                        item.ImageURL = "/Images/NewsGallery/" + NewsID + "_" + newid + "_" + filename;
+                        item.NewsID = NewsID;
+                        NewsGalleryM.Add(item);
+                        newid += 1;
+                    }
+                }
+            }
+            return RedirectToAction("News");
+        }
         #endregion
 
         #region Logins

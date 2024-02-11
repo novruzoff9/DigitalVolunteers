@@ -16,6 +16,7 @@ namespace DataAccessLayer.Concrete
         public DbSet<EventGallery> EventGallery { get; set; }
         public DbSet<EventRegistration> EventRegistrations { get; set; }
         public DbSet<News> News { get; set; }
+        public DbSet<NewsGallery> NewsGallery { get; set; }
         public DbSet<DailyLogin> DailyLogins { get; set; }
         public DbSet<PasswordTokens> PasswordTokens { get; set; }
         public DbSet<Vacancy> Vacancies { get; set; }

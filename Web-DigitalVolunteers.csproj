@@ -358,11 +358,13 @@
     <Content Include="Views\Member\AppliedVacancies.cshtml" />
     <Content Include="Views\Admin\AppliesofVacancy.cshtml" />
     <Content Include="Views\Admin\ApplyDetails.cshtml" />
+    <Content Include="Views\Admin\NewsGallery.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Images\EventCovers\" />
     <Folder Include="Images\EventGallery\" />
+    <Folder Include="Images\NewsGallery\" />
     <Folder Include="Models\" />
     <Folder Include="Views\User\" />
   </ItemGroup>
