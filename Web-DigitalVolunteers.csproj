@@ -251,7 +251,7 @@
     <Content Include="Style\AdminPanel\Profile234.css" />
     <Content Include="Style\AdminPanel\Settings123.css" />
     <Content Include="Style\AdminPanel\Staff123.css" />
-    <Content Include="Style\AdminPanel\Vacancies156.css" />
+    <Content Include="Style\AdminPanel\Vacancies485.css" />
     <Content Include="Style\APStaff1.css" />
     <Content Include="Style\Home\Event12.css" />
     <Content Include="Style\Home\Events.css" />
@@ -357,6 +357,7 @@
     <Content Include="Views\Member\PrimaryVacancies.cshtml" />
     <Content Include="Views\Member\AppliedVacancies.cshtml" />
     <Content Include="Views\Admin\AppliesofVacancy.cshtml" />
+    <Content Include="Views\Admin\ApplyDetails.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

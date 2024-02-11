@@ -99,14 +99,14 @@
         background-color: transparent;
     }
 
-input.daisy {
+.daisy {
     padding: 6px 10px;
     border-radius: 8px;
     border: 2px solid #87898f;
     outline: none;
 }
 
-    input.daisy:focus {
+    .daisy:focus {
         border: 2px solid #0162e8;
     }
 /*# sourceMappingURL=FormUI.css.map */

@@ -25,26 +25,54 @@
             <select name="Department" id="">
                 @{
                     string department = "";
-                    if (Model.Department == "First") { department = "Əsas korpus, Böyük"; }
-                    else if (Model.Department == "FirstHA") { department = "Əsas korpus, Heydər Əliyev"; }
-                    else if (Model.Department == "FirstWhite") { department = "Əsas korpus, Ağ zal"; }
-                    else if (Model.Department == "FirstSmall") { department = "Əsas korpus, Kiçik"; }
-                    else if (Model.Department == "SecondBig") { department = "II korpus, Böyük"; }
-                    else if (Model.Department == "SecondSmall") { department = "II  korpus, Kiçik"; }
-                    else if (Model.Department == "ThirdBig") { department = "III korpus, Böyük"; }
-                    else if (Model.Department == "ThirdSmall") { department = "III korpus, Kiçik"; }
-                    else if (Model.Department == "Fourth") { department = "IV korpus"; }
+                    if (Model.Department == "Secretary") { department = "Katib"; }
+                    else if (Model.Department == "IT") { department = "İnformasiya Texnologiyaları departamenti"; }
+                    else if (Model.Department == "SMM") { department = "Sosial Media Marketinq departamenti"; }
+                    else if (Model.Department == "HR") { department = "İnsan Resursları departamenti"; }
+                    else if (Model.Department == "PR") { department = "İctimaiyyətlə Əlaqələtr departamenti"; }
+                    else if (Model.Department == "WWM") { department = "Üzvlərlə iş"; }
+                    else if (Model.Department == "WWF") { department = "Fakültələrlə iş"; }
+                    else if (Model.Department == "FS") { department = "Fakültə heyəti"; }
+                    else if (Model.Department == "ICD") { department = "Beynəlxalq əməkdaşlıq departamenti"; }
+                    else if (Model.Department == "Organizer") { department = "Təşkilati işlər departamenti"; }
+                    else if (Model.Department == "Security") { department = "Nəzarət və təftiş"; }
+                    else if (Model.Department == "FS-Digital Economy") { department = "Rəqəmsal İqtisadiyyat"; }
+                    else if (Model.Department == "FS-Russian Economy") { department = "Rus İqtisad Məktəbi"; }
+                    else if (Model.Department == "FS-Business") { department = "Biznes və Menecement"; }
+                    else if (Model.Department == "FS-Sabah") { department = "SABAH"; }
+                    else if (Model.Department == "FS-ISE") { department = "Beynəlxalq İqtisadiyyat Məktəbi"; }
+                    else if (Model.Department == "FS-Design") { department = "UNEC Dizayn Məktəbi"; }
+                    else if (Model.Department == "FS-Finance") { department = "Maliyyə və Mühasibat"; }
+                    else if (Model.Department == "FS-TUDIFAK") { department = "Türk Dünyası İqtisad"; }
+                    else if (Model.Department == "FS-Engineering") { department = "Mühəndislik"; }
+                    else if (Model.Department == "FS-Economy") { department = "İqtisadiyyat və İdarəetmə"; }
+                    else if (Model.Department == "FS-QETM") { department = "Qiyabi və Əlavə Təhsil Mərkəzi"; }
                 }
                 <option selected value="@Model.Department">@department</option>
-                <option value="FS-Digital Economy">Rəqəmsal İqitsadiyyat</option>
-                <option value="FirstHA">İçərişəhər, Heydər Əliyev</option>
-                <option value="FirstWhite">İçərişəhər, Ağ zal</option>
-                <option value="FirstSmall">İçərişəhər, Kiçik</option>
-                <option value="SecondBig">Gənclik, Böyük</option>
-                <option value="SecondSmall">Gənclik, Kiçik</option>
-                <option value="ThirdBig">Nizami, Böyük</option>
-                <option value="ThirdSmall">Nizami, Kiçik</option>
-                <option value="Fourth">Semaşko</option>
+                <optgroup label="Departamentlər">
+                    <option value="Organizer">Təşkilati işlər departamenti</option>
+                    <option value="HR">İnsan Resursları departamenti</option>
+                    <option value="PR">İctimaiyyətlə əlaqələr departamenti</option>
+                    <option value="IT">İnformasiya Texnologiyaları departamenti</option>
+                    <option value="SMM">SMM departamenti</option>
+                    <option value="WWM">Üzvlərlə iş departamenti</option>
+                    <option value="WWF">Fakültələrlə iş departamenti</option>
+                    <option value="ICD">Beynəlxalq Əməkdaşlıq departamenti</option>
+                    <option value="Security">Nəzarət Təftiş Departamenti</option>
+                </optgroup>
+                <optgroup label="Fakültələr">
+                    <option value="FS-Digital Economy">Rəqəmsal İqtisadiyyat</option>
+                    <option value="FS-Russian Economy">Rus İqtisad Məktəbi</option>
+                    <option value="FS-Business">Biznes və Menecement</option>
+                    <option value="FS-Sabah">Sabah</option>
+                    <option value="FS-ISE">Beynəlxalq İqtisadiyyat Məktəbi</option>
+                    <option value="FS-Design">Dizayn</option>
+                    <option value="FS-Finance">Maliyyə və Mühasibat</option>
+                    <option value="FS-TUDIFAK">Türk Dünyası İqtisad fəkültəsi</option>
+                    <option value="FS-Engineering">Mühəndislik</option>
+                    <option value="FS-Economy">İqtisadiyyat və idarəetmə</option>
+                    <option value="FS-QETM">QƏTM</option>
+                </optgroup>
             </select>
         </div>
     </section>

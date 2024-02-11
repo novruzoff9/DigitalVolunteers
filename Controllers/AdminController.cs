@@ -24,6 +24,7 @@ using System.Globalization;
 using System.Configuration;
 using System.Data.SqlClient;
 using System.Management.Instrumentation;
+using Newtonsoft.Json.Linq;
 
 namespace DigitalVolunteers.Controllers
 {
@@ -1101,6 +1102,44 @@ namespace DigitalVolunteers.Controllers
         {
             var applies = VacancyApplyM.AppliesOfVacancy(id);
             return View(applies);
+        }
+
+        public ActionResult ApplyDetails(int id)
+        {
+            var apply = VacancyApplyM.GetByID(id);
+            return View(apply);
+        }
+
+        public JsonResult UpdateApply(int applyid, JObject changedValues)
+        {
+            var apply = VacancyApplyM.GetByID(applyid);
+            if (changedValues["InterviewDateTime"] != null)
+            {
+                var newInterviewDateTime = changedValues["InterviewDateTime"].ToString();
+                apply.InterviewDateTime = newInterviewDateTime.AsDateTime();
+            }
+
+            if (changedValues["Interview"] != null)
+            {
+                var newInterviewValue = (bool)changedValues["Interview"];
+                apply.Interview = newInterviewValue;
+            }
+
+            if (changedValues["Entered"] != null)
+            {
+                var newEnteredValue = (bool)changedValues["Entered"];
+                apply.Entered = newEnteredValue;
+                apply.EnteringDateTime = DateTime.Now;
+            }
+
+            if (changedValues["Note"] != null)
+            {
+                var newNoteValue = changedValues["Note"].ToString();
+                apply.Note = newNoteValue;
+            }
+            VacancyApplyM.Update(apply);
+
+            return Json("success", JsonRequestBehavior.AllowGet);
         }
 
         [HttpGet]

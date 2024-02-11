@@ -1,0 +1,247 @@
+﻿@model EntityLayer.Concrete.VacancyApply
+@{
+    ViewBag.Title = "ApplyDetails";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    string interviewed = "";
+    if (Model.Interview == true)
+    {
+        interviewed = "successpoint";
+    }
+    string entered = "";
+    if (Model.Entered == true)
+    {
+        entered = "successpoint";
+    }
+}
+
+<link href="~/Style/AdminPanel/Vacancies485.css" rel="stylesheet" />
+
+<style>
+    .daisy {
+        padding: 6px 10px;
+        border-radius: 8px;
+        border: 2px solid #87898f;
+        outline: none;
+    }
+
+        .daisy:focus {
+            border: 2px solid #0162e8;
+        }
+</style>
+
+<div id="content">
+    <section id="applierdetails">
+        <div id="userinfo">
+            <img src="@Model.User.UserImage" alt="">
+            <div class="d-flex flex-column ms-lg-3 h-150 justify-content-center">
+                <p class="data">@Model.User.Name @Model.User.Surname</p>
+                @{
+                    string faculty = "";
+                    if (Model.User.Faculty == "Digital Economy") { faculty = "Rəqəmsal İqtisadiyyat"; }
+                    else if (Model.User.Faculty == "Russian Economy") { faculty = "Rus İqtisad Məktəbi"; }
+                    else if (Model.User.Faculty == "Business") { faculty = "Biznes və Menecement"; }
+                    else if (Model.User.Faculty == "Sabah") { faculty = "SABAH"; }
+                    else if (Model.User.Faculty == "ISE") { faculty = "Beynəlxalq İqtisadiyyat Məktəbi"; }
+                    else if (Model.User.Faculty == "Design") { faculty = "UNEC Dizayn Məktəbi"; }
+                    else if (Model.User.Faculty == "Finance") { faculty = "Maliyyə və Mühasibat"; }
+                    else if (Model.User.Faculty == "TUDIFAK") { faculty = "Türk Dünyası İqtisad"; }
+                    else if (Model.User.Faculty == "Engineering") { faculty = "Mühəndislik"; }
+                    else if (Model.User.Faculty == "Economy") { faculty = "İqtisadiyyat və İdarəetmə"; }
+                    else if (Model.User.Faculty == "QETM") { faculty = "Qiyabi və Əlavə Təhsil Mərkəzi"; }
+                }
+                <p>@faculty</p>
+                <a href="#" class="action-button primary-hover">Ətraflı</a>
+            </div>
+
+        </div>
+        <div id="userdetails">
+            <div class="d-flex flex-column align-items-end">
+                <p>Aktivlik balı</p>
+                <p class="data">@Model.User.ActivityPoint</p>
+            </div>
+            <div class="d-flex flex-column align-items-end">
+                <p>Son giriş:</p>
+                @{ 
+                    TimeSpan lastonline = DateTime.Now - Model.User.LastOnline;
+                    string difference = "";
+                    if (lastonline.Days > 0)
+                    { difference = lastonline.Days + " gün"; }
+                    else if (lastonline.Hours > 0)
+                    { difference = lastonline.Hours + " saat"; }
+                    else
+                    { difference = lastonline.Minutes + " dəqiqə"; }
+                }
+                <p class="data">@difference əvvəl</p>
+            </div>
+            <div class="d-flex flex-column align-items-end">
+                <p>Kurs</p>
+                @{ 
+                    int entranceyear = Model.User.EntranceYear;
+                    int thisyear = DateTime.Now.Year;
+                    int course = thisyear - entranceyear;
+                    string coursth;
+                    if (DateTime.Now.Month > 8)
+                    {
+                        course += 1;
+                    }
+                    string[] romanNumerals = { "", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X" };
+                    coursth = romanNumerals[course];
+                }
+                <p class="data">@coursth</p>
+            </div>
+        </div>
+    </section>
+
+    <div id="applycontent">
+        <section id="applydetails">
+            <div class="w-100 d-flex flex-row justify-content-between">
+                <p class="data">Müraciət tarixi:</p>
+                <p>@Model.ApplyDateTime.ToString("dd MMM yyyy")</p>
+            </div>
+            <div class="w-100 d-flex flex-column align-items-start">
+                <p class="data">Müraciət qeydi:</p>
+                <p>@Model.ApplierNote</p>
+            </div>
+
+            <div id="road" class="d-flex flex-row justify-content-between">
+                <div class="point successpoint">
+                    <i class="fas fa-check"></i>
+                    <p>Müraciət</p>
+                    <p>@Model.ApplyDateTime.ToString("dd MMM yyyy")</p>
+                </div>
+                <div class="point @interviewed">
+                    <i class="fas fa-comments"></i>
+                    <p>Müsahibə</p>
+                    @{ 
+                        string interview = "";
+                        if (Model.InterviewDateTime.Date != Model.ApplyDateTime.Date)
+                        {
+                            interview = Model.InterviewDateTime.ToString("dd MMM yyyy");
+                        }
+                        else
+                        {
+                            interview = "-- --- ----";
+                        }
+                    }
+                    <p>@interview</p>
+                </div>
+                <div class="point @entered">
+                    <i class="fas fa-handshake"></i>
+                    <p>Qəbul</p>
+                    @{
+                        string entrance = "";
+                        if (Model.EnteringDateTime.Date != Model.ApplyDateTime.Date)
+                        {
+                            entrance = Model.EnteringDateTime.ToString("dd MMM yyyy");
+                        }
+                        else
+                        {
+                            entrance = "-- --- ----";
+                        }
+                    }
+                    <p>@entrance</p>
+                </div>
+                <span id="line"></span>
+            </div>
+        </section>
+
+        <section id="setvalues">
+            @if (Model.InterviewDateTime.Year != 2005)
+            {
+                <div class="d-flex flex-row w-100 justify-content-between align-items-center">
+                    <p style="margin: 0;">Müsahibə üçün tarix:</p>
+                    <input class="daisy" type="datetime-local" name="InterviewDateTime" id="InterviewDateTime">
+                </div>
+            }
+            else if (Model.Interview == false)
+            {
+                <div class="d-flex flex-row w-100 justify-content-between align-items-center">
+                    <label for="cb5" style="margin: 0;">Müsahibəni uğurla tamamladı</label>
+                    <div class="checkbox-wrapper-10">
+                        <input class="tgl tgl-flip" id="cb5" type="checkbox" name="Interview"/>
+                        <label class="tgl-btn" data-tg-off="Xeyr" data-tg-on="Bəli!" for="cb5">
+                        </label>
+                    </div>
+                </div>
+            }
+            else if (Model.Entered == false)
+            {
+                <div class="d-flex flex-row w-100 justify-content-between align-items-center">
+                    <label for="cb6" style="margin: 0;">Heyətə qəbul oldu</label>
+                    <div class="checkbox-wrapper-10">
+                        <input class="tgl tgl-flip" id="cb6" type="checkbox" name="Entered"/>
+                        <label class="tgl-btn" data-tg-off="Xeyr" data-tg-on="Bəli!" for="cb5">
+                        </label>
+                    </div>
+                </div>
+            }
+            <div class="d-flex flex-column w-100">
+                <div class="d-flex flex-column w-100">
+                    <label for="NoteforUser">Müraciətçi üçün qeyd:</label>
+                    @Html.TextAreaFor(x=>x.Note, new {@id = "NoteforUser", @class = "daisy mt-1" })
+                </div>
+                <button id="updateapply" class="action-button success mt-2">Təsdiq et</button>
+            </div>
+        </section>
+    </div>
+</div>
+<script>
+        $(document).ready(function () {
+            var now = new Date();
+            var year = now.getFullYear();
+            var month = (now.getMonth() + 1).toString().padStart(2, '0');
+            var day = (now.getDate() + 1).toString().padStart(2, '0');
+            var hours = now.getHours().toString().padStart(2, '0');
+            var minutes = now.getMinutes().toString().padStart(2, '0');
+
+            var minDatetime = year + '-' + month + '-' + day + 'T' + hours + ':' + minutes;
+
+            $('#InterviewDateTime').attr('min', minDatetime);
+
+            var originalValues = {};
+
+            function initOriginalValues() {
+                originalValues.InterviewDateTime = $('#InterviewDateTime').val();
+                originalValues.Interview = $('#cb5').prop('checked');
+                originalValues.Entered = $('#cb6').prop('checked');
+                originalValues.Note = $('#NoteforUser').val();
+            }
+
+            initOriginalValues();
+
+            $('#updateapply').click(function () {
+                var currentValues = {
+                    InterviewDateTime: $('#InterviewDateTime').val(),
+                    Interview: $('#cb5').prop('checked'),
+                    Entered: $('#cb6').prop('checked'),
+                    Note: $('#NoteforUser').val()
+                };
+
+                var changedValues = {};
+                for (var key in currentValues) {
+                    if (currentValues[key] !== originalValues[key]) {
+                        changedValues[key] = currentValues[key];
+                    }
+                }
+
+
+                console.log(changedValues);
+
+                $.ajax({
+                    url: '/Admin/UpdateApply',
+                    method: 'POST',
+                    data: {
+                        applyid : @Model.ApplyID,
+                        changedValues : JSON.stringify(changedValues),
+                    },
+                    contentType: 'application/json',
+                    success: function (response) {
+                        // Handle success response
+                    },
+                    error: function (xhr, status, error) {
+                        // Handle error
+                    }
+                });
+            });
+        });
+</script>
