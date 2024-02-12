@@ -11,6 +11,7 @@ using System.Web.Mvc;
 using BusinessLayer.Concrete;
 using DataAccessLayer.EntityFramework;
 using System.Globalization;
+using System.Management.Instrumentation;
 
 namespace Web_DigitalVolunteers.Controllers
 {
@@ -98,14 +99,41 @@ namespace Web_DigitalVolunteers.Controllers
         #region Vacancies
         public ActionResult Vacancies()
         {
-            var vacancies = VacancyM.GetList().Where(x => x.Primary == false && x.Deadline < DateTime.Now).ToList();
-            return View(vacancies);
+            var vacancies = VacancyM.GetList().Where(x => x.Primary == false && (x.Deadline > DateTime.Now ||
+                x.Deadline.Year == 2005)).ToList();
+            var user = SessionUser();
+            List<Vacancy> selectedvacancies = new List<Vacancy>();
+            foreach (var item in vacancies)
+            {
+                if (item.Department.StartsWith("FS") && item.Department.EndsWith(user.Faculty))
+                {
+                    selectedvacancies.Add(item);
+                }
+                else if(!item.Department.StartsWith("FS"))
+                {
+                    selectedvacancies.Add(item);
+                }
+            }
+            return View(selectedvacancies);
         }
 
         public PartialViewResult PrimaryVacancies()
         {
-            var vacancies = VacancyM.GetList().Where(x => x.Primary == true && x.Deadline < DateTime.Now).ToList();
-            return PartialView(vacancies);
+            var vacancies = VacancyM.GetList().Where(x => x.Primary == true && (x.Deadline > DateTime.Now || 
+                x.Deadline.Year == 2005)).ToList();
+            var user = SessionUser();
+            var selectedvacancies = vacancies;
+            foreach (var item in vacancies)
+            {
+                if (item.Department.StartsWith("FS"))
+                {
+                    if (!item.Department.EndsWith(user.Faculty))
+                    {
+                        selectedvacancies.Remove(item);
+                    }
+                }
+            }
+            return PartialView(selectedvacancies);
         }
 
         public PartialViewResult AppliedVacancies()
@@ -121,6 +149,7 @@ namespace Web_DigitalVolunteers.Controllers
             var user = SessionUser();
             var vacancy = VacancyM.GetByID(id);
             var apply = user.VacancyApplies.FirstOrDefault(x => x.VacancyID == id);
+            vacancy.Description = vacancy.Description.Replace("\n", "<br />");
             ViewBag.applied = "false";
             ViewData["Interview"] = false;
             ViewData["Enter"] = false;

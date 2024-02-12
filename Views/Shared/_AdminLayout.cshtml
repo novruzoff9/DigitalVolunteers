@@ -198,12 +198,19 @@
                     <p>Aktivlik</p>
                 </a>
             </li>
-            <li id="vacationspage">
-                <a href="/Admin/Vacancies">
-                    <i class="fas fa-clipboard-list"></i>
-                    <p>Vakansiyalar</p>
-                </a>
-            </li>
+            @{
+                if (user.Role == "Leader" || user.Role == "Chairman" || user.Role == "Vice-Chairman" || 
+                    user.Role == "President" || user.Role == "Vice-President" || user.Role == "HR")
+                {
+                        <li id="vacationspage">
+                            <a href="/Admin/Vacancies">
+                                <i class="fas fa-clipboard-list"></i>
+                                <p>Vakansiyalar</p>
+                            </a>
+                        </li>
+                }
+            }
+            
             @*<li>
             <i class="fas fa-comments"></i>
             <p>Müzakirə</p>

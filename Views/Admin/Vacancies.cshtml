@@ -27,7 +27,7 @@
             }
 </style>
 
-<div id="vacancies">
+<div id="vacancies" class="flex-wrap">
     <a href="/Admin/AddVacancy" class="vacancy" id="addvacancy">
         <i class="fas fa-notes-medical"></i>
         <p>Vakansiya artır</p>
@@ -61,13 +61,21 @@
                     else if (item.Department == "FS-Engineering") { department = "Mühəndislik"; }
                     else if (item.Department == "FS-Economy") { department = "İqtisadiyyat və İdarəetmə"; }
                     else if (item.Department == "FS-QETM") { department = "Qiyabi və Əlavə Təhsil Mərkəzi"; }
+
+
+}
+                <div class="footer d-flex flex-row justify-content-between mt-2">
+                    @if (item.Primary)
+                {
+                    <p><i class="fas fa-star"></i>Seçilmiş</p>
                 }
-                <p>@department</p>
+                    <p>@department</p>
+                </div>
                 <div class="footer d-flex flex-row justify-content-between mt-2">
                     <p><i class="fas fa-calendar-alt"></i>&nbsp;&nbsp;@item.CreatedTime.ToString("dd MMMM yyyy")</p>
                     <a href="/Admin/UpdateVacancy/@item.VacancyID" class="action-button success">Düzəliş</a>
                 </div>
-                
+
             </div>
             <a href="/Admin/AppliesofVacancy/@item.VacancyID" class="action-button primary-hover w-100 mt-2">Müraciətlər (@item.Applies.Count)</a>
         </section>

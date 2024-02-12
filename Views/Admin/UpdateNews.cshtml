@@ -17,9 +17,6 @@
             @Html.TextBoxFor(x => Model.NewsTitle)
             @Html.TextAreaFor(x => x.NewsCaption, new { @rows = 10 })
         </div>
-        <div class="details">
-            @Html.TextBoxFor(x => x.NewsCreated, "{0:yyyy-MM-dd HH:mm}")
-        </div>
     </section>
     <div class="confirm">
         <button class="action-button success">Təsdiq et</button>

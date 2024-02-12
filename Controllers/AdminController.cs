@@ -896,6 +896,7 @@ namespace DigitalVolunteers.Controllers
             {
                 newid = 1;
             }
+            item.NewsCreated = DateTime.Now;
             string filename = Path.GetFileName(Request.Files[0].FileName);
             string address = "~/Images/NewsCovers/" + newid + "_" + filename;
             Request.Files[0].SaveAs(Server.MapPath(address));
@@ -938,7 +939,6 @@ namespace DigitalVolunteers.Controllers
             }
             pastnews.NewsTitle = item.NewsTitle;
             pastnews.NewsCaption = item.NewsCaption;
-            pastnews.NewsCreated = item.NewsCreated;
             NewsM.Update(pastnews);
             return RedirectToAction("News");
         }
@@ -1149,8 +1149,31 @@ namespace DigitalVolunteers.Controllers
         #region Vacancies
         public ActionResult Vacancies()
         {
+            var user = SessionUser();
+            bool havepermission = false;
+            if(user.Role == "Vice-Chairman" || user.Role == "Vice-Leader" || user.Role == "HR")
+            {
+                havepermission = true;
+            }
+            else if (CheckAdmin())
+            {
+                havepermission = true;
+            }
+            if (!havepermission)
+            {
+                return RedirectToAction("NoPermssion", "Home");
+            }
             var vacancies = VacancyM.GetList();
             vacancies = Enumerable.Reverse(vacancies).ToList();
+            if (user.Role != "President" && user.Role != "Vice-President" && user.UserID != 1 && user.UserID != 7 && user.DepartmentStaff)
+            {
+                vacancies = vacancies.Where(x => x.Department == user.Department).ToList();
+            }
+            else if (user.Role != "President" && user.Role != "Vice-President" && user.UserID != 1 && user.UserID != 7 && user.FacultyStaff)
+            {
+                string fsfaculty = "FS-" + user.Faculty;
+                vacancies = vacancies.Where(x => x.Department == fsfaculty).ToList();
+            }
             return View(vacancies);
         }
 
