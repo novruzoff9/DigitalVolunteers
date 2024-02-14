@@ -112,10 +112,12 @@
     </div>
 
 
-    @Html.Action("UserActivityPoints", "Admin", new { id = Model.UserID })
+    <div id="activities">
 
-    <div id="calendar_basic" class="mt-4" style="width: 100%; height: 350px;"></div>
+        @Html.Action("UserActivityPoints", "Admin", new { id = Model.UserID })
 
+        <div id="calendar_basic" class="mt-4" style="width: 100%; height: 350px;"></div>
+    </div>
     @if (Model.FacultyStaff == true)
     {
         @Html.Action("FacultyStaff", "Admin", new { @faculty = Model.Faculty })
@@ -255,14 +257,14 @@
 <script>
     $(".tabbtn").click(function () {
         $(this).parent().siblings("section").hide();
+        $(this).parent().siblings("div#activities").hide();
         $(".tabbtn").removeClass("activetab");
         $(this).addClass("activetab");
         var tab = $(this).attr("data-tab");
         var screenheight = $("body").height();
         $("aside").height(screenheight - 80);
-        console.log(screenheight);
         if (tab == "activity") {
-            $("section#activity").show();
+            $("div#activities").show();
         }
         else if (tab == "facultystaff") {
             $("section#facultystaff").show();

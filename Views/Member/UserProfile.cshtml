@@ -1,4 +1,6 @@
-﻿@model EntityLayer.Concrete.User
+﻿@using BusinessLayer.Concrete
+@using DataAccessLayer.EntityFramework
+@model EntityLayer.Concrete.User
 @{
     ViewBag.Title = "UserProfile";
     Layout = "~/Views/Shared/_MemberLayout.cshtml";
@@ -6,12 +8,15 @@
     int thisyear = DateTime.Now.Year;
     int course = thisyear - entranceyear;
     string coursth;
+    string congratulations = ViewBag.congratulations;
     if (DateTime.Now.Month > 8)
     {
         course += 1;
     }
     string[] romanNumerals = { "", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X" };
     coursth = romanNumerals[course];
+    DailyLoginManager LoginM = new DailyLoginManager(new EfDailyLoginDAL());
+    var userLogins = LoginM.GetList().Where(x => x.UserID == Model.UserID).ToList();
 }
 
 <link href="~/Style/Profile1.css" rel="stylesheet" />
@@ -41,50 +46,75 @@
     <p>E-mail: <span id="mail">@Model.EMail</span></p>
     <p>Qeydiyyat tarixi: <span id="signdate">@Model.SignDate.ToString("dd MMM yyyy")</span></p>
     <p>Doğum tarixi: <span id="birthdate">@Model.BirthDate.ToString("dd MMM yyyy")</span></p>
-    <button class="action-button primary"><i class="fas fa-envelope"></i> &nbsp;&nbsp;Xəta bildir</button>
+    @*<button class="action-button primary"><i class="fas fa-envelope"></i> &nbsp;&nbsp;Xəta bildir</button>*@
 </section>
 
 <div id="about">
     @*<div class="header">
         <div data-tab="activity" class="tabbtn activetab">Aktivlik</div>
-        @if (Model.FacultyStaff == true)
-        {
-            <div data-tab="facultystaff" class="tabbtn">Fakültə heyəti</div>
-        }
-        @if (Model.DepartmentStaff == true)
-        {
-            <div data-tab="departmentstaff" class="tabbtn">Departament heyəti</div>
-        }
+        <div data-tab="facultystaff" class="tabbtn">Fakültə heyəti</div>
+        <div data-tab="departmentstaff" class="tabbtn">Departament heyəti</div>
     </div>*@
 
 
-    @Html.Action("ActivityPoints", "Member", new { id = Model.UserID })
+    <div id="activities">
 
-    @if (Model.FacultyStaff == true)
-    {
-        @Html.Action("FacultyStaff", "Admin", new { @faculty = Model.Faculty })
+        @Html.Action("ActivityPoints", "Member", new { id = Model.UserID })
 
-    }
+        <div class="w100 d-flex justify-content-center">
+            <div id="calendar_basic" class="mt-4" style="width: 900px; height: 180px;"></div>
+        </div>
+
+        <div class="mt-4">
+            <canvas id="myPieChart"></canvas>
+        </div>
+    </div>
 
 
-    @if (Model.DepartmentStaff == true)
-    {
-        @Html.Action("DepartmentStaff", "Admin", new { @department = Model.Department })
-    }
 
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    const ctx = document.getElementById('myPieChart');
+    ctx.parentElement.style.height = "400px";
+    new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: ['Rəy yazdıqlarım', 'Rəy yazmadıqlarım', 'İştirak etmədiklərim'],
+            datasets: [{
+                label: 'Ümumi say',
+                data: [5, 4, 1],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+                title: {
+                    display: true,
+                    text: 'Tədbirlərdə iştirak'
+                }
+            }
+        },
+    });
+</script>
 
 <script>
     $(".tabbtn").click(function () {
         $(this).parent().siblings("section").hide();
+        $(this).parent().siblings("div#activities").hide();
         $(".tabbtn").removeClass("activetab");
         $(this).addClass("activetab");
         var tab = $(this).attr("data-tab");
         var screenheight = $("body").height();
         $("aside").height(screenheight - 80);
-        console.log(screenheight);
         if (tab == "activity") {
-            $("section#activity").show();
+            $("div#activities").show();
         }
         else if (tab == "facultystaff") {
             $("section#facultystaff").show();
@@ -92,7 +122,47 @@
         else if (tab == "departmentstaff") {
             $("section#departmentstaff").show();
         }
-
     });
 </script>
 
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script type="text/javascript">
+    google.charts.load("current", { packages: ["calendar"] });
+    google.charts.setOnLoadCallback(drawChart);
+
+    function drawChart() {
+        var dataTable = new google.visualization.DataTable();
+        dataTable.addColumn({ type: 'date', id: 'Date' });
+        dataTable.addColumn({ type: 'number', id: 'Won/Loss' });
+        dataTable.addRows([
+            @foreach (var item in userLogins)
+            {
+                int year = item.LoginDateTime.Year;
+                int month = item.LoginDateTime.Month - 1;
+                int day = item.LoginDateTime.Day;
+
+                @:[new Date(2024, @month, @day), 1],
+            }
+        ]);
+
+        var chart = new google.visualization.Calendar(document.getElementById('calendar_basic'));
+
+        var options = {
+            title: "365 günlük giriş",
+            height: 180,
+            calendar: {
+                monthLabel: {
+                    color: '#131850',
+                    bold : true,
+                },
+                underYearSpace: 10,
+                yearLabel: {
+                    fontSize: 1
+                }
+            },
+            colorAxis: { minValue: 0, colors: ['#FFFFFF', '#006BCE'] }
+        };
+
+        chart.draw(dataTable, options);
+    }
+</script>

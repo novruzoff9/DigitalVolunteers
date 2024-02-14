@@ -359,6 +359,7 @@
     <Content Include="Views\Admin\AppliesofVacancy.cshtml" />
     <Content Include="Views\Admin\ApplyDetails.cshtml" />
     <Content Include="Views\Admin\NewsGallery.cshtml" />
+    <Content Include="Views\Member\Certificates.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

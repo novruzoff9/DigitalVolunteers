@@ -198,6 +198,13 @@ namespace Web_DigitalVolunteers.Controllers
         }
         #endregion
 
+        #region Certificates
+        public ActionResult Certificates()
+        {
+            return View();
+        }
+        #endregion
+
         #region Profile
         public ActionResult UserProfile()
         {
