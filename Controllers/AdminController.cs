@@ -41,6 +41,7 @@ namespace DigitalVolunteers.Controllers
         DailyLoginManager LoginM = new DailyLoginManager(new EfDailyLoginDAL());
         VacancyManager VacancyM = new VacancyManager(new EfVacancyDAL());
         VacancyApplyManager VacancyApplyM = new VacancyApplyManager(new EfVacancyApplyDAL());
+        AnnounceManager AnnounceM = new AnnounceManager(new EfAnnounceDal());
 
         // GET: Admin
 
@@ -1254,6 +1255,60 @@ namespace DigitalVolunteers.Controllers
             return RedirectToAction("Vacancies", "Admin");
         }
 
+        #endregion
+
+        #region Announce
+        public ActionResult Announces()
+        {
+            var user = SessionUser();
+            bool havepermission = false;
+            if (user.Role == "Vice-Chairman" || user.Role == "Vice-Leader" || user.Role == "HR")
+            {
+                havepermission = true;
+            }
+            else if (CheckAdmin())
+            {
+                havepermission = true;
+            }
+            if (!havepermission)
+            {
+                return RedirectToAction("NoPermssion", "Home");
+            }
+            var announces = AnnounceM.GetList();
+            return View(announces);
+        }
+
+        [HttpGet]
+        public ActionResult AddAnnounce()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult AddAnnounce(Announce item)
+        {
+            item.WritingTime = DateTime.Now;
+            item.WriterID = SessionUser().UserID;
+            AnnounceM.Add(item);
+            return RedirectToAction("Announces", "Admin");
+        }
+
+        [HttpGet]
+        public ActionResult UpdateAnnounce(int id)
+        {
+            var announce = AnnounceM.GetByID(id);
+            return View(announce);
+        }
+
+        [HttpPost]
+        public ActionResult UpdateAnnounce(Announce item)
+        {
+            var pastannounce = AnnounceM.GetByID(item.AnnounceID);
+            pastannounce.Title = item.Title;
+            pastannounce.Text = item.Text;
+            AnnounceM.Update(pastannounce);
+            return RedirectToAction("Announces", "Admin");
+        }
         #endregion
 
         public ActionResult UpdateAllUsers()

@@ -1,0 +1,76 @@
+﻿@using EntityLayer.Concrete
+@model List<Announce>
+@{
+    ViewBag.Title = "Announces";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<link href="~/Style/AdminPanel/Vacancies485.css" rel="stylesheet" />
+
+<style>
+
+    aside ul #vacationspage {
+        border-radius: 8px;
+        background-color: #006bce;
+    }
+
+        aside ul #vacationspage p, aside ul #vacationspage i {
+            color: white;
+        }
+
+        aside ul #vacationspage:hover {
+            padding-left: 0;
+        }
+
+            aside ul #vacationspage:hover p, aside ul #vacationspage:hover i {
+                color: white;
+            }
+</style>
+
+<div id="vacancies" class="flex-wrap">
+    <a href="/Admin/AddAnnounce" class="vacancy" id="addvacancy">
+        <i class="fas fa-notes-medical"></i>
+        <p>Elan artır</p>
+    </a>
+    @foreach (var item in Model)
+    {
+        <section class="vacancy">
+            <p class="title">@item.Title</p>
+            <div class="footer d-flex flex-column justify-content-between">
+                @*@{
+                string department = "";
+                if (item.Department == "Secretary") { department = "Katib"; }
+                else if (item.Department == "IT") { department = "İnformasiya Texnologiyaları departamenti"; }
+                else if (item.Department == "SMM") { department = "Sosial Media Marketinq departamenti"; }
+                else if (item.Department == "HR") { department = "İnsan Resursları departamenti"; }
+                else if (item.Department == "PR") { department = "İctimaiyyətlə Əlaqələtr departamenti"; }
+                else if (item.Department == "WWM") { department = "Üzvlərlə iş"; }
+                else if (item.Department == "WWF") { department = "Fakültələrlə iş"; }
+                else if (item.Department == "FS") { department = "Fakültə heyəti"; }
+                else if (item.Department == "ICD") { department = "Beynəlxalq əməkdaşlıq departamenti"; }
+                else if (item.Department == "Organizer") { department = "Təşkilati işlər departamenti"; }
+                else if (item.Department == "Security") { department = "Nəzarət və təftiş"; }
+                else if (item.Department == "FS-Digital Economy") { department = "Rəqəmsal İqtisadiyyat"; }
+                else if (item.Department == "FS-Russian Economy") { department = "Rus İqtisad Məktəbi"; }
+                else if (item.Department == "FS-Business") { department = "Biznes və Menecement"; }
+                else if (item.Department == "FS-Sabah") { department = "SABAH"; }
+                else if (item.Department == "FS-ISE") { department = "Beynəlxalq İqtisadiyyat Məktəbi"; }
+                else if (item.Department == "FS-Design") { department = "UNEC Dizayn Məktəbi"; }
+                else if (item.Department == "FS-Finance") { department = "Maliyyə və Mühasibat"; }
+                else if (item.Department == "FS-TUDIFAK") { department = "Türk Dünyası İqtisad"; }
+                else if (item.Department == "FS-Engineering") { department = "Mühəndislik"; }
+                else if (item.Department == "FS-Economy") { department = "İqtisadiyyat və İdarəetmə"; }
+                else if (item.Department == "FS-QETM") { department = "Qiyabi və Əlavə Təhsil Mərkəzi"; }
+            }*@
+                <div class="footer d-flex flex-row justify-content-between mt-2">
+                    <p>@item.Text.Substring(0, 100)</p>
+                </div>
+                <div class="footer d-flex flex-row justify-content-between mt-2">
+                    <p><i class="fas fa-calendar-alt"></i>&nbsp;&nbsp;@item.WritingTime.ToString("dd MMMM yyyy")</p>
+                </div>
+
+            </div>
+            <a href="/Admin/UpdateAnnounce/@item.AnnounceID" class="action-button success w-100 mt-2">Düzəliş</a>
+        </section>
+    }
+</div>

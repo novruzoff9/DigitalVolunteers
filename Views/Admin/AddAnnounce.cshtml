@@ -1,0 +1,26 @@
+﻿@model EntityLayer.Concrete.Announce
+@{
+    ViewBag.Title = "AddAnnounce";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<link href="~/Style/AdminPanel/adminpanelevents.css" rel="stylesheet" />
+@using (Html.BeginForm("AddAnnounce", "Admin", FormMethod.Post))
+{
+    <section id="eventform">
+        <div class="title-caption">
+            <input type="text" placeholder="Başlıq" name="Title">
+            <textarea name="Text" id="" cols="30" rows="10" placeholder="Haqqında"></textarea>
+        </div>
+    </section>
+    <div class="confirm">
+        <button class="action-button success">Təsdiq et</button>
+    </div>
+}
+
+<script>
+    $(document).ready(function () {
+
+        $("#eventform>div").height($("#eventform").height());
+    });
+</script>

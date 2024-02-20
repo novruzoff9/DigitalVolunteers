@@ -1,0 +1,27 @@
+﻿@model EntityLayer.Concrete.Announce
+@{
+    ViewBag.Title = "UpdateAnnounce";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<link href="~/Style/AdminPanel/adminpanelevents.css" rel="stylesheet" />
+@using (Html.BeginForm("UpdateAnnounce", "Admin", FormMethod.Post))
+{
+    @Html.HiddenFor(x => x.AnnounceID)
+    <section id="eventform">
+        <div class="title-caption">
+            @Html.TextBoxFor(x => x.Title)
+            @Html.TextAreaFor(x => x.Text)
+        </div>
+    </section>
+    <div class="confirm">
+        <button class="action-button success">Təsdiq et</button>
+    </div>
+}
+
+<script>
+    $(document).ready(function () {
+        $("textarea").height(200);
+        $("#eventform>div").height($("#eventform").height());
+    });
+</script>

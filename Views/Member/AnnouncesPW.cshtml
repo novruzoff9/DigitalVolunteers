@@ -1,0 +1,27 @@
+﻿@using EntityLayer.Concrete
+@model List<Announce>
+
+<section class="incomings" id="news">
+    <h2>Elanlar</h2>
+    <div class="icon-list">
+        <div class="icon">
+            <i class="fas  fa-bullhorn"></i>
+        </div>
+        <div class="incomings-list">
+            @foreach (var item in Model)
+            {
+                <div class="inform">
+                    <p class="fw-bold fs-5">@item.Title</p>
+                    <p>
+                        @item.Text
+                    </p>
+                    <p class="date">@item.WritingTime.ToString("dd MMMM")</p>
+                </div>
+            }
+        </div>
+    </div>
+
+    <div class="viewall">
+        <a href="/Member/Announces">Hamısına bax <i class="fas fa-arrow-right"></i></a>
+    </div>
+</section>

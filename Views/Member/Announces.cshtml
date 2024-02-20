@@ -1,50 +1,64 @@
 ﻿@using EntityLayer.Concrete
 @model List<Announce>
+@{
+    ViewBag.Title = "Announces";
+    Layout = "~/Views/Shared/_MemberLayout.cshtml";
+}
 
-<section class="incomings" id="news">
-    <h2>Elanlar</h2>
-    <div class="icon-list">
-        <div class="icon">
-            <i class="fas  fa-bullhorn"></i>
-        </div>
-        <div class="incomings-list">
-            <div class="inform">
-                <p>
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Maiores itaque, praesentium
-                    architecto repellat laborum odio, suscipit aliquid mollitia inventore reprehenderit
-                    porro vitae fugit dolore corporis magni, dignissimos recusandae maxime illum dolorum
-                    similique facilis atque. Odio soluta eius reiciendis delectus animi dicta, suscipit,
-                    totam cupiditate dolorum repudiandae ipsa sunt sequi ratione vero aliquid ex veritatis?
-                    Dignissimos eius quibusdam mollitia alias consequuntur.
-                </p>
-                <p class="date">29.10.2023</p>
-            </div>
-            <div class="inform">
-                <p>
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Maiores itaque, praesentium
-                    architecto repellat laborum odio, suscipit aliquid mollitia inventore reprehenderit
-                    porro vitae fugit dolore corporis magni, dignissimos recusandae maxime illum dolorum
-                    similique facilis atque. Odio soluta eius reiciendis delectus animi dicta, suscipit,
-                    totam cupiditate dolorum repudiandae ipsa sunt sequi ratione vero aliquid ex veritatis?
-                    Dignissimos eius quibusdam mollitia alias consequuntur.
-                </p>
-                <p class="date">17.10.2023</p>
-            </div>
-            <div class="inform">
-                <p>
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Maiores itaque, praesentium
-                    architecto repellat laborum odio, suscipit aliquid mollitia inventore reprehenderit
-                    porro vitae fugit dolore corporis magni, dignissimos recusandae maxime illum dolorum
-                    similique facilis atque. Odio soluta eius reiciendis delectus animi dicta, suscipit,
-                    totam cupiditate dolorum repudiandae ipsa sunt sequi ratione vero aliquid ex veritatis?
-                    Dignissimos eius quibusdam mollitia alias consequuntur.
-                </p>
-                <p class="date">19.09.2023</p>
-            </div>
-        </div>
-    </div>
+<link href="~/Style/Member/Vacancies156.css" rel="stylesheet" />
 
-    <div class="viewall">
-        <a href="#">Hamısına bax <i class="fas fa-arrow-right"></i></a>
-    </div>
-</section>
+<style>
+
+    aside ul #announcespage {
+        border-radius: 8px;
+        background-color: #006bce;
+    }
+
+        aside ul #announcespage p, aside ul #announcespage i {
+            color: white;
+        }
+
+        aside ul #announcespage:hover {
+            padding-left: 0;
+        }
+
+            aside ul #announcespage:hover p, aside ul #announcespage:hover i {
+                color: white;
+            }
+    p.caption {
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        white-space: none;
+        text-overflow: ellipsis;
+    }
+</style>
+<div class="vacancies" id="all">
+    @foreach (var item in Model)
+    {
+        <section class="vacancy">
+            <p class="title">@item.Title</p>
+            <p class="caption">@item.Text</p>
+            <div class="footer d-flex w-100 justify-content-end">
+                <!--Writer data gorunsun-->
+                <!--Writer data gorunsun-->
+                <!--Writer data gorunsun-->
+                <button data-id="@item.AnnounceID" class="action-button primary details">Ətraflı</button>
+            </div>
+        </section>
+    }
+</div>
+
+<script>
+    $(".details").click(function () {
+        let announceid = $(this).attr("data-id");
+        $.ajax({
+            url: "/Member/AnnounceByID",
+            data: { announceid: announceid },
+            success: function (response) {
+                console.log(response);
+            }
+        });
+    });
+</script>

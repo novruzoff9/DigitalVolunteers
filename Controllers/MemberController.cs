@@ -55,10 +55,23 @@ namespace Web_DigitalVolunteers.Controllers
             return View(user);
         }
 
-        public PartialViewResult Announces()
+        public PartialViewResult AnnouncesPW()
         {
             var announces = AnnounceM.GetList();
+            announces = announces.GetRange(announces.Count - 3, 3);
             return PartialView(announces);
+        }
+
+        public ActionResult Announces()
+        {
+            var announces = AnnounceM.GetList();
+            announces = Enumerable.Reverse(announces).ToList();
+            return View(announces);
+        }
+        public JsonResult AnnounceByID(int announceid)
+        {
+            var announce = AnnounceM.GetByID(announceid);
+            return Json(announce, JsonRequestBehavior.AllowGet);
         }
 
         #region Events
