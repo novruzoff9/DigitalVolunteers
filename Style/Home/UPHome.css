@@ -27,11 +27,11 @@ section#home article .article-right {
   justify-content: center;
 }
 section#home article .article-right p.slogan {
-  color: white;
-  font-weight: 500;
-  font-size: 98px;
-  text-align: center;
-  font-family: "Caramel", cursive;
+    color: white;
+    font-weight: 500;
+    font-size: 86px;
+    text-align: center;
+    font-family: "Cousine", monospace;
 }
 section#home article .article-right .links {
   display: flex;

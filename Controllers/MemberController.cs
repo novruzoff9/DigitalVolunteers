@@ -26,6 +26,7 @@ namespace Web_DigitalVolunteers.Controllers
         DailyLoginManager LoginM = new DailyLoginManager(new EfDailyLoginDAL());
         VacancyManager VacancyM = new VacancyManager(new EfVacancyDAL());
         VacancyApplyManager VacancyApplyM = new VacancyApplyManager(new EfVacancyApplyDAL());
+        AnnounceManager AnnounceM = new AnnounceManager(new EfAnnounceDal());
         // GET: Member
 
         public ActionResult Index()
@@ -52,6 +53,12 @@ namespace Web_DigitalVolunteers.Controllers
             user.LastOnline = DateTime.Now;
             UserM.Update(user);
             return View(user);
+        }
+
+        public PartialViewResult Announces()
+        {
+            var announces = AnnounceM.GetList();
+            return PartialView(announces);
         }
 
         #region Events

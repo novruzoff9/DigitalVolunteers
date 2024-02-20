@@ -75,6 +75,7 @@
     <Compile Include="Class1.cs" />
     <Compile Include="Concrete\ActivityPoints.cs" />
     <Compile Include="Concrete\Admin.cs" />
+    <Compile Include="Concrete\Announce.cs" />
     <Compile Include="Concrete\DailyLogin.cs" />
     <Compile Include="Concrete\Event.cs" />
     <Compile Include="Concrete\EventGallery.cs" />

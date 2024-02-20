@@ -86,12 +86,12 @@ namespace DigitalVolunteers.Controllers
             return View();
         }
 
-        #region Statistics
+        #region Dashboard
         [Authorize]
         public ActionResult Dashboard()
         {
-            DefaultCulture();
-            if (!CheckAdmin())
+            //DefaultCulture();
+            if (!CheckAdmin() && !CheckRector())
             {
                 return RedirectToAction("NoPermission", "Home");
             }
@@ -435,7 +435,7 @@ namespace DigitalVolunteers.Controllers
             activityPoint.Date = DateTime.Now;
             activityPoint.WriterID = (int)Session["UserID"];
             activityPoint.Verified = false;
-            if (CheckAdmin())
+            if (CheckAdmin() || CheckRector())
             {
                 PointM.Add(activityPoint);
             }
@@ -1498,6 +1498,14 @@ namespace DigitalVolunteers.Controllers
             }
             return true;
         }
-        
+        private bool CheckRector()
+        {
+            var user = SessionUser();
+            if (user.Department == "Vice-Rector" || user.Department == "Rectorship" )
+            {
+                return true;
+            }
+            return false;
+        }
     }
 }

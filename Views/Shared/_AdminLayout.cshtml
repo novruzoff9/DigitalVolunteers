@@ -44,9 +44,18 @@
     <header>
         <i id="menubtn" class="fas fa-bars"></i>
         <div class="header-center">
-            <a href="/Admin/Dashboard">
-                <img src="~/Images/new Logo - white.png" />
-            </a>
+            @if (user.Department == "Vice-Rector" || user.Department == "Rectorship")
+            {
+                <a href="/Admin/Rectorship">
+                    <img src="~/Images/new Logo - white.png" />
+                </a>
+            }
+            else
+            {
+                <a href="/Admin/Dashboard">
+                    <img src="~/Images/new Logo - white.png" />
+                </a>
+            }
         </div>
         <div class="header-right">
             @*<i class="fas fa-bell notficationbtn"></i>*@

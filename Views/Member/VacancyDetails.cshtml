@@ -30,7 +30,7 @@
 <link href="~/Style/Member/Vacancies156.css" rel="stylesheet" />
 
 <section id="vacancydetails">
-    <h2>@Model.Title</h2>
+    <h2 id="vacancyname">@Model.Title</h2>
     <div class="footer w-100 d-flex justify-content-between">
         @if (Model.Deadline.Year != 2005)
         {
@@ -167,7 +167,7 @@
 <script>
     $(".pop-up").css("display", "none");
     $("button#apply").click(function () {
-        var vacancy = "@Model.Title";
+        var vacancy = $("h2#vacancyname").text();
         $("#offer").parent().css("display", "flex");
         $("#offer p>span").text(vacancy);
         $("#accepted p>span").text(vacancy);

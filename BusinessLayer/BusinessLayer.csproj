@@ -55,6 +55,7 @@
     <Compile Include="Class1.cs" />
     <Compile Include="Concrete\ActivityPointManager.cs" />
     <Compile Include="Concrete\AdminManager.cs" />
+    <Compile Include="Concrete\AnnounceManager.cs" />
     <Compile Include="Concrete\DailyLoginManager.cs" />
     <Compile Include="Concrete\EventGalleryManager.cs" />
     <Compile Include="Concrete\EventManager.cs" />

@@ -159,16 +159,6 @@ namespace DigitalVolunteers.Controllers
             }
         }
 
-        public ActionResult MyProfile(string user)
-        {
-            user = (string)Session["UserName"];
-            var users = UserM.GetList();
-            var userid = users.Where(x => x.UserName == user).
-                Select(y => y.UserID).FirstOrDefault();
-            var userinfo = UserM.GetByID(userid);
-            return View(userinfo);
-        }
-
         private void SendMail(string to, string subject, string body)
         {
             using (MailMessage EMail = new MailMessage("digitalvolunteers.it@gmail.com", to))

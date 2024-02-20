@@ -70,7 +70,10 @@
     }
 </style>
 
-@Html.Action("BestEvent", "Events")
+@if (Model.First().DateTime > DateTime.Now)
+{
+    @Html.Action("NextEvent", "Events")
+}
 
 <section id="events">
     <header>
@@ -121,10 +124,7 @@ new { page }), new PagedListRenderOptions
 })
 </section>
 
-@if (Model.First().DateTime > DateTime.Now)
-{
-    @Html.Action("NextEvent", "Events")
-}
+@Html.Action("BestEvent", "Events")
 
 <div class="pop-up">
     <div id="acceptregistration">

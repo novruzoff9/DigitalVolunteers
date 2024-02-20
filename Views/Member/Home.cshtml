@@ -24,6 +24,15 @@
             aside ul #dashboard:hover p, aside ul #dashboard:hover i {
                 color: white;
             }
+    p.activitypoint{
+        color: #cf352e !important;
+        font-weight: 500;
+        font-size: 24px;
+        margin: 8px 0;
+    }
+    p.name, p.profession {
+        margin: 0;
+    }
 </style>
 
 <section id="digi-greeting">
@@ -37,6 +46,7 @@
     <img src="@Model.UserImage" />
     <p class="name">@Model.Name @Model.Surname</p>
     <p class="profession">@Model.Profession</p>
+    <p class="activitypoint"><i class="fas fa-fire"></i> @Model.ActivityPoint</p>
     <div class="actions">
         <a href="/Member/Settings" class="action">
             <i class="fas fa-cog"></i>
@@ -49,53 +59,8 @@
         </a>
     </div>
 </section>
-<section class="incomings" id="news">
-    <h2>Elanlar</h2>
-    <div class="icon-list">
-        <div class="icon">
-            <i class="fas  fa-bullhorn"></i>
-        </div>
-        <div class="incomings-list">
-            <div class="inform">
-                <p>
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Maiores itaque, praesentium
-                    architecto repellat laborum odio, suscipit aliquid mollitia inventore reprehenderit
-                    porro vitae fugit dolore corporis magni, dignissimos recusandae maxime illum dolorum
-                    similique facilis atque. Odio soluta eius reiciendis delectus animi dicta, suscipit,
-                    totam cupiditate dolorum repudiandae ipsa sunt sequi ratione vero aliquid ex veritatis?
-                    Dignissimos eius quibusdam mollitia alias consequuntur.
-                </p>
-                <p class="date">29.10.2023</p>
-            </div>
-            <div class="inform">
-                <p>
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Maiores itaque, praesentium
-                    architecto repellat laborum odio, suscipit aliquid mollitia inventore reprehenderit
-                    porro vitae fugit dolore corporis magni, dignissimos recusandae maxime illum dolorum
-                    similique facilis atque. Odio soluta eius reiciendis delectus animi dicta, suscipit,
-                    totam cupiditate dolorum repudiandae ipsa sunt sequi ratione vero aliquid ex veritatis?
-                    Dignissimos eius quibusdam mollitia alias consequuntur.
-                </p>
-                <p class="date">17.10.2023</p>
-            </div>
-            <div class="inform">
-                <p>
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Maiores itaque, praesentium
-                    architecto repellat laborum odio, suscipit aliquid mollitia inventore reprehenderit
-                    porro vitae fugit dolore corporis magni, dignissimos recusandae maxime illum dolorum
-                    similique facilis atque. Odio soluta eius reiciendis delectus animi dicta, suscipit,
-                    totam cupiditate dolorum repudiandae ipsa sunt sequi ratione vero aliquid ex veritatis?
-                    Dignissimos eius quibusdam mollitia alias consequuntur.
-                </p>
-                <p class="date">19.09.2023</p>
-            </div>
-        </div>
-    </div>
 
-    <div class="viewall">
-        <a href="#">Hamısına bax <i class="fas fa-arrow-right"></i></a>
-    </div>
-</section>
+@Html.Action("Announces", "Member")
 
 <section class="incomings" id="informs">
     <h2>Xəbərdarlıqlar</h2>

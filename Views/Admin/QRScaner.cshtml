@@ -9,7 +9,7 @@
 <div class="pop-up">
     <section id="noregistration">
         <p>
-            <span class="username">Test User</span> adlı istifadəçinin <span class="eventname">"Event"</span> tədbirinə
+            <span class="username">Name Surname</span> adlı istifadəçinin <span class="eventname">"@ViewBag.EventName"</span> tədbirinə
             qeydiyyatı yoxdur
         </p>
         <button class="action-button danger close">Bağla</button>
@@ -19,7 +19,7 @@
 <div class="pop-up">
     <section id="confirmparticipating">
         <p>
-            <span class="username">Test User</span> adlı istifadəçinin <span class="eventname">"Event"</span> tədbirində
+            <span class="username">Name Surname</span> adlı istifadəçinin <span class="eventname">"@ViewBag.EventName"</span> tədbirində
             iştiakını təsdiqləyin
         </p>
         <input hidden id="userid" value="0" />
@@ -31,12 +31,10 @@
 </div>
 
 <input type="hidden" id="eventid" value="@ViewBag.EventID"/>
-<input type="hidden" id="eventname" value="@ViewBag.EventName"/>
 
 <script>
 
     const eventid = $("#eventid").val();
-    const eventname = $("#eventname").val();
         document.addEventListener('DOMContentLoaded', function () {
             const video = document.getElementById('preview');
 
@@ -51,8 +49,7 @@
                         eventid: eventid
                     },
                     success: function (result) {
-                        $("span.user").text(result.Name + " " + result.Surname);
-                        $("span.eventname").text(eventname);
+                        $("span.username").text(result.Name + " " + result.Surname);
                         $("#userid").attr("value", result.UserID);
                         if (result.Password === "Yes") {
                             $("#confirmparticipating").parent().css("display", "flex");

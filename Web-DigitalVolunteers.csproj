@@ -239,8 +239,7 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
     <Content Include="Scripts\Slider.js" />
-    <Content Include="Style\About1.css" />
-    <Content Include="Style\adminlogin.css" />
+    <Content Include="Style\Home\About1.css" />
     <Content Include="Style\AdminPanel\ActivityPoint144.css" />
     <Content Include="Style\AdminPanel\AdminPage122.css" />
     <Content Include="Style\AdminPanel\adminpanelevents.css" />
@@ -260,15 +259,11 @@
     <Content Include="Style\Home\Staff.css" />
     <Content Include="Style\Home\UPHome.css" />
     <Content Include="Style\Login875.css" />
-    <Content Include="Style\mainpage11.css" />
     <Content Include="Style\Member\UserPanel4525.css" />
     <Content Include="Style\Member\Vacancies156.css" />
     <Content Include="Style\Profile1.css" />
     <Content Include="Style\sign.css" />
-    <Content Include="Style\Staff11.css" />
-    <Content Include="Style\style.css" />
     <Content Include="Style\UIStyle1569.css" />
-    <Content Include="Style\UPHome12.css" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -287,7 +282,6 @@
     <Content Include="Views\Admin\AddUser.cshtml" />
     <Content Include="Views\Admin\Events.cshtml" />
     <Content Include="Views\Admin\Users.cshtml" />
-    <Content Include="Views\Login\MyProfile.cshtml" />
     <Content Include="Views\Login\UserLogin.cshtml" />
     <Content Include="Views\Shared\_AdminLayout.cshtml" />
     <Content Include="Views\Admin\UserProfile.cshtml" />
@@ -360,6 +354,7 @@
     <Content Include="Views\Admin\ApplyDetails.cshtml" />
     <Content Include="Views\Admin\NewsGallery.cshtml" />
     <Content Include="Views\Member\Certificates.cshtml" />
+    <Content Include="Views\Member\Announces.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

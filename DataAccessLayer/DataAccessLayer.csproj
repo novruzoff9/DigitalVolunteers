@@ -57,6 +57,7 @@
     <Compile Include="Concrete\Repositories\GenericRepository.cs" />
     <Compile Include="EntityFramework\EfActivityPointDAL.cs" />
     <Compile Include="EntityFramework\EfAdminDAL.cs" />
+    <Compile Include="EntityFramework\EfAnnounceDal.cs" />
     <Compile Include="EntityFramework\EfDailyLoginDAL.cs" />
     <Compile Include="EntityFramework\EfEventDAL.cs" />
     <Compile Include="EntityFramework\EfEventRegistrationDAL.cs" />
