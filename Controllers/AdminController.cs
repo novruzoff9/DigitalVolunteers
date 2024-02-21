@@ -42,6 +42,7 @@ namespace DigitalVolunteers.Controllers
         VacancyManager VacancyM = new VacancyManager(new EfVacancyDAL());
         VacancyApplyManager VacancyApplyM = new VacancyApplyManager(new EfVacancyApplyDAL());
         AnnounceManager AnnounceM = new AnnounceManager(new EfAnnounceDal());
+        NotficiationManager NotficiationM = new NotficiationManager(new EfNotficiationDal());
 
         // GET: Admin
 
@@ -1223,6 +1224,14 @@ namespace DigitalVolunteers.Controllers
             }
             VacancyApplyM.Update(apply);
 
+            Notficiation notficiation = new Notficiation();
+            notficiation.RecieverID = apply.UserID;
+            notficiation.Title = "Vakansiya müraciətində yenilik.";
+            notficiation.Text = apply.Vacancy.Title + " adlı vakansiyaya olan müraciətinizdə yenilik var. " + 
+                "\n 'Müraciətlərim' bölməsindən baxa bilərsiniz.";
+            notficiation.WriterID = -2;
+            notficiation.WritingTime = DateTime.Now;
+            NotficiationM.Add(notficiation);
             return RedirectToAction("ApplyDetails", "Admin", new { id = applyid });
         }
 

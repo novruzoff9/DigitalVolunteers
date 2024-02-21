@@ -6,7 +6,7 @@
 }
 
 <style>
-    
+
 
     aside ul #dashboard {
         border-radius: 8px;
@@ -24,12 +24,14 @@
             aside ul #dashboard:hover p, aside ul #dashboard:hover i {
                 color: white;
             }
-    p.activitypoint{
+
+    p.activitypoint {
         color: #cf352e !important;
         font-weight: 500;
         font-size: 24px;
         margin: 8px 0;
     }
+
     p.name, p.profession {
         margin: 0;
     }
@@ -62,52 +64,11 @@
 
 @Html.Action("AnnouncesPW", "Member")
 
-<section class="incomings" id="informs">
-    <h2>Bildirişlər</h2>
-    <div class="icon-list">
-        <div class="icon">
-            <i class="fas warning fa-bell"></i>
-        </div>
-        <div class="incomings-list">
-            <div class="inform">
-                <p>
-                    Data analtika tədbiri üçün qeydiyyatdan keçdiyiniz halda tədbirə gəlmədiniz. Bu hal bir
-                    daha
-                    təkrarlanarsa lazımi tədbirlər görüləcək
-                </p>
-                <p class="date">16.10.2023</p>
-            </div>
-            <div class="inform">
-                <p>Lorem ipsum dolor sit amet.</p>
-                <p class="date">16.10.2023</p>
-            </div>
-            <div class="inform">
-                <p>
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Ab quasi cupiditate aliquid
-                    facere dolorem officiis, velit eius magnam dicta sed eaque, voluptatem aut id
-                    praesentium necessitatibus architecto non labore adipisci repellendus error
-                    exercitationem possimus quos. Neque excepturi minima voluptatibus nisi, delectus
-                    similique placeat. Aut facilis cum earum repudiandae explicabo deleniti excepturi
-                    perspiciatis aspernatur. Magni maxime neque ducimus in officiis earum, labore nisi esse
-                    ratione alias veritatis iusto repudiandae tempora quas iste dolores suscipit molestias?
-                    Voluptatibus pariatur hic quia veniam repudiandae.
-                </p>
-                <p class="date">16.10.2023</p>
-            </div>
-        </div>
+@Html.Action("NotficiationsPW", "Member")
+
+@if (ViewBag.Review == "true")
+{
+    <div id="reviewpopup" class="pop-up">
+        @Html.Action("EventReview", "Member", new { @id = ViewBag.Reviewid })
     </div>
-
-    <div class="viewall">
-        <a href="#">Hamısına bax <i class="fas fa-arrow-right"></i></a>
-    </div>
-
-    @if (ViewBag.Review == "true")
-    {
-        <div id="reviewpopup" class="pop-up">
-            @Html.Action("EventReview", "Member", new { @id = ViewBag.Reviewid })
-        </div>
-    }
-
-
-</section>
-
+}

@@ -21,6 +21,7 @@ namespace Web_DigitalVolunteers.Controllers
         EventManager EventM = new EventManager(new EfEventDAL());
         EventGalleryManager GalleryM = new EventGalleryManager(new EfEventGalleryDAL());
         EventRegistrationManager RegistrationM = new EventRegistrationManager(new EfEventRegistrationDAL());
+        NotficiationManager NotficiationM = new NotficiationManager(new EfNotficiationDal());
 
         public ActionResult Index(int page = 1)
         {
@@ -88,7 +89,14 @@ namespace Web_DigitalVolunteers.Controllers
                     return Json("Alredy registrated", JsonRequestBehavior.AllowGet);
                 }
             }
+            Notficiation notficiation = new Notficiation();
+            notficiation.RecieverID = (int)Session["UserID"];
+            notficiation.Title = "Tədbir qeydiyyatı";
+            notficiation.Text = currentevent.Title + " adlı tədbirə qeydiyyatınız uğurla tamamlandı.";
+            notficiation.WriterID = 0;
+            notficiation.WritingTime = DateTime.Now;
             RegistrationM.Add(registration);
+            NotficiationM.Add(notficiation);
             return Json(registration, JsonRequestBehavior.AllowGet);
         }
     }

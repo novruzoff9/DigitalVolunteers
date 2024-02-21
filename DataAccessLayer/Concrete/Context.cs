@@ -22,6 +22,7 @@ namespace DataAccessLayer.Concrete
         public DbSet<Vacancy> Vacancies { get; set; }
         public DbSet<VacancyApply> VacancyApplies { get; set; }
         public DbSet<Announce> Announces { get; set; }
+        public DbSet<Notficiation> Notficiations { get; set; }
         //public DbSet<NewsReading> NewsReadings { get; set; }
     }
 }

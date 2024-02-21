@@ -27,6 +27,7 @@ namespace Web_DigitalVolunteers.Controllers
         VacancyManager VacancyM = new VacancyManager(new EfVacancyDAL());
         VacancyApplyManager VacancyApplyM = new VacancyApplyManager(new EfVacancyApplyDAL());
         AnnounceManager AnnounceM = new AnnounceManager(new EfAnnounceDal());
+        NotficiationManager NotficiationM = new NotficiationManager(new EfNotficiationDal());
         // GET: Member
 
         public ActionResult Index()
@@ -60,6 +61,16 @@ namespace Web_DigitalVolunteers.Controllers
             var announces = AnnounceM.GetList();
             announces = announces.GetRange(announces.Count - 3, 3);
             return PartialView(announces);
+        }
+
+        public PartialViewResult NotficiationsPW()
+        {
+            var notficiations = NotficiationM.NotficiationsofUser(SessionUser().UserID);
+            if (notficiations.Count >= 3)
+            {
+                notficiations = notficiations.GetRange(notficiations.Count - 3, 3);
+            }
+            return PartialView(notficiations);
         }
 
         public ActionResult Announces()
@@ -211,6 +222,14 @@ namespace Web_DigitalVolunteers.Controllers
             apply.InterviewDateTime = DateTime.Now;
             apply.EnteringDateTime = DateTime.Now;
             VacancyApplyM.Add(apply);
+            Notficiation notficiation = new Notficiation();
+            notficiation.RecieverID = apply.UserID;
+            notficiation.Title = "Vakansiya müraciəti.";
+            notficiation.Text = apply.Vacancy.Title + " adlı vakansiyaya olan müraciətiniz uğurla qeydə alındı." +
+                "\n 'Müraciətlərim' bölməsindən baxa bilərsiniz.";
+            notficiation.WriterID = 0;
+            notficiation.WritingTime = DateTime.Now;
+            NotficiationM.Add(notficiation);
             return Json("succes", JsonRequestBehavior.AllowGet);
         }
 
