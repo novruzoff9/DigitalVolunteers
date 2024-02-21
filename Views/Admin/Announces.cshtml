@@ -9,20 +9,20 @@
 
 <style>
 
-    aside ul #vacationspage {
+    aside ul #announcespage {
         border-radius: 8px;
         background-color: #006bce;
     }
 
-        aside ul #vacationspage p, aside ul #vacationspage i {
+        aside ul #announcespage p, aside ul #announcespage i {
             color: white;
         }
 
-        aside ul #vacationspage:hover {
+        aside ul #announcespage:hover {
             padding-left: 0;
         }
 
-            aside ul #vacationspage:hover p, aside ul #vacationspage:hover i {
+            aside ul #announcespage:hover p, aside ul #announcespage:hover i {
                 color: white;
             }
 </style>
@@ -63,7 +63,7 @@
                 else if (item.Department == "FS-QETM") { department = "Qiyabi və Əlavə Təhsil Mərkəzi"; }
             }*@
                 <div class="footer d-flex flex-row justify-content-between mt-2">
-                    <p>@item.Text.Substring(0, 100)</p>
+                    <p>@item.Text.Substring(0, 100)...</p>
                 </div>
                 <div class="footer d-flex flex-row justify-content-between mt-2">
                     <p><i class="fas fa-calendar-alt"></i>&nbsp;&nbsp;@item.WritingTime.ToString("dd MMMM yyyy")</p>

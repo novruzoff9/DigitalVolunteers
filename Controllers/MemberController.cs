@@ -71,6 +71,12 @@ namespace Web_DigitalVolunteers.Controllers
         public JsonResult AnnounceByID(int announceid)
         {
             var announce = AnnounceM.GetByID(announceid);
+            if(announce.WriterID != 0)
+            {
+                var writer = UserM.GetByID(announce.WriterID);
+                announce.Writer = writer;
+            }
+            announce.Text = announce.Text.Replace("\n", "<br />");
             return Json(announce, JsonRequestBehavior.AllowGet);
         }
 
@@ -80,6 +86,7 @@ namespace Web_DigitalVolunteers.Controllers
             int userid = (int)Session["UserID"];
             var events = EventM.GetList();
             var registrations = EventRegistrationM.GetList().Where(x => x.UserID == userid).ToList();
+            registrations = Enumerable.Reverse(registrations).ToList();
             return View(registrations);
         }
 
@@ -112,6 +119,7 @@ namespace Web_DigitalVolunteers.Controllers
             int userid = (int)Session["UserID"];
             var events = EventM.GetList();
             var registrations = EventRegistrationM.GetList().Where(x => x.UserID == userid).ToList();
+            registrations = Enumerable.Reverse(registrations).ToList();
             return View(registrations);
         }
         #endregion

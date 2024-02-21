@@ -753,6 +753,12 @@ namespace DigitalVolunteers.Controllers
             Request.Files[0].SaveAs(Server.MapPath(address));
             item.Image = "/Images/EventCovers/" + newid + "_" + filename;
             EventM.Add(item);
+            Announce eventannounce = new Announce();
+            eventannounce.Title = item.Title + " adlı tədbir keçiriləcək";
+            eventannounce.Text = item.Caption;
+            eventannounce.WritingTime = DateTime.Now;
+            eventannounce.WriterID = 0;
+            AnnounceM.Add(eventannounce);
             return RedirectToAction("Events");
         }
 
@@ -1274,7 +1280,7 @@ namespace DigitalVolunteers.Controllers
             {
                 return RedirectToAction("NoPermssion", "Home");
             }
-            var announces = AnnounceM.GetList();
+            var announces = Enumerable.Reverse(AnnounceM.GetList()).ToList();
             return View(announces);
         }
 

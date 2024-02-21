@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace EntityLayer.Concrete
 {
-    public class Announce
+    public class Notficiation
     {
-        public Announce()
+        public Notficiation()
         {
-            if(WriterID == 0)
+            if (WriterID == 0)
             {
                 Writer = new User
                 {
@@ -26,7 +26,9 @@ namespace EntityLayer.Concrete
         }
 
         [Key]
-        public int AnnounceID { get; set; }
+        public string NotficiationID { get; set; }
+        public int RecieverID { get; set; }
+        public virtual User Reciever { get; set; }
         public string Title { get; set; }
         public string Text { get; set; }
         public DateTime WritingTime { get; set; }

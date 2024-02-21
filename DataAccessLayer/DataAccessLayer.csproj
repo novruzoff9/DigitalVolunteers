@@ -63,6 +63,7 @@
     <Compile Include="EntityFramework\EfEventRegistrationDAL.cs" />
     <Compile Include="EntityFramework\EfNewsDal.cs" />
     <Compile Include="EntityFramework\EfNewsGalleryDal.cs" />
+    <Compile Include="EntityFramework\EfNotficiationDal.cs" />
     <Compile Include="EntityFramework\EfPasswordTokenDAL.cs" />
     <Compile Include="EntityFramework\EfUserDAL.cs" />
     <Compile Include="EntityFramework\EfEventGalleryDAL.cs" />

@@ -83,6 +83,7 @@
     <Compile Include="Concrete\News.cs" />
     <Compile Include="Concrete\NewsGallery.cs" />
     <Compile Include="Concrete\NewsReading.cs" />
+    <Compile Include="Concrete\Notficiation.cs" />
     <Compile Include="Concrete\PasswordTokens.cs" />
     <Compile Include="Concrete\User.cs" />
     <Compile Include="Concrete\Vacancy.cs" />
