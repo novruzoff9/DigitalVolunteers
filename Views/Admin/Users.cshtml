@@ -589,32 +589,6 @@
     $("#activitypoint i").click(function () {
         $("#activitypoint").parent().css("display", "none");
     });
-
-    //İstifadəçiyə xəbərdarlıq etmək
-    function InformUser(id) {
-        userid = id;
-        $.ajax({
-            type: "GET",
-            url: "/Admin/UserByID/" + userid,
-            success: function (result) {
-                ShowUserInform(result);
-            }
-        });
-
-        function ShowUserInform(user) {
-            $("#inform-user").parent().css("display", "flex");
-            $("body").css("overflow", "auto");
-            $("#reciever-user img").attr("src", user.UserImage);
-            $("p.username").text(user.Name, " ", user.Surname);
-            $("p.name").text(user.UserName);
-        }
-    }
-    $("#cancelinformation").click(function () {
-        $("#inform-user").parent().css("display", "none");
-        $("body").css("overflow", "auto");
-    });
-
-
 </script>
 
 <script>
@@ -857,10 +831,6 @@
             window.location.href = url;
         });
 
-        //Json əsasında isifadəçilər gətirilsinnnn!!
-        //Json əsasında isifadəçilər gətirilsinnnn!!
-        //Json əsasında isifadəçilər gətirilsinnnn!!
-        //Json əsasında isifadəçilər gətirilsinnnn!!
 
         setTimeout(function () {
             ShowUsers(searchresults);
@@ -910,5 +880,52 @@
                 }
             });
         }
+    });
+</script>
+
+<script>
+    //İstifadəçiyə xəbərdarlıq etmək
+    function InformUser(id) {
+        userid = id;
+        $.ajax({
+            type: "GET",
+            url: "/Admin/UserByID/" + userid,
+            success: function (result) {
+                ShowUserInform(result);
+            }
+        });
+
+        function ShowUserInform(user) {
+            $("#inform-user").parent().css("display", "flex");
+            $("body").css("overflow", "auto");
+            $("#reciever-user img").attr("src", user.UserImage);
+            $("p.username").text(user.Name, " ", user.Surname);
+            $("p.name").text(user.UserName);
+            $("#sendinformation").attr("data-id", user.UserID);
+        }
+    }
+    $("#cancelinformation").click(function () {
+        $("#inform-user").parent().css("display", "none");
+        $("body").css("overflow", "auto");
+    });
+    $("#sendinformation").click(function () {
+        let userid = Number($(this).attr("data-id"));
+        const informtext = $("#InformText").val();
+        $.ajax({
+            type: 'POST',
+            url: '/Admin/SendInform',
+            data: {
+                userid: userid,
+                text: informtext
+            },
+            dataType: 'json',
+            success: function (result) {
+                alert(result);
+                $("#inform-user").parent().css("display", "none");
+            },
+            error: function () {
+                alert("Olmadiye qaqa");
+            }
+        });
     });
 </script>

@@ -40,6 +40,8 @@
     var user = UserM.GetByID(userid);
     NotficiationManager notficiationM = new NotficiationManager(new EfNotficiationDal());
     var notficiations = notficiationM.NotficiationsofUser(userid);
+    notficiations = Enumerable.Reverse(notficiations).ToList();
+    if (notficiations.Count > 3) { notficiations = notficiations.GetRange(0, 3); }
 }
 <body>
 

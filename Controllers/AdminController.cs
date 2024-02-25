@@ -446,6 +446,27 @@ namespace DigitalVolunteers.Controllers
             return Json("Aktivlik balı uğurla artırıldı.");
         }
 
+        [HttpPost]
+        public JsonResult SendInform(int userid, string text)
+        {
+            Notficiation notficiation = new Notficiation();
+            notficiation.UserID = userid;
+            notficiation.Text = text;
+            notficiation.Seen = false;
+            notficiation.Title = "Fərdi Mesaj";
+            notficiation.WriterID = SessionUser().UserID;
+            notficiation.WritingTime = DateTime.Now;
+            if (CheckAdmin() || CheckRector())
+            {
+                NotficiationM.Add(notficiation);
+            }
+            else
+            {
+                return Json("Sizin fərdi mesaj göndərməyə icazəniz yoxdur.", JsonRequestBehavior.AllowGet);
+            }
+            return Json("Fərdi mesaj uğurla göndərildi.");
+        }
+
         #endregion
 
         #region UserProfile
@@ -1321,6 +1342,32 @@ namespace DigitalVolunteers.Controllers
             pastannounce.Text = item.Text;
             AnnounceM.Update(pastannounce);
             return RedirectToAction("Announces", "Admin");
+        }
+        #endregion
+
+        #region Notficiation
+        public ActionResult Notficiations()
+        {
+            int userid = (int)Session["UserID"];
+            var notficiations = NotficiationM.NotficiationsofUser(userid);
+            notficiations = Enumerable.Reverse(notficiations).ToList();
+            foreach (var item in notficiations)
+            {
+                item.Writer = UserM.GetByID(item.WriterID);
+            }
+            return View(notficiations);
+        }
+
+        public JsonResult NotficiationByID(int notficiationid)
+        {
+            var notficiation = NotficiationM.GetByID(notficiationid);
+            if (notficiation.WriterID != 0)
+            {
+                var writer = UserM.GetByID(notficiation.WriterID);
+                notficiation.Writer = writer;
+            }
+            notficiation.Text = notficiation.Text.Replace("\n", "<br />");
+            return Json(notficiation, JsonRequestBehavior.AllowGet);
         }
         #endregion
 

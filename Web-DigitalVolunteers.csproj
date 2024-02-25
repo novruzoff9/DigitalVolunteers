@@ -362,6 +362,7 @@
     <Content Include="Views\Member\Announces.cshtml" />
     <Content Include="Views\Member\NotficiationsPW.cshtml" />
     <Content Include="Views\Member\Notficiations.cshtml" />
+    <Content Include="Views\Admin\Notficiations.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

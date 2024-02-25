@@ -37,6 +37,10 @@
     UserManager UserM = new UserManager(new EfUserDAL());
     int userid = Session["UserID"].ToString().AsInt();
     var user = UserM.GetByID(userid);
+    NotficiationManager notficiationM = new NotficiationManager(new EfNotficiationDal());
+    var notficiations = notficiationM.NotficiationsofUser(userid);
+    notficiations = Enumerable.Reverse(notficiations).ToList();
+    if(notficiations.Count > 3) { notficiations = notficiations.GetRange(0, 3); }
 }
 <body>
 
@@ -58,7 +62,7 @@
             }
         </div>
         <div class="header-right">
-            @*<i class="fas fa-bell notficationbtn"></i>*@
+            <i class="fas fa-bell notficationbtn"></i>
             <img class="profilebtn" src="@user.UserImage" alt="">
         </div>
         <div class="profile-menu mini-menu">
@@ -146,8 +150,46 @@
                 </li>
             </ul>
         </div>
+        <style>
+            .notfication-menu {
+                width: 300px !important;
+            }
+
+                .notfication-menu p.empty {
+                    font-size: 24px;
+                }
+
+                .notfication-menu p {
+                    font-size: 16px;
+                    color: #212529;
+                    font-weight: 400;
+                    display: -webkit-box;
+                    -webkit-line-clamp: 3;
+                    -webkit-box-orient: vertical;
+                    overflow: hidden;
+                    white-space: none;
+                    text-overflow: ellipsis;
+                }
+        </style>
         <div class="notfication-menu mini-menu">
-            <p class="empty">Bildiriş yoxdur</p>
+            @if (notficiations.Count == 0)
+            {
+                <p class="empty">Bildiriş yoxdur</p>
+            }
+            else
+            {
+                foreach (var item in notficiations)
+                {
+                    <div class="d-flex flex-column mb-2">
+                        <p style="font-weight:500;">@item.Title</p>
+                        <p>@item.Text</p>
+                    </div>
+                }
+                <script>
+            $(".notficationbtn").find('::after').css("content", "@notficiations.Count");
+                </script>
+            }
+            <a href="/Admin/Notficiations">Hamısı</a>
         </div>
     </header>
 

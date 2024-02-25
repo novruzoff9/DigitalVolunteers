@@ -95,8 +95,13 @@ namespace Web_DigitalVolunteers.Controllers
 
         public ActionResult Notficiations()
         {
-            var notficiations = NotficiationM.GetList();
+            int userid = (int)Session["UserID"];
+            var notficiations = NotficiationM.NotficiationsofUser(userid);
             notficiations = Enumerable.Reverse(notficiations).ToList();
+            foreach (var item in notficiations)
+            {
+                item.Writer = UserM.GetByID(item.WriterID);
+            }
             return View(notficiations);
         }
         public JsonResult NotficiationByID(int notficiationid)

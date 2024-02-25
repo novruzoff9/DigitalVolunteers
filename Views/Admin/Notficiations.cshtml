@@ -2,7 +2,7 @@
 @model List<Notficiation>
 @{
     ViewBag.Title = "Notficiations";
-    Layout = "~/Views/Shared/_MemberLayout.cshtml";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
 <link href="~/Style/Member/Vacancies156.css" rel="stylesheet" />
@@ -29,9 +29,6 @@
             <p class="title">@item.Title</p>
             <p class="caption w-100">@item.Text</p>
             <div class="footer d-flex w-100 justify-content-between">
-                <!--Writer data gorunsun-->
-                <!--Writer data gorunsun-->
-                <!--Writer data gorunsun-->
                 <div class="d-flex flex-row align-items-center">
                     <img id="writerimg" width="60" height="60" style="border-radius:50%;" alt="WriterImage" src="@item.Writer.UserImage" />
                     <p class="ms-lg-2 mb-0 fs-6" id="writername" style="font-weight:500;">@item.Writer.Name @item.Writer.Surname</p>
@@ -48,10 +45,10 @@
         <p id="announcecaption"></p>
         <div class="d-flex flex-row w-100 justify-content-between align-items-center">
             <div class="d-flex flex-row align-items-center">
-                <img id="writerimage" width="60" height="60" style="border-radius:50%;" alt="WriterImage" src=""/>
+                <img id="writerimage" width="60" height="60" style="border-radius:50%;" alt="WriterImage" />
                 <p class="ms-lg-2 mb-0 fs-6" id="writersname" style="font-weight:500;"></p>
             </div>
-            <p id="datetime" class="mb-0" style="font-weight:500;height:fit-content;"></p>
+            <p id="datetime" class="mb-0 ms-3" style="font-weight:500;height:fit-content;"></p>
         </div>
     </section>
 </div>
@@ -63,7 +60,7 @@
     $(".details").click(function () {
         let announceid = $(this).attr("data-id");
         $.ajax({
-            url: "/Member/NotficiationByID",
+            url: "/Admin/NotficiationByID",
             data: { notficiationid: announceid },
             success: function (response) {
                 $("#announcetitle").html(response.Title);
@@ -93,5 +90,3 @@
         }
     });
 </script>
-
-
