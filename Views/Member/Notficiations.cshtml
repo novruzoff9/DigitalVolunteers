@@ -1,0 +1,116 @@
+﻿@using EntityLayer.Concrete
+@model List<Notficiation>
+@{
+    ViewBag.Title = "Notficiations";
+    Layout = "~/Views/Shared/_MemberLayout.cshtml";
+}
+
+<link href="~/Style/Member/Vacancies156.css" rel="stylesheet" />
+
+<style>
+
+    aside ul #announcespage {
+        border-radius: 8px;
+        background-color: #006bce;
+    }
+
+        aside ul #announcespage p, aside ul #announcespage i {
+            color: white;
+        }
+
+        aside ul #announcespage:hover {
+            padding-left: 0;
+        }
+
+            aside ul #announcespage:hover p, aside ul #announcespage:hover i {
+                color: white;
+            }
+
+    p.caption {
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        white-space: none;
+        text-overflow: ellipsis;
+    }
+
+    section#announcedetails {
+        width: fit-content;
+    }
+</style>
+<div class="vacancies" id="all">
+    @foreach (var item in Model)
+    {
+        <section class="vacancy">
+            <p class="title">@item.Title</p>
+            <p class="caption w-100">@item.Text</p>
+            <div class="footer d-flex w-100 justify-content-end">
+                <!--Writer data gorunsun-->
+                <!--Writer data gorunsun-->
+                <!--Writer data gorunsun-->
+                <div class="d-flex flex-row align-items-center">
+                    <img id="writerimg" width="60" height="60" style="border-radius:50%;" alt="WriterImage" src="@item.Writer.UserImage"/>
+                    <p class="ms-lg-2 mb-0 fs-6" id="writername" style="font-weight:500;"></p>
+                </div>
+                <button data-id="@item.NotficiationID" class="action-button primary details">Ətraflı</button>
+            </div>
+        </section>
+    }
+</div>
+
+<div class="pop-up">
+    <section id="announcedetails" class="flex-column justify-content-start">
+        <p id="announcetitle" class="fw-bold fs-5"></p>
+        <p id="announcecaption"></p>
+        <div class="d-flex flex-row w-100 justify-content-between align-items-center">
+            <div class="d-flex flex-row align-items-center">
+                <img id="writerimg" width="60" height="60" style="border-radius:50%;" alt="WriterImage" />
+                <p class="ms-lg-2 mb-0 fs-6" id="writername" style="font-weight:500;"></p>
+            </div>
+            <p id="datetime" class="mb-0" style="font-weight:500;height:fit-content;"></p>
+        </div>
+    </section>
+</div>
+
+<script>
+    $("#announcedetails").parent().css("display", "none");
+    let popupopen = false;
+    let popup;
+    $(".details").click(function () {
+        let announceid = $(this).attr("data-id");
+        $.ajax({
+            url: "/Member/NotficiationByID",
+            data: { notficiationid: announceid },
+            success: function (response) {
+                $("#announcetitle").html(response.Title);
+                $("#announcecaption").html(response.Text);
+                $("#writerimg").attr("src", response.Writer.UserImage);
+                $("#writername").html(response.Writer.Name + " " + response.Writer.Surname);
+
+                //Yazilma tarixi
+                const months = [
+                    "yanvar", "fevral", "mart", "aprel", "may", "iyun",
+                    "iyul", "avqust", "sentyabr", "oktyabr", "noyabr", "dekabr"
+                ];
+                const numericValue = parseInt(response.WritingTime.match(/\d+/)[0], 10);
+                const date = new Date(numericValue);
+                const formattedDate = `${date.getDate()} ${months[date.getMonth()]}`;
+                $("#datetime").html(formattedDate);
+                console.log(response);
+                console.log(formattedDate);
+                $("#announcedetails").parent().css("display", "flex");
+                popupopen = true;
+                popup = $("#announcedetails");
+            }
+        });
+    });
+    $(document).on("click", function (event) {
+        if (popupopen && !popup.is(event.target) && !popup.has(event.target).length) {
+            $(".pop-up").css("display", "none");
+            setTimeout(() => { popupopen = false; }, 200);
+        }
+    });
+</script>
+
+

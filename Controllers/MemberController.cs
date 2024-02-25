@@ -59,7 +59,8 @@ namespace Web_DigitalVolunteers.Controllers
         public PartialViewResult AnnouncesPW()
         {
             var announces = AnnounceM.GetList();
-            announces = announces.GetRange(announces.Count - 3, 3);
+            announces = Enumerable.Reverse(announces).ToList();
+            announces = announces.GetRange(0, 3);
             return PartialView(announces);
         }
 
@@ -70,6 +71,7 @@ namespace Web_DigitalVolunteers.Controllers
             {
                 notficiations = notficiations.GetRange(notficiations.Count - 3, 3);
             }
+            notficiations = Enumerable.Reverse(notficiations).ToList();
             return PartialView(notficiations);
         }
 
@@ -89,6 +91,24 @@ namespace Web_DigitalVolunteers.Controllers
             }
             announce.Text = announce.Text.Replace("\n", "<br />");
             return Json(announce, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult Notficiations()
+        {
+            var notficiations = NotficiationM.GetList();
+            notficiations = Enumerable.Reverse(notficiations).ToList();
+            return View(notficiations);
+        }
+        public JsonResult NotficiationByID(int notficiationid)
+        {
+            var notficiation = NotficiationM.GetByID(notficiationid);
+            if (notficiation.WriterID != 0)
+            {
+                var writer = UserM.GetByID(notficiation.WriterID);
+                notficiation.Writer = writer;
+            }
+            notficiation.Text = notficiation.Text.Replace("\n", "<br />");
+            return Json(notficiation, JsonRequestBehavior.AllowGet);
         }
 
         #region Events
@@ -223,7 +243,7 @@ namespace Web_DigitalVolunteers.Controllers
             apply.EnteringDateTime = DateTime.Now;
             VacancyApplyM.Add(apply);
             Notficiation notficiation = new Notficiation();
-            notficiation.RecieverID = apply.UserID;
+            notficiation.UserID = apply.UserID;
             notficiation.Title = "Vakansiya müraciəti.";
             notficiation.Text = apply.Vacancy.Title + " adlı vakansiyaya olan müraciətiniz uğurla qeydə alındı." +
                 "\n 'Müraciətlərim' bölməsindən baxa bilərsiniz.";
@@ -312,6 +332,13 @@ namespace Web_DigitalVolunteers.Controllers
             {
                 user.Password = newpassword;
                 UserM.Update(user);
+                Notficiation notficiation = new Notficiation();
+                notficiation.UserID = SessionUser().UserID;
+                notficiation.Title = "Profil məlumatlarında yenilik.";
+                notficiation.Text = "Şifrəniz yeniləndi.";
+                notficiation.WriterID = 2463;
+                notficiation.WritingTime = DateTime.Now;
+                NotficiationM.Add(notficiation);
                 return Json("Success", JsonRequestBehavior.AllowGet);
             }
             return Json("Salaaam", JsonRequestBehavior.AllowGet);
@@ -328,7 +355,13 @@ namespace Web_DigitalVolunteers.Controllers
             user.UserImage = "/Images/ProfilePictures/" + user.UserID + "_" + filename;
 
             UserM.Update(user);
-
+            Notficiation notficiation = new Notficiation();
+            notficiation.UserID = SessionUser().UserID;
+            notficiation.Title = "Profil məlumatlarında yenilik.";
+            notficiation.Text = "Profil şəkliniz yeniləndi.";
+            notficiation.WriterID = 0;
+            notficiation.WritingTime = DateTime.Now;
+            NotficiationM.Add(notficiation);
             return Json("Success", JsonRequestBehavior.AllowGet);
         }
         #endregion

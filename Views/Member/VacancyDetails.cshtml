@@ -90,7 +90,7 @@
             </div>
             <div class="pointtime">
                 <p>Müsahibəyə çağırılma tarixi</p>
-                @if(interview != "successpoint") { interviewDate = "-- --- ----"; }
+                @if(interview == applyDate) { interviewDate = "-- --- ----"; }
                 <p class="date">@interviewDate</p>
             </div>
             <div class="pointtime">

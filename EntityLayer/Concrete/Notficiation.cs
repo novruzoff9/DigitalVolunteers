@@ -9,38 +9,13 @@ namespace EntityLayer.Concrete
 {
     public class Notficiation
     {
-        public Notficiation()
-        {
-            if (WriterID == 0)
-            {
-                Writer = new User
-                {
-                    Name = "Sistem",
-                    Surname = "Tərəfindən",
-                    UserImage = "/Images/Logo.png",
-                    BirthDate = new DateTime(2005, 9, 23),
-                    LastOnline = DateTime.Now,
-                    SignDate = new DateTime(2005, 9, 23)
-                };
-            }
-            else if (WriterID == -2)
-            {
-                Writer = new User
-                {
-                    Name = "İnsan",
-                    Surname = "Resursları",
-                    UserImage = "/Images/Logo.png",
-                    BirthDate = new DateTime(2005, 9, 23),
-                    LastOnline = DateTime.Now,
-                    SignDate = new DateTime(2005, 9, 23)
-                };
-            }
-        }
 
         [Key]
         public int NotficiationID { get; set; }
         public int RecieverID { get; set; }
         public virtual User Reciever { get; set; }
+        public int UserID { get; set; }
+        public virtual User User { get; set; }
         public string Title { get; set; }
         public string Text { get; set; }
         public DateTime WritingTime { get; set; }

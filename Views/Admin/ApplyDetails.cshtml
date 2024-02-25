@@ -149,7 +149,7 @@
             @using (Html.BeginForm("UpdateApply", "Admin", FormMethod.Post, new { @class = "w-100 h-100 d-flex flex-column justify-content-between" }))
             {
                 @Html.HiddenFor(x=>x.ApplyID)
-                if (Model.InterviewDateTime == Model.ApplyDateTime)
+                if (Model.Interview == false)
                 {
                     <div class="d-flex flex-row w-100 justify-content-between align-items-center">
                         <p style="margin: 0;">Müsahibə üçün tarix:</p>

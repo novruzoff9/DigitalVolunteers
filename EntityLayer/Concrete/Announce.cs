@@ -9,21 +9,6 @@ namespace EntityLayer.Concrete
 {
     public class Announce
     {
-        public Announce()
-        {
-            if(WriterID == 0)
-            {
-                Writer = new User
-                {
-                    Name = "Sistem",
-                    Surname = "Tərəfindən",
-                    UserImage = "/Images/Logo.png",
-                    BirthDate = new DateTime(2005, 9, 23),
-                    LastOnline = DateTime.Now,
-                    SignDate = new DateTime(2005, 9, 23)
-                };
-            }
-        }
 
         [Key]
         public int AnnounceID { get; set; }

@@ -46,5 +46,6 @@ namespace EntityLayer.Concrete
         public DateTime LastOnline { get; set; }
         //public virtual ICollection<ActivityPoints> Points { get; set; }
         public virtual ICollection<VacancyApply> VacancyApplies { get; set; }
+        public virtual ICollection<Notficiation> Notficiations { get; set; }
     }
 }

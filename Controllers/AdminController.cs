@@ -325,8 +325,6 @@ namespace DigitalVolunteers.Controllers
                 "Giriş üçün parolunuz: " + item.Password + "\n" +
                 "Sizi təşkilatımızda gördüyümüzə şad olduq.\n" +
                 "Hörmətlə, Rəqəmsal Könüllülər Təşkilatı.";
-
-
             UserM.Add(item);
 
             SendMail(item.EMail, mailSubject, mailBody);
@@ -758,7 +756,7 @@ namespace DigitalVolunteers.Controllers
             eventannounce.Title = item.Title + " adlı tədbir keçiriləcək";
             eventannounce.Text = item.Caption;
             eventannounce.WritingTime = DateTime.Now;
-            eventannounce.WriterID = 0;
+            eventannounce.WriterID = 2463; // System ID = 2463
             AnnounceM.Add(eventannounce);
             return RedirectToAction("Events");
         }
@@ -1225,11 +1223,11 @@ namespace DigitalVolunteers.Controllers
             VacancyApplyM.Update(apply);
 
             Notficiation notficiation = new Notficiation();
-            notficiation.RecieverID = apply.UserID;
+            notficiation.UserID = apply.UserID;
             notficiation.Title = "Vakansiya müraciətində yenilik.";
             notficiation.Text = apply.Vacancy.Title + " adlı vakansiyaya olan müraciətinizdə yenilik var. " + 
                 "\n 'Müraciətlərim' bölməsindən baxa bilərsiniz.";
-            notficiation.WriterID = -2;
+            notficiation.WriterID = 2463;
             notficiation.WritingTime = DateTime.Now;
             NotficiationM.Add(notficiation);
             return RedirectToAction("ApplyDetails", "Admin", new { id = applyid });

@@ -90,10 +90,10 @@ namespace Web_DigitalVolunteers.Controllers
                 }
             }
             Notficiation notficiation = new Notficiation();
-            notficiation.RecieverID = (int)Session["UserID"];
+            notficiation.UserID = (int)Session["UserID"];
             notficiation.Title = "Tədbir qeydiyyatı";
             notficiation.Text = currentevent.Title + " adlı tədbirə qeydiyyatınız uğurla tamamlandı.";
-            notficiation.WriterID = 0;
+            notficiation.WriterID = 2463; // System UserID = 2463
             notficiation.WritingTime = DateTime.Now;
             RegistrationM.Add(registration);
             NotficiationM.Add(notficiation);

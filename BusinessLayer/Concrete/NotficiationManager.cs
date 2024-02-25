@@ -49,7 +49,7 @@ namespace BusinessLayer.Concrete
         }
         public List<Notficiation> NotficiationsofUser(int id)
         {
-            return _repository.List().Where(x=>x.RecieverID == id).ToList();
+            return _repository.List().Where(x=>x.UserID == id).ToList();
         }
     }
 }
