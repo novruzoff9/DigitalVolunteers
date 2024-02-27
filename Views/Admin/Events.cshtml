@@ -71,7 +71,7 @@
                 <a href="/Admin/EventGallery/@item.EventID" class="warning-hover action-button"><i class="fas fa-images"></i> Qalareya</a>
                 <a href="/Admin/EventParticipiants/@item.EventID" class="secondary-hover action-button"><i class="fas fa-users"></i> İştirakçılar</a>
                 <a href="/Admin/EventReviews/@item.EventID" class="yellow-hover action-button"><i class="fas fa-comments"></i> Rəylər</a>
-                @if (DateTime.Now.AddHours(-1) < item.DateTime)
+                @if (DateTime.Now.AddHours(-2) <= item.DateTime && DateTime.Now.AddHours(1) >= item.DateTime)
                 {
                     <a href="/Admin/QRScaner/@item.EventID" class="danger-hover action-button"><i class="fas fa-qrcode"></i> QR Skan</a>
                 }

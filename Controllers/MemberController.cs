@@ -35,6 +35,7 @@ namespace Web_DigitalVolunteers.Controllers
             return View();
         }
 
+        #region Home
         public ActionResult Home()
         {
             ViewBag.Review = "false";
@@ -115,6 +116,7 @@ namespace Web_DigitalVolunteers.Controllers
             notficiation.Text = notficiation.Text.Replace("\n", "<br />");
             return Json(notficiation, JsonRequestBehavior.AllowGet);
         }
+        #endregion
 
         #region Events
         public ActionResult Events()
@@ -129,7 +131,7 @@ namespace Web_DigitalVolunteers.Controllers
         public JsonResult EventByID(int id)
         {
             var eventinfo = EventM.GetByID(id);
-            eventinfo.Caption = System.Web.HttpUtility.HtmlDecode(eventinfo.Caption);
+            eventinfo.Caption = eventinfo.Caption.Replace("\n", "<br />");
             return Json(eventinfo, JsonRequestBehavior.AllowGet);
         }
         #endregion

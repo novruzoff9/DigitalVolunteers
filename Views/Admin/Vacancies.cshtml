@@ -1,5 +1,5 @@
 ﻿@using EntityLayer.Concrete
-@model List<Vacancy> 
+@model List<Vacancy>
 @{
     ViewBag.Title = "Vacancies";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
@@ -7,6 +7,7 @@
 
 <link href="~/Style/AdminPanel/Vacancies485.css" rel="stylesheet" />
 
+<link href="~/Style/Member/Vacancies156.css" rel="stylesheet" />
 <style>
 
     aside ul #vacationspage {
@@ -25,9 +26,77 @@
             aside ul #vacationspage:hover p, aside ul #vacationspage:hover i {
                 color: white;
             }
+
+    #vacancies {
+        justify-content: center;
+    }
 </style>
 
-<div id="vacancies" class="flex-wrap">
+
+<section id="navigation">
+    <div class="tabbtn activetab" data-tab="active">Qüvvədə olanlar</div>
+    <div class="tabbtn" data-tab="all">Bütün vakansiyalar</div>
+</section>
+
+<div id="vacancies" class="flex-wrap active">
+    <a href="/Admin/AddVacancy" class="vacancy" id="addvacancy">
+        <i class="fas fa-notes-medical"></i>
+        <p>Vakansiya artır</p>
+    </a>
+    @foreach (var item in Model)
+    {
+        if (item.Deadline.Year == 2005 || item.Deadline > DateTime.Now)
+        {
+            <section class="vacancy">
+                <p class="title">@item.Title</p>
+                <div class="footer d-flex flex-column justify-content-between">
+                    @{
+                        string department = "";
+                        if (item.Department == "Secretary") { department = "Katib"; }
+                        else if (item.Department == "IT") { department = "İnformasiya Texnologiyaları departamenti"; }
+                        else if (item.Department == "SMM") { department = "Sosial Media Marketinq departamenti"; }
+                        else if (item.Department == "HR") { department = "İnsan Resursları departamenti"; }
+                        else if (item.Department == "PR") { department = "İctimaiyyətlə Əlaqələtr departamenti"; }
+                        else if (item.Department == "WWM") { department = "Üzvlərlə iş"; }
+                        else if (item.Department == "WWF") { department = "Fakültələrlə iş"; }
+                        else if (item.Department == "FS") { department = "Fakültə heyəti"; }
+                        else if (item.Department == "ICD") { department = "Beynəlxalq əməkdaşlıq departamenti"; }
+                        else if (item.Department == "Organizer") { department = "Təşkilati işlər departamenti"; }
+                        else if (item.Department == "Security") { department = "Nəzarət və təftiş"; }
+                        else if (item.Department == "FS-Digital Economy") { department = "Rəqəmsal İqtisadiyyat"; }
+                        else if (item.Department == "FS-Russian Economy") { department = "Rus İqtisad Məktəbi"; }
+                        else if (item.Department == "FS-Business") { department = "Biznes və Menecement"; }
+                        else if (item.Department == "FS-Sabah") { department = "SABAH"; }
+                        else if (item.Department == "FS-ISE") { department = "Beynəlxalq İqtisadiyyat Məktəbi"; }
+                        else if (item.Department == "FS-Design") { department = "UNEC Dizayn Məktəbi"; }
+                        else if (item.Department == "FS-Finance") { department = "Maliyyə və Mühasibat"; }
+                        else if (item.Department == "FS-TUDIFAK") { department = "Türk Dünyası İqtisad"; }
+                        else if (item.Department == "FS-Engineering") { department = "Mühəndislik"; }
+                        else if (item.Department == "FS-Economy") { department = "İqtisadiyyat və İdarəetmə"; }
+                        else if (item.Department == "FS-QETM") { department = "Qiyabi və Əlavə Təhsil Mərkəzi"; }
+
+
+                    }
+                    <div class="footer d-flex flex-row justify-content-between mt-2">
+                        @if (item.Primary)
+                        {
+                            <p style="color:goldenrod"><i class="fas fa-star" style="color: goldenrod"></i>&nbsp;Seçilmiş</p>
+                        }
+                        <p>@department</p>
+                    </div>
+                    <div class="footer d-flex flex-row justify-content-between mt-2">
+                        <p><i class="fas fa-calendar-alt"></i>&nbsp;&nbsp;@item.CreatedTime.ToString("dd MMMM yyyy")</p>
+                        <a href="/Admin/UpdateVacancy/@item.VacancyID" class="action-button success">Düzəliş</a>
+                    </div>
+
+                </div>
+                <a href="/Admin/AppliesofVacancy/@item.VacancyID" class="action-button primary-hover w-100 mt-2">Müraciətlər (@item.Applies.Count)</a>
+            </section>
+        }
+
+    }
+</div>
+<div id="vacancies" class="flex-wrap all">
     <a href="/Admin/AddVacancy" class="vacancy" id="addvacancy">
         <i class="fas fa-notes-medical"></i>
         <p>Vakansiya artır</p>
@@ -63,12 +132,12 @@
                     else if (item.Department == "FS-QETM") { department = "Qiyabi və Əlavə Təhsil Mərkəzi"; }
 
 
-}
+                }
                 <div class="footer d-flex flex-row justify-content-between mt-2">
                     @if (item.Primary)
-                {
-                    <p style="color:goldenrod"><i class="fas fa-star" style="color: goldenrod"></i>&nbsp;Seçilmiş</p>
-                }
+                    {
+                        <p style="color:goldenrod"><i class="fas fa-star" style="color: goldenrod"></i>&nbsp;Seçilmiş</p>
+                    }
                     <p>@department</p>
                 </div>
                 <div class="footer d-flex flex-row justify-content-between mt-2">
@@ -79,5 +148,25 @@
             </div>
             <a href="/Admin/AppliesofVacancy/@item.VacancyID" class="action-button primary-hover w-100 mt-2">Müraciətlər (@item.Applies.Count)</a>
         </section>
+
     }
 </div>
+
+<script>
+        $(".tabbtn").click(function () {
+            if ($(this).hasClass("activetab")) { return; }
+            else {
+                $(".tabbtn").removeClass("activetab");
+                $(this).addClass("activetab");
+                let value = $(this).attr("data-tab");
+                if (value == "all") {
+                    $(".active").css("display", "none");
+                    $(".all").css("display", "flex");
+                }
+                else if (value == "active") {
+                    $(".all").css("display", "none");
+                    $(".active").css("display", "flex");
+                }
+            }
+        });
+</script>

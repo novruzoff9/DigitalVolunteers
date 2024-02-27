@@ -43,28 +43,24 @@
             <p class="title">@item.Event.Title</p>
             <div class="details">
                 <p class="date">@item.Event.DateTime.ToString("dd MMMM yyyy")</p>
-                @{if (item.Event.Location == "First")
-                    {
-                        location = "Əsas korpus";
-                    }
-                    else if (item.Event.Location == "Second")
-                    {
-                        location = "II saylı korpus";
-                    }
-                    else if (item.Event.Location == "Third")
-                    {
-                        location = "III saylı korpus";
-                    }
-                    else if (item.Event.Location == "Fourth")
-                    {
-                        location = "IV saylı korpus";
-                    }
+                @{if (item.Event.Location == "FirstBig") { location = "Əsas korpus, Böyük"; }
+                    else if (item.Event.Location == "FirstHA") { location = "Əsas korpus, Heydər Əliyev"; }
+                    else if (item.Event.Location == "FirstWhite") { location = "Əsas korpus, Ağ zal"; }
+                    else if (item.Event.Location == "FirstSmall") { location = "Əsas korpus, Kiçik"; }
+                    else if (item.Event.Location == "SecondBig") { location = "II korpus, Böyük"; }
+                    else if (item.Event.Location == "SecondSmall") { location = "II  korpus, Kiçik"; }
+                    else if (item.Event.Location == "ThirdBig") { location = "III korpus, Böyük"; }
+                    else if (item.Event.Location == "ThirdSmall") { location = "III korpus, Kiçik"; }
+                    else if (item.Event.Location == "Fourth") { location = "IV korpus"; }
                 }
                 <p class="location">@location</p>
             </div>
             <div class="actions">
-                <button style="width:100%;" onclick="ShowEventDetails(@item.Event.EventID)" class="primary-hover action-button">
+                <button style="width:48%;" onclick="ShowEventDetails(@item.EventID)" class="primary-hover action-button">
                     <i class="fas fa-info"></i> Tam bax
+                </button>
+                <button style="width:48%;" onclick="ShowEventDetails(@item.EventID)" class="warning-hover action-button">
+                    <i class="fas fa-comments"></i> Rəy bildir
                 </button>
             </div>
         </div>
@@ -132,12 +128,17 @@
         eventid = id;
         $.ajax({
             type: "GET",
-            url: "/Member/EventByID/" + eventid,
+            url: "/Member/EventByID",
+            data: {
+                id: eventid
+            },
             success: function (result) {
                 ShowEventData(result);
             }
         });
         function ShowEventData(item) {
+
+            $("#eventdetails").parent().css("display", "flex");
             console.log(item);
             var event = item;
             $("img[data-detail='image']").attr("src", event.Image);
@@ -145,7 +146,7 @@
             $("p[data-detail='caption'").text(event.Caption);
             //var datetime = event.DateTime.substring(6, 19);
             //var time = new Date(datetime).toLocaleString("az");
-            ////$("p[data-detail='date'").text(event.DateTime);
+            //$("p[data-detail='date'").text(event.DateTime);
             //$("p[data-detail='date'").text(time);
             $("p[data-detail='registrationurl'").text(event.RegistrationURL);
             if (event.Location == "First") eventlocation = "Əsas korpus";
