@@ -38,7 +38,7 @@
         <div class="event-image">
             <img src="@item.ImageURL" alt="">
             <div class="actions">
-                <a href="#" class="danger action-button"><i class="fas fa-trash"></i> Sil</a>
+                <button onclick="DeletePopUp(@item.ImageID)" class="danger action-button"><i class="fas fa-trash"></i> Sil</button>
             </div>
         </div>
     }
@@ -62,6 +62,16 @@
                 <button class="action-button success">Artır</button>
             </div>
         }
+    </section>
+</div>
+
+<div class="pop-up">
+    <section id="deleteimage" class="d-flex flex-column">
+        <p style="font-weight:500;font-size:18px;">Şəkili silmək istədiyinizə əminsinizmi?</p>
+        <div class="d-flex flex-row w-100 justify-content-around">
+            <a href="#" class="action-button primary-hover">Sil</a>
+            <button class="action-button danger-link">Ləğv et</button>
+        </div>
     </section>
 </div>
 
@@ -95,4 +105,9 @@
     $("#addingimage i").click(function () {
         $("#addingimage").parent().css("display", "none");
     });
+
+    function DeletePopUp(imageid) {
+        $("#deleteimage").parent().css("display", "flex");
+        $("#deleteimage a").attr("href", "/Admin/DeleteNewsImage/" + imageid);
+    }
 </script>

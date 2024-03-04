@@ -361,7 +361,7 @@ namespace DigitalVolunteers.Controllers
                 $"'{item.Name} {item.Surname}' adlı istifadəçi artırıldı.\n" +
                 $"İstifadəçi adı : {item.UserName} \n" +
                 $"MAC address: {macaddress}";
-            SendTgDatabaseMessage(tgmessage, "", "");
+            SendTgDatabaseMessage(tgmessage, "İstifadəçi siyahısı", $"https://www.digitalvolunteers.xyz/Admin/SelectedUsers");
 
             return RedirectToAction("SelectedUsers");
         }
@@ -491,7 +491,7 @@ namespace DigitalVolunteers.Controllers
             string tgmessage = $"Aktivlik balı cədvəlinə '{SessionUser().Name} {SessionUser().Surname}' tərəfindən " +
                 $"'{user.Name} {user.Surname}' adlı istifadəçinin balı {activityPoint.Point} vahid artırıldı.\n" +
                 $"MAC address: {macaddress}";
-            SendTgDatabaseMessage(tgmessage, "", "");
+            SendTgDatabaseMessage(tgmessage, "Aktivlik balı siyahısı", $"https://www.digitalvolunteers.xyz/Admin/ActivityPoints");
             return Json("Aktivlik balı uğurla artırıldı.");
         }
 
@@ -935,10 +935,30 @@ namespace DigitalVolunteers.Controllers
                         newid += 1;
                     }
                 }
+                string macaddress = "";
+                foreach (NetworkInterface nic in NetworkInterface.GetAllNetworkInterfaces())
+                {
+                    if (nic.NetworkInterfaceType == NetworkInterfaceType.Ethernet &&
+                        nic.OperationalStatus == OperationalStatus.Up)
+                    {
+                        macaddress = nic.GetPhysicalAddress().ToString();
+                    }
+                }
+
+                Event @event = EventM.GetByID(EventID);
+                string tgmessage = $"Tədbir qalareyası cədvəlinə '{sessionuser.Name} {sessionuser.Surname}' tərəfindən " +
+                $"{@event.Title} başlıqlı tədbirə '{files.Count()}' sayda şəkil artırıldı.\n" +
+                $"MAC address: {macaddress}";
+                SendTgDatabaseMessage(tgmessage, "Tədbirə bax", $"https://www.digitalvolunteers.xyz/Events/Event/{EventID}");
             }
             return RedirectToAction("Events");
         }
-
+        public ActionResult DeleteEventImage(int id)
+        {
+            var eventimage = EventGalleyM.GetByID(id);
+            EventGalleyM.Delete(eventimage);
+            return RedirectToAction("EventGallery", "Admin", new { id = eventimage.EventID });
+        }
         #endregion
 
         #region News
@@ -1106,8 +1126,30 @@ namespace DigitalVolunteers.Controllers
                         newid += 1;
                     }
                 }
+                string macaddress = "";
+                foreach (NetworkInterface nic in NetworkInterface.GetAllNetworkInterfaces())
+                {
+                    if (nic.NetworkInterfaceType == NetworkInterfaceType.Ethernet &&
+                        nic.OperationalStatus == OperationalStatus.Up)
+                    {
+                        macaddress = nic.GetPhysicalAddress().ToString();
+                    }
+                }
+
+                News news = NewsM.GetByID(NewsID);
+                string tgmessage = $"Xəbər qalareyası cədvəlinə '{sessionuser.Name} {sessionuser.Surname}' tərəfindən " +
+                $"{news.NewsTitle} başlıqlı xəbərə '{files.Count()}' sayda şəkil artırıldı.\n" +
+                $"MAC address: {macaddress}";
+                SendTgDatabaseMessage(tgmessage, "Xəbərə bax", $"https://www.digitalvolunteers.xyz/News/NewsDetails/{NewsID}");
             }
             return RedirectToAction("News");
+        }
+
+        public ActionResult DeleteNewsImage(int id)
+        {
+            var newsimage = NewsGalleryM.GetByID(id);
+            NewsGalleryM.Delete(newsimage);
+            return RedirectToAction("NewsGallery", "Admin", new { id = newsimage.NewsID });
         }
         #endregion
 
