@@ -44,9 +44,18 @@
             <label for="eventimage"><i class="fas fa-image"></i></label>
         </div>
         <div class="name">
-            <input type="text" placeholder="Ad" name="Name">
-            <input type="text" placeholder="Soyad" name="Surname">
-            <input type="date" placeholder="Doğum tarixi" name="BirthDate">
+            <div class="d-flex flex-column">
+                <label for="nameofuser">Adı:</label>
+                <input id="nameofuser" type="text" placeholder="Ad" name="Name">
+            </div>
+            <div class="d-flex flex-column">
+                <label for="surnameofuser">Soyadı:</label>
+                <input id="surnameofuser" type="text" placeholder="Soyad" name="Surname">
+            </div>
+            <div class="d-flex flex-column">
+                <label for="birthofuser">Doğum tarixi:</label>
+                <input id="birthofuser" type="date" placeholder="Doğum tarixi" name="BirthDate">
+            </div>
         </div>
         <div class="name">
             <div class="input-tel">

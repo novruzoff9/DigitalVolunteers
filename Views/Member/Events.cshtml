@@ -56,10 +56,10 @@
                 <p class="location">@location</p>
             </div>
             <div class="actions">
-                <button style="width:48%;" onclick="ShowEventDetails(@item.EventID)" class="primary-hover action-button">
+                @*<button style="width:48%;" onclick="ShowEventDetails(@item.EventID)" class="primary-hover action-button">
                     <i class="fas fa-info"></i> Tam bax
-                </button>
-                <button style="width:48%;" onclick="ShowEventDetails(@item.EventID)" class="warning-hover action-button">
+                </button>*@
+                <button style="width:100%;" data-registrationid="@item.RegistrationID" class="warning-hover action-button editreview">
                     <i class="fas fa-comments"></i> Rəy bildir
                 </button>
             </div>
@@ -119,6 +119,10 @@
     </section>
 </div>
 
+<div id="reviewpopup" class="pop-up">
+</div>
+
+
 <script>
 
     $("#eventdetails .data-column").height($(".data-column").parent().height());
@@ -166,3 +170,35 @@
 
 </script>
 
+<script>
+    $(document).ready(function () {
+        $(".editreview").click(function () {
+            var registrationId = $(this).data("registrationid");
+            $.ajax({
+                url: "/Member/EventReview",
+                method: "GET",
+                data: { id: registrationId },
+                success: function (data) {
+                    $("#reviewpopup").html(data);
+                    $("#review").parent().css("display", "flex");
+                }
+            });
+        });
+    });
+
+    $(".close i").click(function () {
+        $("#review").parent().css("display", "none");
+    });
+    var popup = $("#review");
+    $(document).click(function (event) {
+        if ($("#review").parent().css("display") == "flex") {
+            if (!$("#review").parent().find(event.target).length != 0) {
+                $("#review").parent().css("display", "none");
+                setTimeout(() => { }, 200);
+            }
+        }
+    });
+
+    $("#reviewpopup").css("display", "none");
+
+</script>

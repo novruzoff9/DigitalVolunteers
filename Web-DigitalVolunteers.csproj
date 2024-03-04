@@ -240,6 +240,7 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
     <Content Include="Scripts\Slider.js" />
+    <Content Include="Style\EMail\Registration324.css" />
     <Content Include="Style\Home\About1.css" />
     <Content Include="Style\AdminPanel\ActivityPoint144.css" />
     <Content Include="Style\AdminPanel\AdminPage122.css" />
@@ -363,6 +364,7 @@
     <Content Include="Views\Member\NotficiationsPW.cshtml" />
     <Content Include="Views\Member\Notficiations.cshtml" />
     <Content Include="Views\Admin\Notficiations.cshtml" />
+    <Content Include="Views\Login\RegistrationEmail.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

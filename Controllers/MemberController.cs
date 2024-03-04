@@ -156,7 +156,7 @@ namespace Web_DigitalVolunteers.Controllers
         {
             int userid = (int)Session["UserID"];
             var events = EventM.GetList();
-            var registrations = EventRegistrationM.GetList().Where(x => x.UserID == userid).ToList();
+            var registrations = EventRegistrationM.GetList().Where(x => x.UserID == userid && x.Rating > 0).ToList();
             registrations = Enumerable.Reverse(registrations).ToList();
             return View(registrations);
         }

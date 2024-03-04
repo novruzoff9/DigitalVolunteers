@@ -46,10 +46,19 @@
             <label for="eventimage"><i class="fas fa-image"></i></label>
         </div>
         <div class="name">
-            @Html.TextBoxFor(x => x.UserName, new { @readonly = "readonly" })
-            @Html.TextBoxFor(x => x.Name)
-            @Html.TextBoxFor(x => x.Surname)
-            @Html.TextBoxFor(x => x.BirthDate, "{0:yyyy-MM-dd}", new { type = "datetime" })
+            @Html.TextBoxFor(x => x.UserName)
+            <div class="d-flex flex-column">
+                <label for="nameofuser">Adı:</label>
+                @Html.TextBoxFor(x => x.Name, new {id = "nameofuser" })
+            </div>
+            <div class="d-flex flex-column">
+                <label for="surnameofuser">Soyadı:</label>
+                @Html.TextBoxFor(x => x.Surname, new { id = "surnameofuser" })
+            </div>
+            <div class="d-flex flex-column">
+                <label for="birthofuser">Doğum tarixi:</label>
+                @Html.TextBoxFor(x => x.BirthDate, "{0:yyyy-MM-dd}", new { type = "datetime", id = "birthofuser" })
+            </div>
         </div>
         <div class="name">
             <div class="input-tel">
@@ -150,6 +159,7 @@
                 else if (Model.Department == "ICD") { department = "Beynəlxalq əməkdaşlıq departamenti"; }
                 else if (Model.Department == "Organizer") { department = "Təşkilati işlər departamenti"; }
                 else if (Model.Department == "Security") { department = "Nəzarət və təftiş"; }
+                else if (Model.Department == "Member") { department = "Üzv"; }
             }
             <select name="Department" id="" placeholder="Departament">
                 <option value="@Model.Department" selected>@department</option>
@@ -193,6 +203,7 @@
                 else if (modelRole == "GDesigner") { role = "Qrafik dizayner"; }
                 else if (modelRole == "Secretary") { role = "Katib"; }
                 else if (modelRole == "Advisor") { role = "Müşavir"; }
+                else if (modelRole == "Member") { role = "Üzv"; }
             }
             <select name="Role" id="" placeholder="Rolu">
                 <option value="@Model.Role" selected>@role</option>

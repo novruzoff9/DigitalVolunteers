@@ -125,6 +125,11 @@ namespace DigitalVolunteers.Controllers
             return RedirectToAction("UserLogin");
         }
 
+        public ActionResult RegistrationEmail(User user)
+        {
+            return View(user);
+        }
+
         public JsonResult Authentication(string username, string password)
         {
             var user = UserM.FindProfile(username, password);

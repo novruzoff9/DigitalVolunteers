@@ -280,6 +280,8 @@ namespace DigitalVolunteers.Controllers
             {
                 newid = 1;
             }
+
+            //Istifadeci adinin hazirlanmasi
             string username = item.Surname.First() + "." + item.Name;
             username = username.ToLower();
             int quantity = users.Where(x => x.UserName.StartsWith(username) &&
@@ -293,9 +295,10 @@ namespace DigitalVolunteers.Controllers
             username = username.Replace("ö", "o");
             username = username.Replace("ç", "c");
             username = username.Replace("ş", "s");
+            username = username.Replace("ı", "i");
             item.UserName = username;
 
-
+            //Sifrenin hazirlanmasi
             const string chars = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz123456789";
 
             Random random = new Random();
@@ -307,6 +310,7 @@ namespace DigitalVolunteers.Controllers
             }
             item.Password = new string(randomArray);
 
+            //Profil seklinin qoyulmasi
             string filename = Path.GetFileName(Request.Files[0].FileName);
             string address = "~/Images/ProfilePictures/" + newid + "_" + filename;
             Request.Files[0].SaveAs(Server.MapPath(address));
@@ -315,19 +319,26 @@ namespace DigitalVolunteers.Controllers
             {
                 item.UserImage = "/Images/ProfilePictures/defaultPP.jpg";
             }
+
             item.ActivityPoint = 0;
             item.SignDate = DateTime.Now;
             item.LastOnline = DateTime.Now;
+            if(item.BirthDate == null) { item.BirthDate = new DateTime(2000, 01, 01); }
 
+
+            //Mail gonderilmesi
+            string viewPath = "~/Views/Login/RegistrationEmail.cshtml";
+            string body = RenderViewToString(viewPath, item);
             string mailSubject = "Rəqəmsal könüllülər təşkilatına qeydiyyatınız tamamlandı!";
             string mailBody = "Rəqəmsal könüllülər təşkilatı platforması üçün profil məlumatlarınız:\n" +
                 "Giriş üçün istifadəçi adınız: " + item.UserName + "\n" +
                 "Giriş üçün parolunuz: " + item.Password + "\n" +
                 "Sizi təşkilatımızda gördüyümüzə şad olduq.\n" +
                 "Hörmətlə, Rəqəmsal Könüllülər Təşkilatı.";
+
             UserM.Add(item);
 
-            SendMail(item.EMail, mailSubject, mailBody);
+            SendMail(item.EMail, mailSubject, body);
 
             return RedirectToAction("SelectedUsers");
         }
@@ -363,7 +374,7 @@ namespace DigitalVolunteers.Controllers
                 Request.Files[0].SaveAs(Server.MapPath(address));
                 pastuser.UserImage = "/Images/ProfilePictures/" + pastuser.UserID + "_" + filename;
             }
-            //pastuser.UserName = item.UserName;
+            pastuser.UserName = item.UserName;
             pastuser.Name = item.Name;
             pastuser.Surname = item.Surname;
             pastuser.BirthDate = item.BirthDate;
@@ -389,23 +400,23 @@ namespace DigitalVolunteers.Controllers
         {
             ViewBag.list = list;
             ViewBag.search = search;
-            var users = UserM.GetList().ToPagedList(page, 10);
+            var users = UserM.GetList().ToPagedList(page, 20);
 
             if(search == "role")
             {
-                users = UserM.GetList().Where(x=>x.Role == list).ToPagedList(page, 10);
+                users = UserM.GetList().Where(x=>x.Role == list).ToPagedList(page, 20);
             }
             else if (search == "faculty")
             {
-                users = UserM.GetList().Where(x => x.Faculty == list).ToPagedList(page, 10);
+                users = UserM.GetList().Where(x => x.Faculty == list).ToPagedList(page, 20);
             }
             else if (search == "department")
             {
-                users = UserM.GetList().Where(x => x.Department == list).ToPagedList(page, 10);
+                users = UserM.GetList().Where(x => x.Department == list).ToPagedList(page, 20);
             }
             else if(search == "username")
             {
-                users = UserM.GetList().Where(x => x.UserName.Contains(list)).ToPagedList(page, 10);
+                users = UserM.GetList().Where(x => x.UserName.Contains(list)).ToPagedList(page, 20);
             }
             return View(users);
         }
@@ -421,7 +432,7 @@ namespace DigitalVolunteers.Controllers
         {
             var users = UserM.GetList();
             users = users.Where(x => x.UserName.Contains(name)).ToList();
-            if(users.Count > 10) { users = users.GetRange(0, 10); }
+            if(users.Count > 10) { users = users.GetRange(0, 20); }
             return Json(users, JsonRequestBehavior.AllowGet);
         }
 
@@ -1371,198 +1382,215 @@ namespace DigitalVolunteers.Controllers
         }
         #endregion
 
-        public ActionResult UpdateAllUsers()
-        {
-            var users = UserM.GetList();
-            foreach (var item in users)
-            {
-                
-                if (item.UserID >= 1436)
-                {
-                    string mailSubject = "Rəqəmsal könüllülər təşkilatına profil qeydiyyatınız tamamlandı!";
-                    string mailBody = "Hörmətli, " + item.Name + ".\n" +
-                        "Rəqəmsal könüllülər təşkilatı platforması üçün profil məlumatlarınız:\n" +
-                        "Giriş üçün istifadəçi adınız: " + item.UserName + "\n" +
-                        "Giriş üçün parolunuz: " + item.Password + "\n" +
-                        "Sizi təşkilatımızda gördüyümüzə şad olduq.\n" +
-                        "Hörmətlə, Rəqəmsal Könüllülər Təşkilatı.";
+        //public ActionResult UpdateAllUsers()
+        //{
+        //    var users = UserM.GetList();
+        //    List<User> usersstack = new List<User>();
+        //    foreach (var item in users)
+        //    {
 
-                    SendMail(item.EMail, mailSubject, mailBody);
-                    //item.Name = item.Name.Replace("?", "ə");
-                    //item.Surname = item.Surname.Replace("?", "ə");
-                    //item.Role = item.Role.Replace("?", "ə");
-                    //item.Department = item.Department.Replace("?", "ə");
-                    //item.Profession = item.Profession.Replace("?", "ə");
+        //        if (item.UserID >= 3182)
+        //        {
+        //            //string mailSubject = "Rəqəmsal könüllülər təşkilatına profil qeydiyyatınız tamamlandı!";
+        //            //string mailBody = "Hörmətli, " + item.Name + ".\n" +
+        //            //    "Rəqəmsal könüllülər təşkilatı platforması üçün profil məlumatlarınız:\n" +
+        //            //    "Giriş üçün istifadəçi adınız: " + item.UserName + "\n" +
+        //            //    "Giriş üçün parolunuz: " + item.Password + "\n" +
+        //            //    "Sizi təşkilatımızda gördüyümüzə şad olduq.\n" +
+        //            //    "Hörmətlə, Rəqəmsal Könüllülər Təşkilatı.";
 
-                    //const string chars = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz123456789";
+        //            //SendMail(item.EMail, mailSubject, mailBody);
 
-                    //Random random = new Random();
-                    //char[] randomArray = new char[8];
+        //            //item.Name = item.Name.Replace("?", "ə");
+        //            //item.Surname = item.Surname.Replace("?", "ə");
+        //            //item.Role = item.Role.Replace("?", "ə");
+        //            //item.Department = item.Department.Replace("?", "ə");
+        //            //item.Profession = item.Profession.Replace("?", "ə");
 
-                    //for (int i = 0; i < 8; i++)
-                    //{
-                    //    randomArray[i] = chars[random.Next(chars.Length)];
-                    //}
-                    //item.Password = new string(randomArray);
-                    //item.UserImage = "/Images/ProfilePictures/defaultPP.jpg";
+        //            //const string chars = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz123456789";
 
-                    //string username = item.Surname.First() + "." + item.Name;
-                    //username = username.ToLower();
-                    //int quantity = users.Where(x => x.UserName.StartsWith(username) &&
-                    //    (x.UserName.Substring(username.Length).IsInt() || x.UserName.Length == username.Length)).ToList().Count();
-                    //if (quantity > 0)
-                    //{
-                    //    username = username + (quantity + 1).ToString();
-                    //}
-                    //item.UserName = username;
+        //            //Random random = new Random();
+        //            //char[] randomArray = new char[8];
 
-                    /*
-                    //if (item.Department == "Təskilati islər departamenti")
-                    //{
-                    //    item.Department = "Organizer";
-                    //}
-                    //else if (item.Department == "Insan Resursları departamenti")
-                    //{
-                    //    item.Department = "HR";
-                    //}
-                    //else if (item.Department == "Ictimaiyyətlə əlaqələr departamenti")
-                    //{
-                    //    item.Department = "PR";
-                    //}
-                    //else if (item.Department == "SMM departamenti")
-                    //{
-                    //    item.Department = "SMM";
-                    //}
-                    //else if (item.Department == "Üzvlərlə is departamenti")
-                    //{
-                    //    item.Department = "WWM";
-                    //}
-                    //else if (item.Department == "Fakültələrlə is departamenti")
-                    //{
-                    //    item.Department = "WWF";
-                    //}
-                    //else if (item.Department == "Beynəlxalq Əməkdaşlıq departamenti")
-                    //{
-                    //    item.Department = "ICD";
-                    //}
-                    //else if (item.Department == "Nəzarət Təftis Departamenti")
-                    //{
-                    //    item.Department = "Security";
-                    //}
-                    //else
-                    //{
-                    //    item.Department = "FS";
-                    //}
+        //            //for (int i = 0; i < 8; i++)
+        //            //{
+        //            //    randomArray[i] = chars[random.Next(chars.Length)];
+        //            //}
+        //            //item.Password = new string(randomArray);
+        //            //item.UserImage = "/Images/ProfilePictures/defaultPP.jpg";
 
-                    //if (item.Role == "Üzv")
-                    //{
-                    //    item.Role = "Member";
-                    //}
-                    //else if (item.Role == "Rəhbər")
-                    //{
-                    //    item.Role = "Leader";
-                    //}
-                    //else if (item.Role == "Sədr Müavini")
-                    //{
-                    //    item.Role = "Vice-Chairman";
-                    //}
-                    //else if (item.Role == "Sədr")
-                    //{
-                    //    item.Role = "Chairman";
-                    //}
-                    //else if (item.Role == "Insan Resurslari")
-                    //{
-                    //    item.Role = "HR";
-                    //}
-                    //else if (item.Role == "Ictimaiyyətlə əlaqələr")
-                    //{
-                    //    item.Role = "PR";
-                    //}
-                    //else if (item.Role == "Informasiya Texnologiyaları")
-                    //{
-                    //    item.Role = "IT";
-                    //}
-                    //else if (item.Role == "SMM")
-                    //{
-                    //    item.Role = "SMM";
-                    //}
-                    //else if (item.Role == "Layihə Meneceri")
-                    //{
-                    //    item.Role = "PM";
-                    //}
-                    //else if (item.Role == "Copywriter")
-                    //{
-                    //    item.Role = "CW";
-                    //}
-                    //else if (item.Role == "Üzvlərlə is")
-                    //{
-                    //    item.Role = "WWM";
-                    //}
-                    //else if (item.Role == "Fotoqraf")
-                    //{
-                    //    item.Role = "Photograph";
-                    //}
-                    //else if (item.Role == "Fotoqraf/Videoqraf")
-                    //{
-                    //    item.Role = "Photograph/Videograph";
-                    //}
-                    //else if (item.Role == "Koordinator")
-                    //{
-                    //    item.Role = "Coordinator";
-                    //}
-                    //else if (item.Role == "Nəzarət və Təftis")
-                    //{
-                    //    item.Role = "Security";
-                    //}
-                    //else if (item.Role == "Qrafik Dizayner")
-                    //{
-                    //    item.Role = "GDesigner";
-                    //}
-                    //else if (item.Role == "Katib")
-                    //{
-                    //    item.Role = "Secretary";
-                    //}
-                    //else if (item.Role == "Müsavir")
-                    //{
-                    //    item.Role = "Advisor";
-                    //}
-                    //else
-                    //{
-                    //    item.Role = "Staff";
-                    //}
-                    */
+        //            string username = item.Surname.First() + "." + item.Name;
+        //            username = username.ToLower();
+        //            username = username.Replace("ə", "e");
+        //            username = username.Replace("ü", "u");
+        //            username = username.Replace("ö", "o");
+        //            username = username.Replace("ç", "c");
+        //            username = username.Replace("ş", "s");
+        //            username = username.Replace("ı", "i");
+        //            int quantity = usersstack.Where(x => x.UserName.StartsWith(username) &&
+        //                (x.UserName.Substring(username.Length).IsInt() || x.UserName.Length == username.Length)).ToList().Count();
+        //            if (quantity > 0)
+        //            {
+        //                username = username + (quantity + 1).ToString();
+        //            }
+        //            item.UserName = username;
 
-                    //if(item.Department == "FS")
-                    //{
-                    //    item.FacultyStaff = true;
-                    //}
-                    //else
-                    //{
-                    //    item.DepartmentStaff = true;
-                    //}
+        //            /*
+        //            //if (item.Department == "Təskilati islər departamenti")
+        //            //{
+        //            //    item.Department = "Organizer";
+        //            //}
+        //            //else if (item.Department == "Insan Resursları departamenti")
+        //            //{
+        //            //    item.Department = "HR";
+        //            //}
+        //            //else if (item.Department == "Ictimaiyyətlə əlaqələr departamenti")
+        //            //{
+        //            //    item.Department = "PR";
+        //            //}
+        //            //else if (item.Department == "SMM departamenti")
+        //            //{
+        //            //    item.Department = "SMM";
+        //            //}
+        //            //else if (item.Department == "Üzvlərlə is departamenti")
+        //            //{
+        //            //    item.Department = "WWM";
+        //            //}
+        //            //else if (item.Department == "Fakültələrlə is departamenti")
+        //            //{
+        //            //    item.Department = "WWF";
+        //            //}
+        //            //else if (item.Department == "Beynəlxalq Əməkdaşlıq departamenti")
+        //            //{
+        //            //    item.Department = "ICD";
+        //            //}
+        //            //else if (item.Department == "Nəzarət Təftis Departamenti")
+        //            //{
+        //            //    item.Department = "Security";
+        //            //}
+        //            //else
+        //            //{
+        //            //    item.Department = "FS";
+        //            //}
 
-                    //item.UserName = item.UserName.Replace("ə", "e");
-                    //item.UserName = item.UserName.Replace("ı", "i");
-                    //item.UserName = item.UserName.Replace("ü", "u");
-                    //item.UserName = item.UserName.Replace("ö", "o");
+        //            //if (item.Role == "Üzv")
+        //            //{
+        //            //    item.Role = "Member";
+        //            //}
+        //            //else if (item.Role == "Rəhbər")
+        //            //{
+        //            //    item.Role = "Leader";
+        //            //}
+        //            //else if (item.Role == "Sədr Müavini")
+        //            //{
+        //            //    item.Role = "Vice-Chairman";
+        //            //}
+        //            //else if (item.Role == "Sədr")
+        //            //{
+        //            //    item.Role = "Chairman";
+        //            //}
+        //            //else if (item.Role == "Insan Resurslari")
+        //            //{
+        //            //    item.Role = "HR";
+        //            //}
+        //            //else if (item.Role == "Ictimaiyyətlə əlaqələr")
+        //            //{
+        //            //    item.Role = "PR";
+        //            //}
+        //            //else if (item.Role == "Informasiya Texnologiyaları")
+        //            //{
+        //            //    item.Role = "IT";
+        //            //}
+        //            //else if (item.Role == "SMM")
+        //            //{
+        //            //    item.Role = "SMM";
+        //            //}
+        //            //else if (item.Role == "Layihə Meneceri")
+        //            //{
+        //            //    item.Role = "PM";
+        //            //}
+        //            //else if (item.Role == "Copywriter")
+        //            //{
+        //            //    item.Role = "CW";
+        //            //}
+        //            //else if (item.Role == "Üzvlərlə is")
+        //            //{
+        //            //    item.Role = "WWM";
+        //            //}
+        //            //else if (item.Role == "Fotoqraf")
+        //            //{
+        //            //    item.Role = "Photograph";
+        //            //}
+        //            //else if (item.Role == "Fotoqraf/Videoqraf")
+        //            //{
+        //            //    item.Role = "Photograph/Videograph";
+        //            //}
+        //            //else if (item.Role == "Koordinator")
+        //            //{
+        //            //    item.Role = "Coordinator";
+        //            //}
+        //            //else if (item.Role == "Nəzarət və Təftis")
+        //            //{
+        //            //    item.Role = "Security";
+        //            //}
+        //            //else if (item.Role == "Qrafik Dizayner")
+        //            //{
+        //            //    item.Role = "GDesigner";
+        //            //}
+        //            //else if (item.Role == "Katib")
+        //            //{
+        //            //    item.Role = "Secretary";
+        //            //}
+        //            //else if (item.Role == "Müsavir")
+        //            //{
+        //            //    item.Role = "Advisor";
+        //            //}
+        //            //else
+        //            //{
+        //            //    item.Role = "Staff";
+        //            //}
+        //            */
+
+        //            //if(item.Department == "FS")
+        //            //{
+        //            //    item.FacultyStaff = true;
+        //            //}
+        //            //else
+        //            //{
+        //            //    item.DepartmentStaff = true;
+        //            //}
 
 
-                    //item.Name = item.Name.First().ToString().ToUpper() + item.Name.Substring(1);
-                    //item.Surname = item.Surname.First().ToString().ToUpper() + item.Surname.Substring(1);
 
-                    //if (item.Name.StartsWith("I"))
-                    //{
-                    //    item.Name = "İ" + item.Name.Substring(1);
-                    //}
-                    //if (item.Surname.StartsWith("I"))
-                    //{
-                    //    item.Surname = "İ" + item.Surname.Substring(1);
-                    //}
-                    //UserM.Update(item);
-                }
-            }
-            return RedirectToAction("Index", "Home");
-        }
+        //            //string name = item.Name;
+        //            //if(item.Name.EndsWith("zadə"))
+        //            //{
+        //            //    item.Name = item.Surname;
+        //            //    item.Surname = name;
+        //            //}
+
+        //            //item.Name = item.Name.First().ToString().ToUpper() + item.Name.Substring(1);
+        //            //item.Surname = item.Surname.First().ToString().ToUpper() + item.Surname.Substring(1);
+
+        //            //if (item.Name.StartsWith("I"))
+        //            //{
+        //            //    item.Name = "İ" + item.Name.Substring(1);
+        //            //}
+        //            //if (item.Surname.StartsWith("I"))
+        //            //{
+        //            //    item.Surname = "İ" + item.Surname.Substring(1);
+        //            //}
+        //            //if (item.Surname.Contains(" "))
+        //            //{
+        //            //    int startind = item.Surname.IndexOf(" ");
+        //            //    item.Surname = item.Surname.Remove(startind);
+        //            //}
+        //            UserM.Update(item);
+        //        }
+        //        usersstack.Add(item);
+        //    }
+        //    return RedirectToAction("Index", "Home");
+        //}
 
         private void SendMail(string to, string subject, string body)
         {
@@ -1570,7 +1598,7 @@ namespace DigitalVolunteers.Controllers
             {
                 EMail.Subject = subject;
                 EMail.Body = body;
-                EMail.IsBodyHtml = false;
+                EMail.IsBodyHtml = true;
 
                 using (SmtpClient smtp = new SmtpClient())
                 {
@@ -1586,6 +1614,17 @@ namespace DigitalVolunteers.Controllers
 
                     smtp.Send(EMail);
                 }
+            }
+        }
+
+        private string RenderViewToString(string viewPath, object model)
+        {
+            using (var sw = new StringWriter())
+            {
+                var viewResult = ViewEngines.Engines.FindPartialView(ControllerContext, viewPath);
+                var viewContext = new ViewContext(ControllerContext, viewResult.View, new ViewDataDictionary(model), new TempDataDictionary(), sw);
+                viewResult.View.Render(viewContext, sw);
+                return sw.GetStringBuilder().ToString();
             }
         }
 
