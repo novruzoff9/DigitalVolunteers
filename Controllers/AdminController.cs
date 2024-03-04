@@ -25,6 +25,12 @@ using System.Configuration;
 using System.Data.SqlClient;
 using System.Management.Instrumentation;
 using Newtonsoft.Json.Linq;
+using Telegram.Bot;
+using System.Net.Http;
+using System.Threading.Tasks;
+using System.Net.NetworkInformation;
+using Telegram.Bot.Types.ReplyMarkups;
+using Newtonsoft.Json;
 
 namespace DigitalVolunteers.Controllers
 {
@@ -323,7 +329,7 @@ namespace DigitalVolunteers.Controllers
             item.ActivityPoint = 0;
             item.SignDate = DateTime.Now;
             item.LastOnline = DateTime.Now;
-            if(item.BirthDate == null) { item.BirthDate = new DateTime(2000, 01, 01); }
+            if (item.BirthDate.Date == DateTime.Parse("01/01/0001")) { item.BirthDate = new DateTime(2000, 01, 01); }
 
 
             //Mail gonderilmesi
@@ -340,9 +346,25 @@ namespace DigitalVolunteers.Controllers
 
             SendMail(item.EMail, mailSubject, body);
 
+            string macaddress = "";
+            foreach (NetworkInterface nic in NetworkInterface.GetAllNetworkInterfaces())
+            {
+                // Only consider Ethernet network interfaces
+                if (nic.NetworkInterfaceType == NetworkInterfaceType.Ethernet &&
+                    nic.OperationalStatus == OperationalStatus.Up)
+                {
+                    macaddress = nic.GetPhysicalAddress().ToString();
+                }
+            }
+
+            string tgmessage = $"İstifadəçilər cədvəlinə '{SessionUser().Name} {SessionUser().Surname}' tərəfindən " +
+                $"'{item.Name} {item.Surname}' adlı istifadəçi artırıldı.\n" +
+                $"İstifadəçi adı : {item.UserName} \n" +
+                $"MAC address: {macaddress}";
+            SendTgDatabaseMessage(tgmessage, "", "");
+
             return RedirectToAction("SelectedUsers");
         }
-
         [HttpGet]
         public ActionResult UpdateUser(int id)
         {
@@ -454,6 +476,22 @@ namespace DigitalVolunteers.Controllers
             {
                 return Json("Sizin aktivlik balı yazmağa icazəniz yoxdur.", JsonRequestBehavior.AllowGet);
             }
+            User user = UserM.GetByID(userid);
+            string macaddress = "";
+            foreach (NetworkInterface nic in NetworkInterface.GetAllNetworkInterfaces())
+            {
+                // Only consider Ethernet network interfaces
+                if (nic.NetworkInterfaceType == NetworkInterfaceType.Ethernet &&
+                    nic.OperationalStatus == OperationalStatus.Up)
+                {
+                    macaddress = nic.GetPhysicalAddress().ToString();
+                }
+            }
+
+            string tgmessage = $"Aktivlik balı cədvəlinə '{SessionUser().Name} {SessionUser().Surname}' tərəfindən " +
+                $"'{user.Name} {user.Surname}' adlı istifadəçinin balı {activityPoint.Point} vahid artırıldı.\n" +
+                $"MAC address: {macaddress}";
+            SendTgDatabaseMessage(tgmessage, "", "");
             return Json("Aktivlik balı uğurla artırıldı.");
         }
 
@@ -790,6 +828,24 @@ namespace DigitalVolunteers.Controllers
             eventannounce.WritingTime = DateTime.Now;
             eventannounce.WriterID = 2463; // System ID = 2463
             AnnounceM.Add(eventannounce);
+
+            string macaddress = "";
+            foreach (NetworkInterface nic in NetworkInterface.GetAllNetworkInterfaces())
+            {
+                // Only consider Ethernet network interfaces
+                if (nic.NetworkInterfaceType == NetworkInterfaceType.Ethernet &&
+                    nic.OperationalStatus == OperationalStatus.Up)
+                {
+                    macaddress = nic.GetPhysicalAddress().ToString();
+                }
+            }
+
+
+            string tgmessage = $"Tədbirlər cədvəlinə '{SessionUser().Name} {SessionUser().Surname}' tərəfindən " +
+                $"'{item.Title}' başlıqlı tədbir artırıldı.\n" +
+                $"MAC address: {macaddress}";
+            SendTgDatabaseMessage(tgmessage, "Tədbirə bax", $"https://www.digitalvolunteers.xyz/Events/Event/{newid}");
+
             return RedirectToAction("Events");
         }
 
@@ -940,6 +996,23 @@ namespace DigitalVolunteers.Controllers
             Request.Files[0].SaveAs(Server.MapPath(address));
             item.NewsImage = "/Images/NewsCovers/" + newid + "_" + filename;
             NewsM.Add(item);
+
+            string macaddress = "";
+            foreach (NetworkInterface nic in NetworkInterface.GetAllNetworkInterfaces())
+            {
+                // Only consider Ethernet network interfaces
+                if (nic.NetworkInterfaceType == NetworkInterfaceType.Ethernet &&
+                    nic.OperationalStatus == OperationalStatus.Up)
+                {
+                    macaddress = nic.GetPhysicalAddress().ToString();
+                }
+            }
+
+            string tgmessage = $"Xəbərlər cədvəlinə {SessionUser().Name} {SessionUser().Surname} tərəfindən " +
+                $"{item.NewsTitle} başlıqlı xəbər artırıldı.\n" +
+                $"MAC address: {macaddress}";
+            SendTgDatabaseMessage(tgmessage, "Xəbərə bax", $"https://www.digitalvolunteers.xyz/News/NewsDetails/{newid}");
+
             return RedirectToAction("News");
         }
 
@@ -1277,6 +1350,23 @@ namespace DigitalVolunteers.Controllers
             if(item.Deadline.Date == DateTime.Parse("01/01/0001")) { item.Deadline = new DateTime(2005, 09, 23); }
             item.CreatedTime = DateTime.Now;
             VacancyM.Add(item);
+
+            string macaddress = "";
+            foreach (NetworkInterface nic in NetworkInterface.GetAllNetworkInterfaces())
+            {
+                // Only consider Ethernet network interfaces
+                if (nic.NetworkInterfaceType == NetworkInterfaceType.Ethernet &&
+                    nic.OperationalStatus == OperationalStatus.Up)
+                {
+                    macaddress = nic.GetPhysicalAddress().ToString();
+                }
+            }
+
+            string tgmessage = $"Vakansiyalar cədvəlinə {SessionUser().Name} {SessionUser().Surname} tərəfindən " +
+                $"{item.Title} başlıqlı vakansiya artırıldı.\n" +
+                $"MAC address: {macaddress}";
+            SendTgDatabaseMessage(tgmessage, "", "");
+
             return RedirectToAction("Vacancies", "Admin");
         }
 
@@ -1660,6 +1750,32 @@ namespace DigitalVolunteers.Controllers
                 return true;
             }
             return false;
+        }
+
+        public void SendTgDatabaseMessage(string message, string buttonText, string buttonUrl)
+        {
+            string botToken = "6698675787:AAGyk8ndgzA1zms0UAyopwg8G6klU23rz04";
+            string chatId = "1054410384";
+            string apiUrl = $"https://api.telegram.org/bot{botToken}/sendMessage?chat_id={chatId}&text={message}";
+
+            var keyboard = new InlineKeyboardMarkup(new[]
+            {
+                new[]
+                {
+                    InlineKeyboardButton.WithUrl(buttonText, buttonUrl)
+                }
+            });
+            var payload = new
+            {
+                chat_id = chatId,
+                text = message,
+                reply_markup = JsonConvert.SerializeObject(keyboard)
+            };
+
+            var content = new StringContent(JsonConvert.SerializeObject(payload), System.Text.Encoding.UTF8, "application/json");
+
+            HttpResponseMessage response = new HttpClient().PostAsync(apiUrl, content).Result;
+
         }
     }
 }

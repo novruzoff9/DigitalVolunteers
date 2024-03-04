@@ -3,8 +3,11 @@ using DataAccessLayer.EntityFramework;
 using EntityLayer.Concrete;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Web;
 using System.Web.Mvc;
 
@@ -23,8 +26,11 @@ namespace Web_DigitalVolunteers.Controllers
             ViewBag.UserCount = UserM.GetList().Count();
             ViewBag.EventCount = EventM.GetList().Count();
             ViewBag.StaffCount = UserM.GetList().Where(x=>x.DepartmentStaff == true || x.FacultyStaff == true).Count();
+           
+
             return View();
         }
+
 
         public PartialViewResult News()
         {
