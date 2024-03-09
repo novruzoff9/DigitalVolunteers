@@ -768,14 +768,21 @@ namespace DigitalVolunteers.Controllers
         public JsonResult UserByUserName(string username, int eventid)
         {
             User user = UserM.GetByUserName(username);
-            user.VacancyApplies = null;
             user.Password = "None";
             var possiblereg = EventRegistrationM.GetList().FirstOrDefault(x => x.EventID == eventid && x.UserID == user.UserID);
             if (possiblereg != null)
             {
                 user.Password = "Yes";
             }
-            return Json(user, JsonRequestBehavior.AllowGet);
+            var userJson = new
+            {
+                UserID = user.UserID,
+                Username = user.UserName,
+                Name = user.Name,
+                Surname = user.Surname,
+                Password = user.Password
+            };
+            return Json(userJson, JsonRequestBehavior.AllowGet);
         }
 
         //public JsonResult ConfirmParticipating(int registrationid)

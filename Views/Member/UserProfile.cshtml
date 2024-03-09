@@ -144,10 +144,11 @@
             new Chart(ctx, {
                 type: 'doughnut',
                 data: {
-                    labels: ['Rəy yazdıqlarım', 'Rəy yazmadıqlarım', 'İştirak etmədiklərim'],
+                    labels: ['Rəy yazdıqlarım', 'Rəysiz iştiraklarım', 'İştirak etmədiklərim'],
                     datasets: [{
                         label: 'Ümumi say',
                         data: [@ViewBag.comments, @ViewBag.noncomments, @ViewBag.nonparticipate],
+                        backgroundColor: ['#006bce', '#5e17eb', '#131850'],
                         borderWidth: 1
                     }]
                 },
@@ -164,10 +165,10 @@
                     }
                 },
             });
-        }, 100); 
-        
+        }, 100);
+
     });
-    
+
 </script>
 
 <script>

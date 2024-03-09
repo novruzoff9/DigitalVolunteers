@@ -7,15 +7,18 @@
         <div class="data-column">
             <h4>@Model.Event.Title tədbiri barədə fikirləriniz.</h4>
             <div class="stars">
-                <i class="far fa-star" data-number="1"></i>
-                <i class="far fa-star" data-number="2"></i>
-                <i class="far fa-star" data-number="3"></i>
-                <i class="far fa-star" data-number="4"></i>
-                <i class="far fa-star" data-number="5"></i>
+                @for (int i = 1; i <= Model.Rating; i++)
+                {
+                    <i class="fas fa-star" data-number="@i"></i>
+                }
+                @for (int i = Model.Rating + 1; i <= 5; i++)
+                {
+                    <i class="far fa-star" data-number="@i"></i>
+                }
             </div>
             <div class="offer">
                 <p>Təklif və iradlarınız:</p>
-                <textarea class="daisy" name="" id="comment" cols="30" rows="10"></textarea>
+                <textarea class="daisy" name="" id="comment" cols="30" rows="10">@Model.Review</textarea>
                 <p id="errormessage"></p>
             </div>
         </div>

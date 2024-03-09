@@ -90,7 +90,7 @@
             </div>
             <div class="pointtime">
                 <p>Müsahibəyə çağırılma tarixi</p>
-                @if(interview == applyDate) { interviewDate = "-- --- ----"; }
+                @if(interviewDate == applyDate) { interviewDate = "-- --- ----"; }
                 <p class="date">@interviewDate</p>
             </div>
             <div class="pointtime">
@@ -194,7 +194,8 @@
             },
             dataType: 'json',
             success: function (result) {
-                if (result == "success") {
+                console.log(result);
+                if (result === "success") {
                     $("#accepted").parent().css("display", "flex");
                 }
                 else if (result == "applied") {

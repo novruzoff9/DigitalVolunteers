@@ -101,6 +101,7 @@ namespace Web_DigitalVolunteers.Controllers
             notficiations = Enumerable.Reverse(notficiations).ToList();
             foreach (var item in notficiations)
             {
+                item.Text = item.Text.Replace("\n", "<br>");
                 item.Writer = UserM.GetByID(item.WriterID);
             }
             return View(notficiations);
@@ -237,6 +238,7 @@ namespace Web_DigitalVolunteers.Controllers
         public JsonResult ApplytoVacancy(int vacancyid, int userid, string note)
         {
             var user = SessionUser();
+            Vacancy vacancy = VacancyM.GetByID(vacancyid);
             if (user.VacancyApplies.FirstOrDefault(x => x.VacancyID == vacancyid) != null)
             {
                 return Json("applied", JsonRequestBehavior.AllowGet);
@@ -250,14 +252,14 @@ namespace Web_DigitalVolunteers.Controllers
             apply.EnteringDateTime = DateTime.Now;
             VacancyApplyM.Add(apply);
             Notficiation notficiation = new Notficiation();
-            notficiation.UserID = apply.UserID;
+            notficiation.UserID = userid;
             notficiation.Title = "Vakansiya müraciəti.";
-            notficiation.Text = apply.Vacancy.Title + " adlı vakansiyaya olan müraciətiniz uğurla qeydə alındı." +
+            notficiation.Text = vacancy.Title + " adlı vakansiyaya olan müraciətiniz uğurla qeydə alındı." +
                 "\n 'Müraciətlərim' bölməsindən baxa bilərsiniz.";
             notficiation.WriterID = 0;
             notficiation.WritingTime = DateTime.Now;
             NotficiationM.Add(notficiation);
-            return Json("succes", JsonRequestBehavior.AllowGet);
+            return Json("success", JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult DeleteApply(int applyid)
