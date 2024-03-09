@@ -744,6 +744,9 @@ namespace DigitalVolunteers.Controllers
             foreach (var item in participiantsofevent)
             {
                 var participiant = UserM.GetByID(item.UserID);
+                if(item.Rating > 0) { participiant.Password = "comment"; }
+                else if(item.Participated == true) { participiant.Password = "participated"; }
+                else if(item.Participated == false) { participiant.Password = "nonparticipated"; }
                 participiants.Add(participiant);
             }
             return View(participiants);
@@ -764,25 +767,24 @@ namespace DigitalVolunteers.Controllers
 
         public JsonResult UserByUserName(string username, int eventid)
         {
-            var user = UserM.GetList().FirstOrDefault(x => x.UserName == username);
-            var participatings = EventRegistrationM.GetList().Where(x => x.UserID == user.UserID).ToList();
+            User user = UserM.GetByUserName(username);
+            user.VacancyApplies = null;
             user.Password = "None";
-            ViewBag.registrationID = 0;
-            if (participatings.FirstOrDefault(x => x.EventID == eventid) != null)
+            var possiblereg = EventRegistrationM.GetList().FirstOrDefault(x => x.EventID == eventid && x.UserID == user.UserID);
+            if (possiblereg != null)
             {
                 user.Password = "Yes";
-                ViewBag.registrationID = participatings.FirstOrDefault(x => x.EventID == eventid).RegistrationID;
             }
             return Json(user, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult ConfirmParticipating(int registrationid)
-        {
-            var registration = EventRegistrationM.GetByID(registrationid);
-            registration.Participated = true;
-            EventRegistrationM.Update(registration);
-            return Json("success", JsonRequestBehavior.AllowGet);
-        }
+        //public JsonResult ConfirmParticipating(int registrationid)
+        //{
+        //    var registration = EventRegistrationM.GetByID(registrationid);
+        //    registration.Participated = true;
+        //    EventRegistrationM.Update(registration);
+        //    return Json("success", JsonRequestBehavior.AllowGet);
+        //}
 
         [HttpGet]
         public ActionResult AddEvent()

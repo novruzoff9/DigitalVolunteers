@@ -289,14 +289,17 @@ namespace Web_DigitalVolunteers.Controllers
             {
                 user = UserM.GetByID(currentsessionid);
             }
-
+            var userparticipates = EventRegistrationM.GetList().Where(x => x.UserID == sessionid).ToList();
+            ViewBag.comments = userparticipates.Where(x=>x.Rating > 0 && x.Participated == true).Count();
+            ViewBag.noncomments = userparticipates.Where(x=>x.Rating == 0 && x.Participated == true).Count();
+            ViewBag.nonparticipate = userparticipates.Where(x=>x.Participated == false).Count();
             return View(user);
         }
 
         public ActionResult QRCode()
         {
             string username = Session["UserName"].ToString();
-            int userid = Convert.ToInt32(Session["UserID"]);
+            int userid = (int)Session["UserID"];
             var user = UserM.GetByID(userid);
 
             using(MemoryStream ms = new MemoryStream())

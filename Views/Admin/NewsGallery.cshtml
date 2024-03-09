@@ -70,7 +70,7 @@
         <p style="font-weight:500;font-size:18px;">Şəkili silmək istədiyinizə əminsinizmi?</p>
         <div class="d-flex flex-row w-100 justify-content-around">
             <a href="#" class="action-button primary-hover">Sil</a>
-            <button class="action-button danger-link">Ləğv et</button>
+            <button id="closedeletepopup" class="action-button danger-link">Ləğv et</button>
         </div>
     </section>
 </div>
@@ -99,11 +99,16 @@
     $("#addingimage .data-column").height($(".data-column").parent().height());
 
     $("#addingimage").parent().css("display", "none");
+    $("#deleteimage").parent().css("display", "none");
     function AddImageForm() {
         $("#addingimage").parent().css("display", "flex");
     };
     $("#addingimage i").click(function () {
         $("#addingimage").parent().css("display", "none");
+    });
+
+    $("#closedeletepopup").click(function () {
+        $("#deleteimage").parent().css("display", "none");
     });
 
     function DeletePopUp(imageid) {

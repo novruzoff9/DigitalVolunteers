@@ -6,13 +6,14 @@
     UserManager UserM = new UserManager(new EfUserDAL());
     int sessionid;
     User user = new User();
-    try
+    if(Session["UserID"] != null)
     {
         sessionid = (int)Session["UserID"];
         user = UserM.GetByID(sessionid);
     }
-    catch (Exception)
+    else
     {
+
         sessionid = 0;
     }
 }

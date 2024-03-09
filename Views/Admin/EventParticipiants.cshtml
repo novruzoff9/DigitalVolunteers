@@ -10,9 +10,14 @@
 <div id="participiants">
     @foreach (var item in Model)
     {
+        string participate = "";
+        if(item.Password == "comment") { participate = "Rəy bildirib"; }
+        if(item.Password == "participated") { participate = "İştirak edib"; }
+        if(item.Password == "nonparticipated") { participate = "İştirak etməyib"; }
         <div class="participiant">
             <img src="@item.UserImage" alt="">
             <p class="title">@item.Name @item.Surname</p>
+            <p>@participate</p>
             <div class="actions">
                 <a href="#" class="primary-hover action-button">Tam bax</a>
             </div>

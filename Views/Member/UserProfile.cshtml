@@ -137,31 +137,37 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
-    const ctx = document.getElementById('myPieChart');
-    ctx.parentElement.style.height = "400px";
-    new Chart(ctx, {
-        type: 'doughnut',
-        data: {
-            labels: ['Rəy yazdıqlarım', 'Rəy yazmadıqlarım', 'İştirak etmədiklərim'],
-            datasets: [{
-                label: 'Ümumi say',
-                data: [5, 4, 1],
-                borderWidth: 1
-            }]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                legend: {
-                    position: 'top',
+    $(document).ready(function () {
+        setTimeout(function () {
+            const ctx = document.getElementById('myPieChart');
+            ctx.parentElement.style.height = "400px";
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Rəy yazdıqlarım', 'Rəy yazmadıqlarım', 'İştirak etmədiklərim'],
+                    datasets: [{
+                        label: 'Ümumi say',
+                        data: [@ViewBag.comments, @ViewBag.noncomments, @ViewBag.nonparticipate],
+                        borderWidth: 1
+                    }]
                 },
-                title: {
-                    display: true,
-                    text: 'Tədbirlərdə iştirak'
-                }
-            }
-        },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        title: {
+                            display: true,
+                            text: 'Tədbirlərdə iştirak'
+                        }
+                    }
+                },
+            });
+        }, 100); 
+        
     });
+    
 </script>
 
 <script>

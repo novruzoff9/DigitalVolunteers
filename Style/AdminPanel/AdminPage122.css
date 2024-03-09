@@ -86,7 +86,7 @@ header {
             }
 
             header .header-right i::after {
-                content: "2";
+                content: "";
                 position: absolute;
                 background-color: #ff331f;
                 color: white;
