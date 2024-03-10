@@ -618,7 +618,7 @@ namespace DigitalVolunteers.Controllers
             return Json("Salaaam", JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult UpdateImage(string password)
+        public JsonResult UpdateImage()
         {
             var user = SessionUser();
             HttpPostedFileBase file = Request.Files["imageFile"];

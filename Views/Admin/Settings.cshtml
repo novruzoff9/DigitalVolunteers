@@ -102,7 +102,6 @@
         reader.onload = function (e) {
             const image = new Image();
             image.src = e.target.result;
-            console.log(reader);
 
             image.onload = function () {
                 const width = this.width;

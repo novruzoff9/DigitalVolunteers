@@ -256,7 +256,7 @@ namespace Web_DigitalVolunteers.Controllers
             notficiation.Title = "Vakansiya müraciəti.";
             notficiation.Text = vacancy.Title + " adlı vakansiyaya olan müraciətiniz uğurla qeydə alındı." +
                 "\n 'Müraciətlərim' bölməsindən baxa bilərsiniz.";
-            notficiation.WriterID = 0;
+            notficiation.WriterID = 2463;
             notficiation.WritingTime = DateTime.Now;
             NotficiationM.Add(notficiation);
             return Json("success", JsonRequestBehavior.AllowGet);
@@ -356,7 +356,7 @@ namespace Web_DigitalVolunteers.Controllers
             return Json("Salaaam", JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult UpdateImage(string password)
+        public JsonResult UpdateImage()
         {
             var user = SessionUser();
             HttpPostedFileBase file = Request.Files["imageFile"];

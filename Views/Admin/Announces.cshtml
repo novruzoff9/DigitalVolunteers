@@ -63,7 +63,14 @@
                 else if (item.Department == "FS-QETM") { department = "Qiyabi və Əlavə Təhsil Mərkəzi"; }
             }*@
                 <div class="footer d-flex flex-row justify-content-between mt-2">
-                    <p>@item.Text.Substring(0, 100)...</p>
+                    @if (item.Text.Length > 100)
+                    {
+                        <p>@item.Text.Substring(0, 100)...</p>
+                    }
+                    else
+                    {
+                        <p>@item.Text</p>
+                    }
                 </div>
                 <div class="footer d-flex flex-row justify-content-between mt-2">
                     <p><i class="fas fa-calendar-alt"></i>&nbsp;&nbsp;@item.WritingTime.ToString("dd MMMM yyyy")</p>
