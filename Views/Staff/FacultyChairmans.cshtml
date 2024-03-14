@@ -14,19 +14,19 @@
                     <p class="name">@item.Name @item.Surname</p>
                     @{ 
                         string faculty = "";
-                        if (item.Faculty == "Digital Economy") { faculty = "Rəqəmsal İqtisadiyyat"; }
+                        if (item.Faculty == "Digital Economy") { faculty = "Rəqəmsal İqtisadiyyat fakültəsi"; }
                         else if (item.Faculty == "Russian Economy") { faculty = "Rus İqtisad Məktəbi"; }
-                        else if (item.Faculty == "Business") { faculty = "Biznes və Menecement"; }
-                        else if (item.Faculty == "Sabah") { faculty = "SABAH"; }
+                        else if (item.Faculty == "Business") { faculty = "Biznes və Menecement fakültəsi"; }
+                        else if (item.Faculty == "Sabah") { faculty = "SABAH fakültəsi"; }
                         else if (item.Faculty == "ISE") { faculty = "Beynəlxalq İqtisadiyyat Məktəbi"; }
                         else if (item.Faculty == "Design") { faculty = "UNEC Dizayn Məktəbi"; }
-                        else if (item.Faculty == "Finance") { faculty = "Maliyyə və Mühasibat"; }
-                        else if (item.Faculty == "TUDIFAK") { faculty = "Türk Dünyası İqtisad"; }
-                        else if (item.Faculty == "Engineering") { faculty = "Mühəndislik"; }
-                        else if (item.Faculty == "Economy") { faculty = "İqtisadiyyat və İdarəetmə"; }
+                        else if (item.Faculty == "Finance") { faculty = "Maliyyə və Mühasibat fakültəsi"; }
+                        else if (item.Faculty == "TUDIFAK") { faculty = "Türk Dünyası İqtisad fakültəsi"; }
+                        else if (item.Faculty == "Engineering") { faculty = "Mühəndislik fakültəsi"; }
+                        else if (item.Faculty == "Economy") { faculty = "İqtisadiyyat və İdarəetmə fakültəsi"; }
                         else if (item.Faculty == "QETM") { faculty = "Qiyabi və Əlavə Təhsil Mərkəzi"; }
                     }
-                    <p class="position">"@faculty" fakültəsi üzrə Sədr</p>
+                    <p class="position">"@faculty" üzrə Sədr</p>
                 </div>
             </div>
           }

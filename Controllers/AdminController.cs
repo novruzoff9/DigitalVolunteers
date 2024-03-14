@@ -290,18 +290,21 @@ namespace DigitalVolunteers.Controllers
             //Istifadeci adinin hazirlanmasi
             string username = item.Surname.First() + "." + item.Name;
             username = username.ToLower();
-            int quantity = users.Where(x => x.UserName.StartsWith(username) &&
-                (x.UserName.Substring(username.Length).IsInt() || x.UserName.Length == username.Length)).ToList().Count();
-            if (quantity > 0)
-            {
-                username = username + (quantity + 1).ToString();
-            }
+
             username = username.Replace("ə", "e");
             username = username.Replace("ü", "u");
             username = username.Replace("ö", "o");
             username = username.Replace("ç", "c");
             username = username.Replace("ş", "s");
             username = username.Replace("ı", "i");
+            username = username.Replace("ğ", "g");
+
+            int quantity = users.Where(x => x.UserName.StartsWith(username) &&
+                (x.UserName.Substring(username.Length).IsInt() || x.UserName.Length == username.Length)).ToList().Count();
+            if (quantity > 0)
+            {
+                username = username + (quantity + 1).ToString();
+            }
             item.UserName = username;
 
             //Sifrenin hazirlanmasi
@@ -1826,7 +1829,6 @@ namespace DigitalVolunteers.Controllers
             var content = new StringContent(JsonConvert.SerializeObject(payload), System.Text.Encoding.UTF8, "application/json");
 
             HttpResponseMessage response = new HttpClient().PostAsync(apiUrl, content).Result;
-
         }
     }
 }

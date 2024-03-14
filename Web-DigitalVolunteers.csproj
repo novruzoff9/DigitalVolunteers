@@ -273,6 +273,7 @@
     <Content Include="Style\Member\UserPanel4525.css" />
     <Content Include="Style\Member\Vacancies156.css" />
     <Content Include="Style\Profile1.css" />
+    <Content Include="Style\Registration456.css" />
     <Content Include="Style\sign.css" />
     <Content Include="Style\UIStyle1569.css" />
     <Content Include="Web.config" />
@@ -374,6 +375,8 @@
     <Content Include="Views\Member\Notficiations.cshtml" />
     <Content Include="Views\Admin\Notficiations.cshtml" />
     <Content Include="Views\Login\RegistrationEmail.cshtml" />
+    <Content Include="Views\Login\MemberRegistration.cshtml" />
+    <Content Include="Views\Login\VerifyProfile.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

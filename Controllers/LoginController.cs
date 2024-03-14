@@ -10,6 +10,13 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
 using System.Web.UI.WebControls;
+using System.Data;
+using System.Web.Helpers;
+using Telegram.Bot.Types;
+using System.Web.WebPages;
+using Newtonsoft.Json;
+using System.Net.Http;
+using Telegram.Bot.Types.ReplyMarkups;
 
 namespace DigitalVolunteers.Controllers
 {
@@ -34,6 +41,125 @@ namespace DigitalVolunteers.Controllers
         public ActionResult ForgotPassword()
         {
             return View();
+        }
+
+        public ActionResult MemberRegistration()
+        {
+            return View();
+        }
+
+        public JsonResult AddRegistration(string FirstName, string LastName, string Email, int PhoneNumber, string Faculty, string Profession, DateTime BirthDate, int EntranceYear, string Group, string Gender, string Password)
+        {
+            string username = LastName.First() + "." + FirstName;
+            username = username.ToLower();
+
+            username = username.Replace("ə", "e");
+            username = username.Replace("ü", "u");
+            username = username.Replace("ö", "o");
+            username = username.Replace("ç", "c");
+            username = username.Replace("ş", "s");
+            username = username.Replace("ı", "i");
+            username = username.Replace("ğ", "g");
+
+            var users = UserM.GetList();
+            int quantity = users.Where(x => x.UserName.StartsWith(username) &&
+                (x.UserName.Substring(username.Length).IsInt() || x.UserName.Length == username.Length)).ToList().Count();
+            if (quantity > 0)
+            {
+                username = username + (quantity + 1).ToString();
+            }
+
+            EntityLayer.Concrete.User newUser = new EntityLayer.Concrete.User
+            {
+                UserName = username,
+                UserImage = "/Images/ProfilePictures/defaultPP.jpg",
+                Name = FirstName,
+                Surname = LastName,
+                BirthDate = BirthDate,
+                Faculty = Faculty,
+                Department = "Waiting Email",
+                Role = "",
+                Password = Password,
+                ActivityPoint = 0,
+                SignDate = DateTime.Now,
+                FacultyStaff = false,
+                DepartmentStaff = false,
+                Gender = Gender,
+                Profession = Profession,
+                EMail = Email,
+                Group = Group,
+                PhoneNumber = PhoneNumber,
+                EntranceYear = EntranceYear,
+                LastOnline = DateTime.Now
+            };
+
+            UserM.Add(newUser);
+
+            string verificationcode; 
+            const string chars = "0123456789";
+
+            Random random = new Random();
+            char[] randomArray = new char[6];
+
+            for (int i = 0; i < 6; i++)
+            {
+                randomArray[i] = chars[random.Next(chars.Length)];
+            }
+            verificationcode = new string(randomArray);
+
+
+            PasswordTokens token = new PasswordTokens();
+            token.UserID = users.FirstOrDefault(x=>x.UserName == username).UserID;
+            token.CreationDate = DateTime.Now;
+            token.Used = false;
+            token.Token = verificationcode;
+
+            PassTokenM.Add(token);
+            string mailBody = "Rəqəmsal könüllülər təşkilatı platformasında profiliniz üçün təsdiq kodunuz:\n" +
+                "Giriş üçün istifadəçi adınız: " + username + "<br>" +
+                "Giriş üçün təsdiq kodu: " + verificationcode + "<br>" +
+                "Sizi təşkilatımızda gördüyümüzə şad olduq.<br>" +
+                "Hörmətlə, Rəqəmsal Könüllülər Təşkilatı.";
+
+            SendMail(Email, "Qeydiyyat təsdiqi", mailBody);
+
+            string tgmessage = $"İstifadəçilər cədvəlinə '{FirstName} {LastName}' adlı yeni qeydiyyat artırıldı" +
+                $"İstifadəçi adı : {username} \n";
+            SendTgDatabaseMessage(tgmessage, "İstifadəçi siyahısı", $"https://www.digitalvolunteers.xyz/Admin/SelectedUsers");
+            Dictionary<string, object> response = new Dictionary<string, object>();
+            response["Status"] = "success";
+            response["UserID"] = token.UserID;
+            return Json(response, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult VerifyProfile(int UserID)
+        {
+            var user = UserM.GetByID(UserID);
+            ViewBag.waiting = "false";
+
+            if(user.Department == "Waiting Email")
+            {
+                var tokens = PassTokenM.GetList();
+                ViewBag.UserID = 0;
+                var token = tokens.LastOrDefault(x=>x.UserID == UserID);
+                if(token.CreationDate.AddDays(10) <= DateTime.Now) { ViewBag.waiting = "late"; ViewBag.UserID = UserID; }
+                else { ViewBag.waiting = "true"; }
+            }
+            return View();
+        }
+
+        public JsonResult CheckVerifyCode(int userid, string code)
+        {
+            var token = PassTokenM.GetList().LastOrDefault(x => x.UserID == userid);
+            if(code == token.Token)
+            {
+                var user = UserM.GetByID(userid);
+                user.Department = "Member";
+                user.Role = "Member";
+                UserM.Update(user);
+                return Json("success", JsonRequestBehavior.AllowGet);
+            }
+            return Json("wrong", JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult SendLink(string email)
@@ -125,7 +251,7 @@ namespace DigitalVolunteers.Controllers
             return RedirectToAction("UserLogin");
         }
 
-        public ActionResult RegistrationEmail(User user)
+        public ActionResult RegistrationEmail(EntityLayer.Concrete.User user)
         {
             return View(user);
         }
@@ -187,6 +313,31 @@ namespace DigitalVolunteers.Controllers
                     smtp.Send(EMail);
                 }
             }
+        }
+
+        public void SendTgDatabaseMessage(string message, string buttonText, string buttonUrl)
+        {
+            string botToken = "6698675787:AAGyk8ndgzA1zms0UAyopwg8G6klU23rz04";
+            string chatId = "1054410384";
+            string apiUrl = $"https://api.telegram.org/bot{botToken}/sendMessage?chat_id={chatId}&text={message}";
+
+            var keyboard = new InlineKeyboardMarkup(new[]
+            {
+                new[]
+                {
+                    InlineKeyboardButton.WithUrl(buttonText, buttonUrl)
+                }
+            });
+            var payload = new
+            {
+                chat_id = chatId,
+                text = message,
+                reply_markup = JsonConvert.SerializeObject(keyboard)
+            };
+
+            var content = new StringContent(JsonConvert.SerializeObject(payload), System.Text.Encoding.UTF8, "application/json");
+
+            HttpResponseMessage response = new HttpClient().PostAsync(apiUrl, content).Result;
         }
     }
 }
