@@ -1,0 +1,68 @@
+﻿
+@{
+    ViewBag.Title = "Feedbacks";
+    Layout = "~/Views/Shared/_MemberLayout.cshtml";
+}
+
+<link href="~/Style/Profile1.css" rel="stylesheet" />
+
+<style>
+    h2 {
+        width: 100%;
+        text-align: center;
+        margin-top: 12px;
+    }
+
+    aside ul #fe {
+        border-radius: 8px;
+        background-color: #006bce;
+    }
+
+    aside ul #Feedbacks p, aside ul #Feedbacks i {
+        color: white;
+    }
+
+    aside ul #Feedbacks:hover {
+        padding-left: 0;
+    }
+
+        aside ul #Feedbacks:hover p, aside ul #Feedbacks:hover i {
+            color: white;
+        }
+</style>
+
+<section id="activity">
+    <h3>Geri dönüşünüz.</h3>
+    <p>Fikirləriniz bizim üçün önəmlidir. Veb sayt barədə düşüncələrinizi və olmasını 
+    istədiyiniz başqa fikirləriniz varsa aşağıdan bizə ünvanlaya bilərsiniz.</p>
+</section>
+
+<section id="form">
+    <textarea id="feedbacktext" class="daisy w-50" style="height:150px;"></textarea>
+    <p id="errormsg" style="color:#ff0000"></p>
+    <button id="send" class="action-button primary w-50 mt-2">Göndər</button>
+</section>
+
+<script>
+    $("#send").click(function () {
+        let text = $("#feedbacktext").val();
+        if (text.length < 10) {
+            $("#errormsg").text("*mətn qutusu minimum 10 simvoldan ibarət olmalıdır.");
+        }
+        else {
+            $.ajax({
+                method: 'POST',
+                url: '/Member/SendFeedback',
+                data: {
+                    text: text
+                },
+                success: function (response) {
+                    if (response === "success") {
+                        alert("Geri dönüşünüz üçün təşəkkürlər!");
+                        $("#feedbacktext").val("");
+                    }
+                }
+            });
+        }
+    });
+</script>

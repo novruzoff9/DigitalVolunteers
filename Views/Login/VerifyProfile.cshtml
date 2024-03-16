@@ -22,8 +22,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rəqəmsal Kabinet - Qeydiyyat</title>
-    <link rel="icon" type="image/png" href="Images/Logo.jpg">
-    <link href="~/Style/Registration456.css" rel="stylesheet" />
+    <link rel="icon" type="image/png" href="~/Images/new Logo - white.png">
+    <link href="~/Style/Registration189.css" rel="stylesheet" />
     <link href="~/Style/UIStyle1569.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
           integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ=="
@@ -37,7 +37,7 @@
 
 <body>
     <main>
-        <section>
+        <section id="verifying">
             <div class="logos">
                 <a href="/Home/Index">
                     <img src="~/Images/Logo.png" alt="">
@@ -72,11 +72,40 @@
                 <p>Bu hesab üçün göndərilən kodun vaxtı bitmişdir.</p>
             }
         </section>
+        <section id="loader">
+            <svg class="pl" width="240" height="240" viewBox="0 0 240 240">
+                <circle class="pl__ring pl__ring--a" cx="120" cy="120" r="105" fill="none" stroke="#000" stroke-width="20" stroke-dasharray="0 660" stroke-dashoffset="-330" stroke-linecap="round"></circle>
+                <circle class="pl__ring pl__ring--b" cx="120" cy="120" r="35" fill="none" stroke="#000" stroke-width="20" stroke-dasharray="0 220" stroke-dashoffset="-110" stroke-linecap="round"></circle>
+                <circle class="pl__ring pl__ring--c" cx="85" cy="120" r="70" fill="none" stroke="#000" stroke-width="20" stroke-dasharray="0 440" stroke-linecap="round"></circle>
+                <circle class="pl__ring pl__ring--d" cx="155" cy="120" r="70" fill="none" stroke="#000" stroke-width="20" stroke-dasharray="0 440" stroke-linecap="round"></circle>
+            </svg>
+        </section>
+
+
+        <div class="pop-up">
+            <div id="reginfo">
+                <div class="icon">
+                    <i class="fas fa-info"></i>
+                </div>
+                <div class="data-row">
+                    <p>
+                        Təşkilatımıza olan mürəcitiniz qeydə alındı. Sizin məlumatlarınız yoxlanıldıqdan sonra sizə
+                        elektron ünvan vasitəsilə giriş məlumatlarınız göndəriləcəkdir. <br> <br>
+                        Hörmətlə, Rəqəmsal Könüllülər Təşkilatı.
+                    </p>
+                </div>
+                <div class="data-row">
+                    <button id="close" class="action-button primary">Bağla</button>
+                </div>
+            </div>
+        </div>
     </main>
+
 
     <script>
         var height = $(window).height();
-        console.log(height);
+        $(".pop-up").height($(window).height());
+        $("#loader").css("display", "none");
         $("section").css("height", height);
         $("#confirm").click(function () {
             event.preventDefault();
@@ -88,29 +117,37 @@
             else {
                 const code = $("#Verificationcode").val();
                 const userid = @userid;
-                $.ajax(function () {
-                    $.ajax({
-                        type: "POST",
-                        url: "/Login/CheckVerifyCode",
-                        data: {
-                            userid: userid,
-                            code: code
-                        },
-                        success: function (response) {
-                            if (response === "success") {
-                                window.location.href = '/Home/Index/';
-                            }
-                            else if (response === "wrong") {
-                                $("#errormsg").html("Daxil etdiyiniz kod yanlışdır. Emailinizi yoxlayın.");
-                            }
-                        },
-                        error: function (xhr, status, error) {
-                            // Handle errors
-                            console.error(xhr.responseText);
+                $("#verifying").css("display", "none");
+                $("#loader").css("display", "flex");
+                $.ajax({
+                    type: "POST",
+                    url: "/Login/CheckVerifyCode/",
+                    data: {
+                        userid: userid,
+                        code: code
+                    },
+                    dataType: 'json',
+                    success: function (response) {
+                        if (response === "success") {
+                            $("#verifying").css("display", "flex");
+                            $("#loader").css("display", "none");
+                            $(".pop-up").css("display", "flex");
                         }
-                    });
+                        else if (response === "wrong") {
+                            $("#verifying").css("display", "flex");
+                            $("#loader").css("display", "none");
+                            $("#errormsg").html("Daxil etdiyiniz kod yanlışdır. Emailinizi yoxlayın.");
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        // Handle errors
+                        console.error(xhr.responseText);
+                    }
                 });
             }
+        });
+        $("#close").click(function () {
+            window.location.href = "/Home/Index/"
         });
     </script>
 

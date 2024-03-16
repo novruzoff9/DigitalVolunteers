@@ -82,6 +82,14 @@
                 </div>
             </div>
         </section>
+        <section id="loader">
+            <svg class="pl" width="240" height="240" viewBox="0 0 240 240">
+                <circle class="pl__ring pl__ring--a" cx="120" cy="120" r="105" fill="none" stroke="#000" stroke-width="20" stroke-dasharray="0 660" stroke-dashoffset="-330" stroke-linecap="round"></circle>
+                <circle class="pl__ring pl__ring--b" cx="120" cy="120" r="35" fill="none" stroke="#000" stroke-width="20" stroke-dasharray="0 220" stroke-dashoffset="-110" stroke-linecap="round"></circle>
+                <circle class="pl__ring pl__ring--c" cx="85" cy="120" r="70" fill="none" stroke="#000" stroke-width="20" stroke-dasharray="0 440" stroke-linecap="round"></circle>
+                <circle class="pl__ring pl__ring--d" cx="155" cy="120" r="70" fill="none" stroke="#000" stroke-width="20" stroke-dasharray="0 440" stroke-linecap="round"></circle>
+            </svg>
+        </section>
     </main>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
@@ -90,6 +98,7 @@
     <script>
         var height = $(window).height();
         $("section").css("height", height);
+        $("#loader").css("display", "none");
     </script>
 
     <script>
@@ -141,15 +150,24 @@
                     dataType: 'json',
                     success: function (result) {
                         if (result === "Member") {
+                            //$("#right-side").html($("#loader").html());
                             window.location.href = "/Member/UserProfile";
                         }
                         if (result === "Rectorship") {
+                            //$("#right-side").html($("#loader").html());
                             window.location.href = "/Admin/Rectorship";
                         }
                         if (result === "Staff") {
+                           // $("#right-side").html($("#loader").html());
                             window.location.href = "/Admin/UserProfile";
                         }
-                        if (result === "Error") {
+                        else if (result === "Waiting Email") {
+                            $("#error").text("*istifadəçi üçün email qeydiyyatı tam bitirilməmişdir. Emailinizi yoxlayın");
+                        }
+                        else if (result === "Waiting") {
+                            $("#error").text("*Tələbə məlumatlarının yoxlanışı dəvam edir.");
+                        }
+                        else if (result === "Error") {
                             $("#error").text("*istifadəçi adınız və ya şifrəniz yanlışdır");
                         }
                     }

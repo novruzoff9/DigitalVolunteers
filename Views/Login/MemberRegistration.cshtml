@@ -20,8 +20,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rəqəmsal Kabinet - Qeydiyyat</title>
-    <link rel="icon" type="image/png" href="Images/Logo.jpg">
-    <link href="~/Style/Registration456.css" rel="stylesheet" />
+    <link rel="icon" type="image/png" href="~/Images/new Logo - white.png">
+    <link href="~/Style/Registration189.css" rel="stylesheet" />
     <link href="~/Style/UIStyle1569.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
           integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ=="
@@ -144,7 +144,7 @@
                         </select>
                     </div>
                 </div>
-                <div class="d-flex flex-row w-80 justify-content-around mt-2">
+                @*<div class="d-flex flex-row w-80 justify-content-around mt-2">
                     <div class="d-flex flex-column w-half">
                         <label for="Password">Şifrə:</label>
                         <input id="Password" type="password" class="daisy">
@@ -153,8 +153,13 @@
                         <label for="PasswordAgain">Təkrar şifrə:</label>
                         <input id="PasswordAgain" type="password" class="daisy">
                     </div>
-                </div>
+                </div>*@
                 <p id="errormsg"></p>
+                <p style="display:block;">*Siz "UNEC Rəqəmsal Könüllülər Təşkilatı"na üzv qeydiyyatı etdiyiniz üçün 
+                qeydiyyatı təsdiq etdikdən sonra sizin məlumatlarınız əməkdaşlarımız tərəfindən yoxlanılacaq. 
+                Məlumatlar doğru olduğu təqdirdə profilinizə giriş məlumatlarınız Email ünvanınıza göndəriləcəkdir. <br />
+                Məlumatlarda yanlışlıq olduğu halda qeydiyyatınız tamamlanmayacaq və üzvlüyünüz təsdiq olunmayacaqdır. 
+                Bu səbəbdən məlumatları düzgün doldurduğunuzdan əmin olun</p>
                 <div class="d-flex flex-row w-80 justify-content-around mt-3">
                     <div class="d-flex flex-column w-half">
                         <button id="confirm" class="action-button primary">Təsdiq et</button>
@@ -239,8 +244,6 @@
                 if ($(this).val() === "") {
                     $(this).css("border-color", "#ff331f");
                     nullinput = true;
-                    if (nullinput) {
-                    }
                 }
                 else {
                     $(this).css("border-color", "#3f8f3e");
@@ -261,11 +264,11 @@
                 $("#EntranceYear").css("border-color", "#ff331f");
                 $("#errormsg").text("*qəbul ilini düzgün daxil edin");
             }
-            else if ($("#PasswordAgain").val() != $("#Password").val()) {
-                $("#PasswordAgain").css("border-color", "#ff331f");
-                $("#Password").css("border-color", "#ff331f");
-                $("#errormsg").text("*daxil edilən şifrələr eyni deyil.");
-            }
+            //else if ($("#PasswordAgain").val() != $("#Password").val()) {
+            //    $("#PasswordAgain").css("border-color", "#ff331f");
+            //    $("#Password").css("border-color", "#ff331f");
+            //    $("#errormsg").text("*daxil edilən şifrələr eyni deyil.");
+            //}
             else {
                 $("#registration").css("display", "none");
                 $("#loader").css("display", "flex");
@@ -275,7 +278,13 @@
                     data: formData,
                     success: function (response) {
                         if (response.Status === "success") {
-                            window.location.href = '/Login/VerifyProfile/' + response.UserID;
+                            window.location.href = '/Login/VerifyProfile?UserID=' + response.UserID;
+                        }
+                        else if ("registered") {
+                            $("#registration").css("display", "flex");
+                            $("#loader").css("display", "none");
+                            $("#errormsg").text("*daxil etdiyiniz email istifadə olunub.");
+                            $("#Email").css("border-color", "#ff331f");
                         }
                     },
                     error: function (xhr, status, error) {

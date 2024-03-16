@@ -17,13 +17,13 @@ using System.Web.WebPages;
 using Newtonsoft.Json;
 using System.Net.Http;
 using Telegram.Bot.Types.ReplyMarkups;
+using System.IO;
 
 namespace DigitalVolunteers.Controllers
 {
     public class LoginController : Controller
     {
         UserManager UserM = new UserManager(new EfUserDAL());
-        AdminManager AdminM = new AdminManager(new EfAdminDAL());
         DailyLoginManager LoginM = new DailyLoginManager(new EfDailyLoginDAL());
         PasswordTokenManager PassTokenM = new PasswordTokenManager(new EfPasswordTokenDAL());
 
@@ -48,8 +48,15 @@ namespace DigitalVolunteers.Controllers
             return View();
         }
 
-        public JsonResult AddRegistration(string FirstName, string LastName, string Email, int PhoneNumber, string Faculty, string Profession, DateTime BirthDate, int EntranceYear, string Group, string Gender, string Password)
+        public JsonResult AddRegistration(string FirstName, string LastName, string Email, int PhoneNumber, string Faculty, string Profession, DateTime BirthDate, int EntranceYear, string Group, string Gender)
         {
+            var users = UserM.GetList();
+            Dictionary<string, object> response = new Dictionary<string, object>();
+            response["Status"] = "registered";
+            if (users.FirstOrDefault(x=>x.EMail == Email) != null)
+            {
+                return Json(response, JsonRequestBehavior.AllowGet);
+            }
             string username = LastName.First() + "." + FirstName;
             username = username.ToLower();
 
@@ -61,7 +68,6 @@ namespace DigitalVolunteers.Controllers
             username = username.Replace("ı", "i");
             username = username.Replace("ğ", "g");
 
-            var users = UserM.GetList();
             int quantity = users.Where(x => x.UserName.StartsWith(username) &&
                 (x.UserName.Substring(username.Length).IsInt() || x.UserName.Length == username.Length)).ToList().Count();
             if (quantity > 0)
@@ -79,7 +85,7 @@ namespace DigitalVolunteers.Controllers
                 Faculty = Faculty,
                 Department = "Waiting Email",
                 Role = "",
-                Password = Password,
+                Password = "",
                 ActivityPoint = 0,
                 SignDate = DateTime.Now,
                 FacultyStaff = false,
@@ -107,26 +113,28 @@ namespace DigitalVolunteers.Controllers
             }
             verificationcode = new string(randomArray);
 
-
+            users = Enumerable.Reverse(UserM.GetList()).ToList();
             PasswordTokens token = new PasswordTokens();
-            token.UserID = users.FirstOrDefault(x=>x.UserName == username).UserID;
+
+            var addeduser = users.FirstOrDefault(x => x.UserName == username);
+
+            token.UserID = addeduser.UserID;
             token.CreationDate = DateTime.Now;
             token.Used = false;
             token.Token = verificationcode;
 
             PassTokenM.Add(token);
-            string mailBody = "Rəqəmsal könüllülər təşkilatı platformasında profiliniz üçün təsdiq kodunuz:\n" +
-                "Giriş üçün istifadəçi adınız: " + username + "<br>" +
-                "Giriş üçün təsdiq kodu: " + verificationcode + "<br>" +
-                "Sizi təşkilatımızda gördüyümüzə şad olduq.<br>" +
-                "Hörmətlə, Rəqəmsal Könüllülər Təşkilatı.";
+
+            var addedtoken = PassTokenM.GetList().FirstOrDefault(x => x.UserID == addeduser.UserID && x.Used == false && x.Token == token.Token);
+            addedtoken.User = addeduser;
+            string viewPath = "~/Views/Login/ProfileVerifyCodeEMail.cshtml";
+            string mailBody = RenderViewToString(viewPath, addedtoken);
 
             SendMail(Email, "Qeydiyyat təsdiqi", mailBody);
 
             string tgmessage = $"İstifadəçilər cədvəlinə '{FirstName} {LastName}' adlı yeni qeydiyyat artırıldı" +
                 $"İstifadəçi adı : {username} \n";
             SendTgDatabaseMessage(tgmessage, "İstifadəçi siyahısı", $"https://www.digitalvolunteers.xyz/Admin/SelectedUsers");
-            Dictionary<string, object> response = new Dictionary<string, object>();
             response["Status"] = "success";
             response["UserID"] = token.UserID;
             return Json(response, JsonRequestBehavior.AllowGet);
@@ -136,13 +144,13 @@ namespace DigitalVolunteers.Controllers
         {
             var user = UserM.GetByID(UserID);
             ViewBag.waiting = "false";
+            ViewBag.UserID = UserID;
 
-            if(user.Department == "Waiting Email")
+            if (user.Department == "Waiting Email")
             {
                 var tokens = PassTokenM.GetList();
-                ViewBag.UserID = 0;
                 var token = tokens.LastOrDefault(x=>x.UserID == UserID);
-                if(token.CreationDate.AddDays(10) <= DateTime.Now) { ViewBag.waiting = "late"; ViewBag.UserID = UserID; }
+                if(token.CreationDate.AddDays(10) <= DateTime.Now) { ViewBag.waiting = "late";  }
                 else { ViewBag.waiting = "true"; }
             }
             return View();
@@ -151,15 +159,19 @@ namespace DigitalVolunteers.Controllers
         public JsonResult CheckVerifyCode(int userid, string code)
         {
             var token = PassTokenM.GetList().LastOrDefault(x => x.UserID == userid);
-            if(code == token.Token)
+            string response;
+            if (code == token.Token)
             {
                 var user = UserM.GetByID(userid);
-                user.Department = "Member";
-                user.Role = "Member";
+                user.Department = "Waiting";
                 UserM.Update(user);
-                return Json("success", JsonRequestBehavior.AllowGet);
+                token.Used = true;
+                PassTokenM.Update(token);
+                response = "success";
+                return Json(response, JsonRequestBehavior.AllowGet);
             }
-            return Json("wrong", JsonRequestBehavior.AllowGet);
+            response = "wrong";
+            return Json(response, JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult SendLink(string email)
@@ -256,6 +268,11 @@ namespace DigitalVolunteers.Controllers
             return View(user);
         }
 
+        public ActionResult ProfileVerifyCodeEMail(PasswordTokens token)
+        {
+            return View(token);
+        }
+
         public JsonResult Authentication(string username, string password)
         {
             var user = UserM.FindProfile(username, password);
@@ -274,13 +291,21 @@ namespace DigitalVolunteers.Controllers
                     login.UserID = user.UserID;
                     LoginM.Add(login);
                 }
-                if(user.Role == "Member" || user.Department == "Member")
+                if(user.Role == "Member" && user.Department == "Member")
                 {
                     return Json("Member", JsonRequestBehavior.AllowGet);
                 }
                 else if(user.Department == "Rectorship" || user.Department == "Vice-Rector")
                 {
                     return Json("Rectorship", JsonRequestBehavior.AllowGet);
+                }
+                else if(user.Department == "Waiting Email")
+                {
+                    return Json("Waiting Email", JsonRequestBehavior.AllowGet);
+                }
+                else if (user.Department == "Waiting")
+                {
+                    return Json("Waiting", JsonRequestBehavior.AllowGet);
                 }
                 return Json("Staff", JsonRequestBehavior.AllowGet);
             }
@@ -338,6 +363,17 @@ namespace DigitalVolunteers.Controllers
             var content = new StringContent(JsonConvert.SerializeObject(payload), System.Text.Encoding.UTF8, "application/json");
 
             HttpResponseMessage response = new HttpClient().PostAsync(apiUrl, content).Result;
+        }
+
+        private string RenderViewToString(string viewPath, object model)
+        {
+            using (var sw = new StringWriter())
+            {
+                var viewResult = ViewEngines.Engines.FindPartialView(ControllerContext, viewPath);
+                var viewContext = new ViewContext(ControllerContext, viewResult.View, new ViewDataDictionary(model), new TempDataDictionary(), sw);
+                viewResult.View.Render(viewContext, sw);
+                return sw.GetStringBuilder().ToString();
+            }
         }
     }
 }

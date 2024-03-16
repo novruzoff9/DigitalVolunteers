@@ -378,6 +378,24 @@ namespace Web_DigitalVolunteers.Controllers
         }
         #endregion
 
+        public ActionResult Feedbacks()
+        {
+            return View();
+        }
+
+        public JsonResult SendFeedback(string text)
+        {
+            Notficiation feedback = new Notficiation();
+            feedback.Title = "Geri Donus";
+            feedback.Text = text;
+            feedback.WriterID = SessionUser().UserID;
+            feedback.UserID = 2463;
+            feedback.Seen = false;
+            feedback.WritingTime = DateTime.Now;
+            NotficiationM.Add(feedback);
+            return Json("success", JsonRequestBehavior.AllowGet);
+        }
+
         private User SessionUser()
         {
             int userid = (int)Session["UserID"];
