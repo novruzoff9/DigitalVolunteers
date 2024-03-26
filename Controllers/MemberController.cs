@@ -333,6 +333,78 @@ namespace Web_DigitalVolunteers.Controllers
             return View(user);
         }
 
+        public ActionResult PersonalDetails()
+        {
+            var user = SessionUser();
+            return View(user);
+        }
+
+        public ActionResult EducationalDetails()
+        {
+            var user = SessionUser();
+            return View(user);
+        }
+
+        public ActionResult ContactDetails()
+        {
+            var user = SessionUser();
+            return View(user);
+        }
+
+        public ActionResult EditImage()
+        {
+            var user = SessionUser();
+            return View(user);
+        }
+
+        public ActionResult EditPassword()
+        {
+            var user = SessionUser();
+            return View(user);
+        }
+
+        public JsonResult UpdateProfile(string Email, int? PhoneNumber, string Faculty, string Profession, DateTime? BirthDate, int? EntranceYear, string Group, string Gender)
+        {
+            var user = SessionUser();
+            //Şəxsi məlumatlar
+            if(Gender != user.Gender && Gender != null)
+            {
+                user.Gender = Gender;
+            }
+            if(BirthDate != user.BirthDate && BirthDate != null)
+            {
+                user.BirthDate = BirthDate.Value;
+            }
+            //Təhil məlumatları
+            if (Faculty != user.Faculty && Faculty != null)
+            {
+                user.Faculty = Faculty;
+            }
+            if (Profession != user.Profession && Profession != null)
+            {
+                user.Profession = Profession;
+            }
+            if (Group != user.Group && Group != null)
+            {
+                user.Group = Group;
+            }
+            if (EntranceYear != user.EntranceYear && EntranceYear != null)
+            {
+                user.EntranceYear = EntranceYear.Value;
+            }
+            //Əlaqə məlumatları
+            if (PhoneNumber != user.PhoneNumber && PhoneNumber != null)
+            {
+                user.PhoneNumber = PhoneNumber.Value;
+            }
+            //if (Email != user.EMail && Email != null)
+            //{
+            //    user.EMail = Email;
+            //}
+            UserM.Update(user);
+            return Json("success", JsonRequestBehavior.AllowGet);
+        }
+        
         public JsonResult UpdatePassword(string password, string newpassword)
         {
             var user = SessionUser();
@@ -386,7 +458,7 @@ namespace Web_DigitalVolunteers.Controllers
         public JsonResult SendFeedback(string text)
         {
             Notficiation feedback = new Notficiation();
-            feedback.Title = "Geri Donus";
+            feedback.Title = "Geri Dönüş";
             feedback.Text = text;
             feedback.WriterID = SessionUser().UserID;
             feedback.UserID = 2463;

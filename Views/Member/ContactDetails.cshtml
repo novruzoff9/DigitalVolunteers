@@ -1,0 +1,88 @@
+﻿@model EntityLayer.Concrete.User
+@{
+    ViewBag.Title = "ContactDetails";
+    Layout = "~/Views/Shared/_MemberLayout.cshtml";
+}
+
+<link href="~/Style/Member/Settings19.css" rel="stylesheet" />
+<link href="~/Style/Loader.css" rel="stylesheet" />
+<div class="editdetails">
+    <h3>Əlaqə məlumatları</h3>
+    <div class="data-field">
+        <label for="PhoneNumber">Telefon</label>
+        <div class="input-tel w-100">
+            <input data-val="true" data-val-number="The field PhoneNumber must be a number."
+                   data-val-required="The PhoneNumber field is required." id="PhoneNumber" name="PhoneNumber"
+                   type="number" value="@Model.PhoneNumber" class="daisy w-100" placeholder="12-345-67-89">
+            <div class="telstart">+994</div>
+        </div>
+    </div>
+    <div class="data-field">
+        <label for="Email">Email</label>
+        <input id="Email" type="email" class="daisy" value="@Model.EMail" readonly>
+    </div>
+    <p>*Email ünvanını dəyişmək hal hazırda mümkün deyil. Yaxın zamanda düzəldiləcəkdir</p>
+    <p id="errormsg" style="color: #ff331f;"></p>
+    <button id="succesbtn" class="action-button primary">Təsdiq et</button>
+</div>
+
+<div id="loader" class="w-100 align-items-center justify-content-center" style="height:80vh;">
+    <svg class="pl" width="100%" height="80vh" viewBox="0 0 240 240">
+        <circle class="pl__ring pl__ring--a" cx="120" cy="120" r="105" fill="none" stroke="#000" stroke-width="20" stroke-dasharray="0 660" stroke-dashoffset="-330" stroke-linecap="round"></circle>
+        <circle class="pl__ring pl__ring--b" cx="120" cy="120" r="35" fill="none" stroke="#000" stroke-width="20" stroke-dasharray="0 220" stroke-dashoffset="-110" stroke-linecap="round"></circle>
+        <circle class="pl__ring pl__ring--c" cx="85" cy="120" r="70" fill="none" stroke="#000" stroke-width="20" stroke-dasharray="0 440" stroke-linecap="round"></circle>
+        <circle class="pl__ring pl__ring--d" cx="155" cy="120" r="70" fill="none" stroke="#000" stroke-width="20" stroke-dasharray="0 440" stroke-linecap="round"></circle>
+    </svg>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $("#loader").css("display", "none");
+    });
+    function isValidEmail(email) {
+        const emailRegex = /^[^\s@@]+@@[^\s@@]+\.[^\s@@]+$/;
+        return emailRegex.test(email);
+    }
+    $("#succesbtn").click(function () {
+        let phone = false;
+        let email = false;
+        const PhoneNumber = $("#PhoneNumber").val();
+        const Email = $("#Email").val();
+        if (!(isValidEmail(Email))) {
+            $("#Email").css("border-color", "#ff331f");
+            $("#errormsg").text("*Email düzgün deyil");
+        }
+        else {
+            $("#Email").css("border-color", "#3f8f3e");
+            email = true;
+        }
+        if (PhoneNumber.length != 9) {
+            $("#PhoneNumber").css("border-color", "#ff331f");
+            $("#errormsg").text("*Telefon nömrəsi 9 simvoldan ibarət olmalıdır");
+        }
+        else {
+            $("#PhoneNumber").css("border-color", "#3f8f3e");
+            phone = true;
+        }
+        if (phone && email) {
+            $("#loader").css("display", "flex");
+            $(".editdetails").css("display", "none");
+            $.ajax({
+                type: "POST",
+                url: "/Member/UpdateProfile",
+                data: {
+                    PhoneNumber: PhoneNumber
+                    //Email: Email
+                },
+                success: function (response) {
+                    if (response === "success") {
+                        window.location.href = '/Member/Settings';
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        }
+    });
+</script>

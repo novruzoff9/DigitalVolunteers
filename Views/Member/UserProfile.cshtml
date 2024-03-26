@@ -100,7 +100,6 @@
     <p>Fakültə: <span id="faculty">@faculty</span></p>
     <p>İxtisas: <span id="department">@Model.Profession</span></p>
     <p>Kurs: <span id="course">@coursth</span></p>
-    <p>Aktivlik balı: <span id="point"> @Model.ActivityPoint</span></p>
     <p>Qəbul ili: <span id="enteranceyear">@Model.EntranceYear</span></p>
     <p>Telefon: <span id="phone">+994 @Model.PhoneNumber</span></p>
     <p>E-mail: <span id="mail">@Model.EMail</span></p>
@@ -121,9 +120,9 @@
 
         @Html.Action("ActivityPoints", "Member", new { id = Model.UserID })
 
-        <div class="w100 d-flex justify-content-center">
+        @*<div class="w100 d-flex justify-content-center">
             <div id="calendar_basic" class="mt-4" style="width: 900px; height: 180px;"></div>
-        </div>
+        </div>*@
 
         <div class="mt-4">
             <canvas id="myPieChart"></canvas>

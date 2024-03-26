@@ -1,0 +1,127 @@
+﻿@model EntityLayer.Concrete.User
+@{
+    ViewBag.Title = "EducationalDetails";
+    Layout = "~/Views/Shared/_MemberLayout.cshtml";
+}
+
+<link href="~/Style/Member/Settings19.css" rel="stylesheet" />
+<link href="~/Style/Loader.css" rel="stylesheet" />
+<div class="editdetails">
+    <h3>Təhsil məlumatları</h3>
+    <div class="data-field">
+        @{
+            string faculty = "";
+            if (Model.Faculty == "Digital Economy") { faculty = "Rəqəmsal İqtisadiyyat"; }
+            else if (Model.Faculty == "Russian Economy") { faculty = "Rus İqtisad Məktəbi"; }
+            else if (Model.Faculty == "Business") { faculty = "Biznes və Menecement"; }
+            else if (Model.Faculty == "Sabah") { faculty = "SABAH"; }
+            else if (Model.Faculty == "ISE") { faculty = "Beynəlxalq İqtisadiyyat Məktəbi"; }
+            else if (Model.Faculty == "Design") { faculty = "UNEC Dizayn Məktəbi"; }
+            else if (Model.Faculty == "Finance") { faculty = "Maliyyə və Mühasibat"; }
+            else if (Model.Faculty == "TUDIFAK") { faculty = "Türk Dünyası İqtisad"; }
+            else if (Model.Faculty == "Engineering") { faculty = "Mühəndislik"; }
+            else if (Model.Faculty == "Economy") { faculty = "İqtisadiyyat və İdarəetmə"; }
+            else if (Model.Faculty == "QETM") { faculty = "Qiyabi və Əlavə Təhsil Mərkəzi"; }
+        }
+        <label for="Faculty">Fakültə</label>
+        <select id="Faculty" name="Faculty" placeholder="Fakültə" class="daisy">
+            <option value="@Model.Faculty" hidden>@faculty</option>
+            <option value="Digital Economy">Rəqəmsal İqtisadiyyat</option>
+            <option value="Russian Economy">Rus İqtisad Məktəbi</option>
+            <option value="Business">Biznes və Menecement</option>
+            <option value="Sabah">Sabah</option>
+            <option value="ISE">Beynəlxalq İqtisadiyyat Məktəbi</option>
+            <option value="Design">Dizayn</option>
+            <option value="Finance">Maliyyə və Mühasibat</option>
+            <option value="TUDIFAK">Türk Dünyası İqtisad fəkültəsi</option>
+            <option value="Engineering">Mühəndislik</option>
+            <option value="Economy">İqtisadiyyat və idarəetmə</option>
+            <option value="QETM">QƏTM</option>
+        </select>
+    </div>
+    <div class="data-field">
+        <label for="Profession">İxtisas</label>
+        <select id="Profession" name="Profession" placeholder="İxtisas" class="daisy">
+            <option value="@Model.Profession" hidden>@Model.Profession</option>
+            <option value="İnformasiya texnologiyaları">İnformasiya texnologiyaları</option>
+            <option value="İnformasiya təhlükəsizliyi">İnformasiya təhlükəsizliyi</option>
+            <option value="Kompüter elmləri">Kompüter elmləri</option>
+            <option value="Kompüter mühəndisliyi">Kompüter mühəndisliyi</option>
+            <option value="Kommunikasiya sistemləri mühəndisliyi">
+                Kommunikasiya sistemləri mühəndisliyi
+            </option>
+            <option value="Sənaye mühəndisliyi">Sənaye mühəndisliyi</option>
+            <option value="Materiallar mühəndisliyi">Materiallar mühəndisliyi</option>
+            <option value="Maşın mühəndisliyi">Maşın mühəndisliyi</option>
+            <option value="Ekologiya mühəndisliyi">Ekologiya mühəndisliyi</option>
+            <option value="Elektrik və elektronika mühəndisliyi">
+                Elektrik və elektronika mühəndisliyi
+            </option>
+            <option value="Qida mühəndisliyi">Qida mühəndisliyi</option>
+            <option value="Maliyyə">Maliyyə</option>
+            <option value="Mühasibat">Mühasibat</option>
+            <option value="Beynəlxalq ticarət və logistika">Beynəlxalq ticarət və logistika</option>
+            <option value="İqtisadiyyat">İqtisadiyyat</option>
+            <option value="Biznesin idarə edilməsi">Biznesin idarə edilməsi</option>
+            <option value="Marketinq">Marketinq</option>
+            <option value="Menecment">Menecment</option>
+            <option value="Statistika">Statistika</option>
+            <option value="Dövlət və bələdiyyə idarəetməsi">Dövlət və bələdiyyə idarəetməsi</option>
+            <option value="Sosial iş">Sosial iş</option>
+            <option value="Ekologiya">Ekologiya</option>
+            <option value="Dizayn">Dizayn</option>
+        </select>
+    </div>
+    <div class="data-field">
+        <label for="EntranceYear">Qəbul ili</label>
+        <input id="EntranceYear" type="number" class="daisy" value="@Model.EntranceYear">
+    </div>
+    <div class="data-field">
+        <label for="Group">Qrup:</label>
+        <input id="Group" type="text" class="daisy" value="@Model.Group">
+    </div>
+    <button id="succesbtn" class="action-button primary">Təsdiq et</button>
+</div>
+
+<div id="loader" class="w-100 align-items-center justify-content-center" style="height:80vh;">
+    <svg class="pl" width="100%" height="80vh" viewBox="0 0 240 240">
+        <circle class="pl__ring pl__ring--a" cx="120" cy="120" r="105" fill="none" stroke="#000" stroke-width="20" stroke-dasharray="0 660" stroke-dashoffset="-330" stroke-linecap="round"></circle>
+        <circle class="pl__ring pl__ring--b" cx="120" cy="120" r="35" fill="none" stroke="#000" stroke-width="20" stroke-dasharray="0 220" stroke-dashoffset="-110" stroke-linecap="round"></circle>
+        <circle class="pl__ring pl__ring--c" cx="85" cy="120" r="70" fill="none" stroke="#000" stroke-width="20" stroke-dasharray="0 440" stroke-linecap="round"></circle>
+        <circle class="pl__ring pl__ring--d" cx="155" cy="120" r="70" fill="none" stroke="#000" stroke-width="20" stroke-dasharray="0 440" stroke-linecap="round"></circle>
+    </svg>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $("#loader").css("display", "none");
+
+        $(".pop-up").height($(window).height());
+    });
+    $("#succesbtn").click(function () {
+        $("#loader").css("display", "flex");
+        $(".editdetails").css("display", "none");
+        const EntranceYear = $("#EntranceYear").val();
+        const Group = $("#Group").val();
+        const Faculty = $('#Faculty').find(":selected").val();
+        const Profession = $('#Profession').find(":selected").val();
+        $.ajax({
+            type: "POST",
+            url: "/Member/UpdateProfile",
+            data: {
+                Faculty: Faculty,
+                Profession: Profession,
+                EntranceYear: EntranceYear,
+                Group: Group
+            },
+            success: function (response) {
+                if (response === "success") {
+                    window.location.href = '/Member/Settings';
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error(xhr.responseText);
+            }
+        });
+    });
+</script>

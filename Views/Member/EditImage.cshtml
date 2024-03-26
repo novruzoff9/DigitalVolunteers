@@ -1,0 +1,112 @@
+﻿@model EntityLayer.Concrete.User
+@{
+    ViewBag.Title = "EditImage";
+    Layout = "~/Views/Shared/_MemberLayout.cshtml";
+}
+
+<link href="~/Style/Member/Settings19.css" rel="stylesheet" />
+<link href="~/Style/Loader.css" rel="stylesheet" />
+
+<div class="editdetails">
+    <h3>Şəkili dəyiş</h3>
+    <p>*Daxil etdiyiniz şəkil 1:1 ölçüsündə olmalı və 2MB-dan çox olmamalıdır</p>
+    <div class="d-flex flex-column">
+        <section id="user-card">
+            <div class="d-flex align-items-center justify-content-center flex-column w-100">
+                <div class="d-flex flex-column">
+                    <label for="ProfilePhoto"
+                           style="background-image: url(@Model.UserImage);"
+                           id="btnchangeimage">
+                        <i class="fas fa-pencil-alt"></i>
+                    </label>
+                </div>
+                <p id="imageerror"></p>
+                <div id="change-image" class="pop-up">
+                    <section id="image-validation">
+                        <h4>Şəkili dəyiş</h4>
+                        <input type="hidden" value="1">
+                        <label for="ProfilePhoto" class="action-button primary-hover">Şəkil seç</label>
+                        <input id="ProfilePhoto" type="file" accept="image/*">
+                        <p id="imageerror"></p>
+                        <button class="action-button primary-hover w-100">Təsdiqlə</button>
+                    </section>
+                </div>
+            </div>
+        </section>
+    </div>
+    <button id="succesbtn" class="action-button primary">Təsdiq et</button>
+</div>
+
+<div id="loader" class="w-100 align-items-center justify-content-center" style="height:80vh;">
+    <svg class="pl" width="100%" height="80vh" viewBox="0 0 240 240">
+        <circle class="pl__ring pl__ring--a" cx="120" cy="120" r="105" fill="none" stroke="#000" stroke-width="20" stroke-dasharray="0 660" stroke-dashoffset="-330" stroke-linecap="round"></circle>
+        <circle class="pl__ring pl__ring--b" cx="120" cy="120" r="35" fill="none" stroke="#000" stroke-width="20" stroke-dasharray="0 220" stroke-dashoffset="-110" stroke-linecap="round"></circle>
+        <circle class="pl__ring pl__ring--c" cx="85" cy="120" r="70" fill="none" stroke="#000" stroke-width="20" stroke-dasharray="0 440" stroke-linecap="round"></circle>
+        <circle class="pl__ring pl__ring--d" cx="155" cy="120" r="70" fill="none" stroke="#000" stroke-width="20" stroke-dasharray="0 440" stroke-linecap="round"></circle>
+    </svg>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $("#loader").css("display", "none");
+    });
+    $("#ProfilePhoto").change(function () {
+        const errormessage = $("p#imageerror");
+        const reader = new FileReader();
+        const input = this.files[0];
+        if (input.size > 2097152) {
+            errormessage.text("*Faylın ölçüsü 2MB-dan çox ola bilməz");
+            errormessage.removeClass("success");
+            errormessage.addClass("error");
+            return;
+        }
+        reader.readAsDataURL(input);
+        reader.onload = function (e) {
+            const image = new Image();
+            image.src = e.target.result;
+
+            image.onload = function () {
+                const width = this.width;
+                const height = this.height;
+
+                if (width === height) {
+                    errormessage.text(input.name);
+                    errormessage.removeClass("error");
+                    errormessage.addClass("success");
+                    return;
+                } else {
+                    errormessage.text("*Şəklin ölçüləri 1:1 nisbətində olmalıdır");
+                    errormessage.removeClass("success");
+                    errormessage.addClass("error");
+                    return;
+                }
+            };
+        }
+    });
+
+    $("#succesbtn").click(function () {
+        const errormessage = $("p#imageerror");
+        if (errormessage.hasClass("success")) {
+
+            var formData = new FormData();
+            var fileInput = document.getElementById('ProfilePhoto');
+
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', '/Member/UpdateImage/', true);
+
+            formData.append('imageFile', fileInput.files[0]);
+
+            xhr.send(formData);
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    console.log(xhr.responseText);
+                    if (xhr.responseText === "Success") {
+                        window.location.href = '/Member/Settings';
+                        errormessage.text("Şəkliniz uğurla yeniləndi!");
+                    }
+                }
+            };
+
+        }
+    });
+</script>

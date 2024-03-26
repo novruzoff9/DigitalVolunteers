@@ -4,88 +4,45 @@
     Layout = "~/Views/Shared/_MemberLayout.cshtml";
 }
 
-<link href="~/Style/AdminPanel/Settings123.css" rel="stylesheet" />
-
-<style>
-    section{
-        margin: 0;
-        width: auto;
-    }
-</style>
-
-<div class="d-flex content">
-    <div class="d-flex flex-column">
-        <section id="user-card">
-            <div class="d-flex flex-row w-100">
-                <img src="@Model.UserImage" alt="">
-                <div class="d-flex flex-column user-datas">
-                    <div class="d-flex flex-column">
-                        <p class="name">@Model.Name @Model.Surname</p>
-                        @{
-                            string faculty = "";
-                            if (Model.Faculty == "Digital Economy") { faculty = "Rəqəmsal İqtisadiyyat fakültəsi"; }
-                            else if (Model.Faculty == "Russian Economy") { faculty = "Rus İqtisad Məktəbi"; }
-                            else if (Model.Faculty == "Business") { faculty = "Biznes və Menecement"; }
-                            else if (Model.Faculty == "Sabah") { faculty = "SABAH mərkəzi"; }
-                            else if (Model.Faculty == "ISE") { faculty = "Beynəlxalq İqtisadiyyat Məktəbi"; }
-                            else if (Model.Faculty == "Design") { faculty = "UNEC Dizayn Məktəbi"; }
-                            else if (Model.Faculty == "Finance") { faculty = "Maliyyə və Mühasibat fəkültəsi"; }
-                            else if (Model.Faculty == "TUDIFAK") { faculty = "Türk Dünyası İqtisad fəkültəsi"; }
-                            else if (Model.Faculty == "Engineering") { faculty = "Mühəndislik fakültəsi"; }
-                            else if (Model.Faculty == "Economy") { faculty = "İqtisadiyyat və İdarəetmə fakültəsi"; }
-                            else if (Model.Faculty == "QETM") { faculty = "Qiyabi və Əlavə Təhsil Mərkəzi"; }
-                        }
-                        <p class="faculty">@faculty</p>
-                    </div>
-                    <div class="d-flex flex-column">
-                        <button id="btnchangeimage" class="action-button primary-hover">Şəkili dəyiş</button>
-                    </div>
-                </div>
-
-                <div id="change-image" class="pop-up">
-                    <section id="image-validation">
-                        <h4>Şəkili dəyiş</h4>
-                        <label for="ProfilePhoto" class="action-button primary-hover">Şəkil seç</label>
-                        <input id="ProfilePhoto" type="file" accept="image/*">
-                        <p id="imageerror"></p>
-                        <button class="action-button primary-hover w-100">Təsdiqlə</button>
-                    </section>
-                </div>
-            </div>
-        </section>
-    </div>
-    <div class="d-flex flex-column">
-        <section id="new-password">
-            <div class="d-flex flex-column">
-                <h4>Elektron ünvan</h4>
-                <p class="email">@Model.EMail</p>
-                <h4>Şifrə</h4>
-                <h5>&bull;&bull;&bull;&bull;&bull;&bull;&bull;</h5>
-                <button id="btnchangepassword" class="action-button primary-hover">Şifrəni dəyiş</button>
-
-                <div id="change-password" class="pop-up">
-                    <section id="password-validation">
-                        <h4>Şifrəni dəyiş</h4>
-                        <input type="hidden" value="1">
-                        <div class="d-flex flex-column">
-                            <input class="daisy" id="oldpass" type="password" placeholder="Köhnə şifrə">
-                        </div>
-                        <div class="d-flex flex-column">
-                            <input class="daisy" id="newpass" type="password" placeholder="Yeni şifrə">
-                        </div>
-                        <div class="d-flex flex-column">
-                            <input class="daisy" id="newpass2" type="password" placeholder="Yeni şifrə">
-                        </div>
-                        <button class="action-button primary-hover w-100">Təsdiqlə</button>
-                        <p id="passerror" class="error"></p>
-                    </section>
-                </div>
-
-            </div>
-        </section>
-    </div>
-</div>
-
+<link href="~/Style/Member/Settings19.css" rel="stylesheet" />
+<h4>Parametrlər</h4>
+<ul id="editprofile">
+    <li class="settingspage">
+        <a href="/Member/PersonalDetails">
+            <i class="fas fa-user-edit"></i>
+            <p>Şəxsi məlumatlar</p>
+            <i class="fas fa-chevron-right"></i>
+        </a>
+    </li>
+    <li class="settingspage">
+        <a href="/Member/EducationalDetails">
+            <i class="fas fa-book"></i>
+            <p>Təhsil məlumatları</p>
+            <i class="fas fa-chevron-right"></i>
+        </a>
+    </li>
+    <li class="settingspage">
+        <a href="/Member/ContactDetails">
+            <i class="fas fa-phone-alt"></i>
+            <p>Əlaqə məlumatları</p>
+            <i class="fas fa-chevron-right"></i>
+        </a>
+    </li>
+    <li class="settingspage">
+        <a href="/Member/EditImage">
+            <i class="fas fa-image"></i>
+            <p>Şəkili dəyiş</p>
+            <i class="fas fa-chevron-right"></i>
+        </a>
+    </li>
+    <li class="settingspage">
+        <a href="/Member/EditPassword">
+            <i class="fas fa-key"></i>
+            <p>Şifrəni dəyiş</p>
+            <i class="fas fa-chevron-right"></i>
+        </a>
+    </li>
+</ul>
 
 <script>
     let imgpopupopen = false;

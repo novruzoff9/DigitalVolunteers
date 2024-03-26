@@ -1,0 +1,92 @@
+﻿@model EntityLayer.Concrete.User
+@{
+    ViewBag.Title = "PersonalDetails";
+    Layout = "~/Views/Shared/_MemberLayout.cshtml";
+}
+
+<link href="~/Style/Member/Settings19.css" rel="stylesheet" />
+<link href="~/Style/Loader.css" rel="stylesheet" />
+
+<div class="editdetails">
+    <h3>Şəxsi məlumatlar</h3>
+    <div class="data-field">
+        <label for="FirstName">Ad</label>
+        <input type="text" id="FirstName" name="Name" class="daisy" readonly value="@Model.Name">
+    </div>
+    <div class="data-field">
+        <label for="LastName">Soyad</label>
+        <input type="text" id="LastName" name="SurName" class="daisy" readonly value="@Model.Surname">
+    </div>
+    <div class="data-field">
+        <label for="BirthDate">Doğum tarixi</label>
+        <input type="date" id="BirthDate" name="BirthDate" class="daisy" value="@Model.BirthDate.ToString("yyyy-MM-dd")">
+    </div>
+    <h6>Cins</h6>
+    <div class="data-field-radio">
+        @if (Model.Gender == "Male")
+        {
+            <input type="radio" id="Male" name="Gender" class="daisy" value="Male" checked>
+        }
+        else
+        {
+            <input type="radio" id="Male" name="Gender" class="daisy" value="Male">
+        }
+        <label for="Male">Kişi</label>
+    </div>
+    <div class="data-field-radio">
+        @if (Model.Gender == "Female")
+        {
+            <input type="radio" id="Female" name="Gender" class="daisy" value="Female" checked>
+        }
+        else
+        {
+            <input type="radio" id="Female" name="Gender" class="daisy" value="Female">
+        }
+        <label for="Female">Qadın</label>
+    </div>
+    <button id="succesbtn" class="action-button primary">Təsdiq et</button>
+</div>
+
+<div id="loader" class="w-100 align-items-center justify-content-center" style="height:80vh;">
+    <svg class="pl" width="100%" height="80vh" viewBox="0 0 240 240">
+        <circle class="pl__ring pl__ring--a" cx="120" cy="120" r="105" fill="none" stroke="#000" stroke-width="20" stroke-dasharray="0 660" stroke-dashoffset="-330" stroke-linecap="round"></circle>
+        <circle class="pl__ring pl__ring--b" cx="120" cy="120" r="35" fill="none" stroke="#000" stroke-width="20" stroke-dasharray="0 220" stroke-dashoffset="-110" stroke-linecap="round"></circle>
+        <circle class="pl__ring pl__ring--c" cx="85" cy="120" r="70" fill="none" stroke="#000" stroke-width="20" stroke-dasharray="0 440" stroke-linecap="round"></circle>
+        <circle class="pl__ring pl__ring--d" cx="155" cy="120" r="70" fill="none" stroke="#000" stroke-width="20" stroke-dasharray="0 440" stroke-linecap="round"></circle>
+    </svg>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $("#loader").css("display", "none");
+        var now = new Date();
+        var year = now.getFullYear();
+
+        var maxDatetime = year - 15 + '-' + 12 + '-' + 31;
+
+        $(".pop-up").height($(window).height());
+        $('#BirthDate').attr('max', maxDatetime);
+    });
+    $("#succesbtn").click(function () {
+        $("#loader").css("display", "flex"); 
+        $(".editdetails").css("display", "none");
+        const BirthDate = $("#BirthDate").val();
+        const Gender = $("input[name='Gender']:checked").val();
+        $.ajax({
+            type: "POST",
+            url: "/Member/UpdateProfile",
+            data: {
+                BirthDate: BirthDate,
+                Gender: Gender
+            },
+            success: function (response) {
+                if (response === "success") {
+                    window.location.href = '/Member/Settings';
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error(xhr.responseText);
+            }
+        });
+    });
+</script>

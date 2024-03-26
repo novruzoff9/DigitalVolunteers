@@ -1736,6 +1736,28 @@ namespace DigitalVolunteers.Controllers
         //    return RedirectToAction("Index", "Home");
         //}
 
+        //public ActionResult SendAllMaillll()
+        //{
+        //    var user = UserM.GetByID(3719);
+        //    //foreach (var item in users)
+        //    //{
+        //    //    if (item.Department == "Member" && item.Role == "Member" && item.EMail != null)
+        //    //    {
+        //    //        string viewPath = "~/Views/Login/RegistrationEmail.cshtml";
+        //    //        string body = RenderViewToString(viewPath, item);
+        //    //        string mailSubject = "Rəqəmsal könüllülər təşkilatına qeydiyyatınız tamamlandı!";
+
+        //    //        SendMail(item.EMail, mailSubject, body);
+        //    //    }
+        //    //}
+        //    string viewPath = "~/Views/Login/RegistrationEmail.cshtml";
+        //    string body = RenderViewToString(viewPath, user);
+        //    string mailSubject = "Rəqəmsal könüllülər təşkilatına qeydiyyatınız tamamlandı!";
+
+        //    SendMail(user.EMail, mailSubject, body);
+        //    return RedirectToAction("Index", "Home");
+        //}
+
         private void SendMail(string to, string subject, string body)
         {
             using (MailMessage EMail = new MailMessage("digitalvolunteers.it@gmail.com", to))

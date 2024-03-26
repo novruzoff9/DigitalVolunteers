@@ -7,6 +7,22 @@
     Layout = "~/Views/Admin/Users.cshtml";
 }
 
+<style>
+    p.activitypoint {
+        color: #cf352e !important;
+        font-weight: 500;
+        font-size: 22px !important;
+        margin: 8px 0;
+        display: flex;
+        align-items: center;
+    }
+
+    .activitypoint {
+        position: relative;
+        display: inline-block;
+        cursor: pointer;
+    }
+</style>
 
 <section id="list">
 
@@ -37,7 +53,9 @@
             {
                 <p class="user-faculty" style="text-align:center">@item.Password</p>
             }
-            <p class="activatepoint">@item.ActivityPoint</p>
+            <p class="activitypoint">
+                <i class="fas fa-fire"></i>&nbsp;@item.ActivityPoint
+            </p>
             <div class="actions" data-userid="@item.UserID">
                 <i class="fas fa-info" onclick="ShowUserDetails(@item.UserID)"></i>
                 <i class="fas fa-plus" onclick="AddUserPoint(@item.UserID)"></i>
