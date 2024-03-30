@@ -250,6 +250,7 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
     <Content Include="Scripts\Slider.js" />
+    <Content Include="Style\CabinetStyle769.css" />
     <Content Include="Style\Home\About1.css" />
     <Content Include="Style\AdminPanel\ActivityPoint144.css" />
     <Content Include="Style\AdminPanel\AdminPage122.css" />
@@ -265,10 +266,11 @@
     <Content Include="Style\APStaff1.css" />
     <Content Include="Style\Home\Event12.css" />
     <Content Include="Style\Home\Events.css" />
-    <Content Include="Style\Home\Mainpage.css" />
+    <Content Include="Style\Home\MainPage159.css" />
     <Content Include="Style\Home\News123.css" />
     <Content Include="Style\Home\Staff.css" />
     <Content Include="Style\Home\UPHome.css" />
+    <Content Include="Style\Home\UPHome723.css" />
     <Content Include="Style\Loader.css" />
     <Content Include="Style\Login875.css" />
     <Content Include="Style\Member\Settings19.css" />
@@ -276,8 +278,6 @@
     <Content Include="Style\Member\Vacancies156.css" />
     <Content Include="Style\Profile1.css" />
     <Content Include="Style\Registration189.css" />
-    <Content Include="Style\Registration456.css" />
-    <Content Include="Style\sign.css" />
     <Content Include="Style\UIStyle1569.css" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
@@ -387,6 +387,7 @@
     <Content Include="Views\Member\ContactDetails.cshtml" />
     <Content Include="Views\Member\EditImage.cshtml" />
     <Content Include="Views\Member\EditPassword.cshtml" />
+    <Content Include="Views\Admin\WaitingUsers.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

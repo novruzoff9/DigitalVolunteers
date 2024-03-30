@@ -16,7 +16,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rəqəmsal Kabinet - Admin</title>
     <link rel="icon" type="image/png" href="~/Images/new Logo - white.png" />
-    <link href="~/Style/AdminPanel/AdminPage122.css" rel="stylesheet" />
+    <link href="~/Style/CabinetStyle769.css" rel="stylesheet" />
+    @*<link href="~/Style/AdminPanel/AdminPage122.css" rel="stylesheet" />*@
     <link href="~/Style/UIStyle1569.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
           integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ=="
@@ -142,7 +143,7 @@
 
                 <hr class="menu-line">
                 </hr>
-                <li>
+                <li id="logout">
                     <a href="/Login/LogOut">
                         <i class="fas fa-sign-out-alt"></i>
                         <p>Çıxış</p>
@@ -213,6 +214,17 @@
                     <p>İstifadəçilər</p>
                 </a>
             </li>
+            @{
+                if (user.UserID == 1)
+                {
+                    <li id="stafflist">
+                        <a href="/Admin/WaitingUsers">
+                            <i class="fas fa-user-clock"></i>
+                            <p>Gözləyən İstifadəçilər</p>
+                        </a>
+                    </li>
+                }
+            }
             <li id="stafflist">
                 <a href="/Admin/Staffs">
                     <i class="fas fa-users"></i>

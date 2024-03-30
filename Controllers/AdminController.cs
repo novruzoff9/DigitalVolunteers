@@ -521,6 +521,15 @@ namespace DigitalVolunteers.Controllers
 
         #endregion
 
+        #region
+        public ActionResult WaitingUsers()
+        {
+            var users = UserM.GetList();
+            var waiting = users.Where(x => x.Department == "Waiting" || x.Department == "Waiting Email").ToList();
+            return View(waiting);
+        }
+        #endregion
+
         #region UserProfile
         public ActionResult UserProfile()
         {

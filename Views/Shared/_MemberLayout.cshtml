@@ -16,7 +16,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rəqəmsal Kabinet</title>
     <link rel="icon" type="image/png" href="~/Images/new Logo - white.png" />
-    <link href="~/Style/AdminPanel/AdminPage122.css" rel="stylesheet" />
+    <link href="~/Style/CabinetStyle769.css" rel="stylesheet" />
     <link href="~/Style/Member/UserPanel4525.css" rel="stylesheet" />
     <link href="~/Style/UIStyle1569.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
@@ -123,12 +123,9 @@
                     <img src="@user.UserImage" alt="">
                     <div class="name-role">
                         <p class="name">@user.Name @user.Surname</p>
-                        @{
-                            string modelRole = user.Role;
-                            string role = "";
-                            if (modelRole == "Member") { role = "Üzv"; }
-                        }
-                        <p class="department">@role</p>
+                        <p class="activitypoint">
+                            <i class="fas fa-fire"></i> @user.ActivityPoint
+                        </p>
                     </div>
                 </li>
                 <hr class="menu-line">
@@ -159,7 +156,7 @@
                 </li>
                 <hr class="menu-line">
                 </hr>
-                <li>
+                <li id="logout">
                     <a href="/Login/LogOut">
                         <i class="fas fa-sign-out-alt"></i>
                         <p>Çıxış</p>
