@@ -388,6 +388,8 @@
     <Content Include="Views\Member\EditImage.cshtml" />
     <Content Include="Views\Member\EditPassword.cshtml" />
     <Content Include="Views\Admin\WaitingUsers.cshtml" />
+    <Content Include="Views\Admin\SimilarProfiles.cshtml" />
+    <Content Include="Views\Admin\GroupMates.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

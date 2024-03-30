@@ -1,7 +1,7 @@
 ﻿@using EntityLayer.Concrete
 @model List<User>
 @{
-    ViewBag.Title = "WaitingUsers";
+    ViewBag.Title = "SimilarProfiles";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
@@ -49,27 +49,50 @@
                 <img src="@item.UserImage" alt="">
                 <p class="user-name">@item.Name @item.Surname</p>
             </div>
-            <p class="userlogin">@item.UserName</p>
+            <input data-id="@item.UserID" class="userlogin daisy" value="@item.UserName" readonly/>
             <p class="user-faculty" style="text-align:center">@faculty</p>
             <p class="user-faculty" style="text-align:center">@item.Profession</p>
-            <p class="user-faculty" style="text-align: center; width: 70px;">@item.Group</p>
-            @{ 
+            <p class="user-faculty" style="text-align:center;width:70px;">@item.Group</p>
+            <p class="user-faculty" style="text-align:center; width: 120px;">@item.BirthDate.ToString("dd-MM-yyyy")</p>
+            <p class="user-faculty" style="text-align: center; width: 100px;">@item.PhoneNumber</p>
+            @{
                 string status = "";
-                if(item.Department == "Waiting") { status = "Təsdiq gözləyir"; }
-                if(item.Department == "Waiting Email") { status = "EMail təsdiq gözləyir"; }
+                if (item.Department == "Waiting") { status = "Təsdiq gözləyir"; }
+                if (item.Department == "Waiting Email") { status = "EMail təsdiq gözləyir"; }
+                if (item.Department == "Member") { status = "İstifadəçi"; }
             }
-            <p class="user-faculty" style="text-align:center">@status</p>
+            <p class="user-faculty" style="text-align:center;width: 120px;">@status</p>
             <div class="actions" data-userid="@item.UserID">
-                <a href="/Admin/SimilarProfiles?username=@item.UserName">
-                    <i class="fas fa-people-arrows"></i>
-                </a>
-                <a href="/Admin/GroupMates?username=@item.UserName">
-                    <i class="fas fa-users"></i>
-                </a>
-                <a href="/Admin/VerifyUser?userid=@item.UserID">
-                    <i class="fas fa-user-check"></i>
+                <i class="fas fa-user-cog" onclick="enableInput(@item.UserID)"></i>
+                <i class="fas fa-user-check" onclick="updateUser(@item.UserID)"></i>
+                <a href="/Admin/DeleteUser/@item.UserID">
+                    <i style="color: #ff331f; border: 1px solid #ff331f " class="fas fa-trash" @*onclick="deleteUser(@item.UserID)"*@></i>
                 </a>
             </div>
         </div>
     }
 </section>
+
+<script>
+    function enableInput(id) {
+        $("input[data-id='" + id + "']").removeAttr("readonly");
+    }
+    function updateUser(id) {
+        const val = $("input[data-id='" + id + "']").val();
+        $.ajax({
+            url: '/Admin/EditUserName',
+            method: 'POST',
+            data: {
+                id: id,
+                username: val
+            },
+            success: function () {
+                alert("ugurlu!");
+                window.href.location = "/Admin/WaitingUsers"
+            }
+        });
+    }
+    //function deleteUser(int id) {
+    //    window.href.location = 
+    //}
+</script>

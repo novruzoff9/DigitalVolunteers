@@ -31,6 +31,7 @@ using System.Threading.Tasks;
 using System.Net.NetworkInformation;
 using Telegram.Bot.Types.ReplyMarkups;
 using Newtonsoft.Json;
+using System.Text.RegularExpressions;
 
 namespace DigitalVolunteers.Controllers
 {
@@ -420,7 +421,23 @@ namespace DigitalVolunteers.Controllers
             UserM.Update(pastuser);
             return RedirectToAction("SelectedUsers");
         }
-
+        public JsonResult EditUserName(int id, string username)
+        {
+            var user = UserM.GetByID(id);
+            user.UserName = username;
+            UserM.Update(user);
+            return Json("success", JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult DeleteUser(int id)
+        {
+            if(SessionUser().UserID != 1)
+            {
+                return RedirectToAction("NoPermission", "Home");
+            }
+            var user = UserM.GetByID(id);
+            UserM.Delete(user);
+            return RedirectToAction("WaitingUsers", "Admin");
+        }
         public ActionResult SelectedUsers(int page = 1, string search = "none" , string list = "all")
         {
             ViewBag.list = list;
@@ -528,6 +545,75 @@ namespace DigitalVolunteers.Controllers
             var waiting = users.Where(x => x.Department == "Waiting" || x.Department == "Waiting Email").ToList();
             return View(waiting);
         }
+
+        public ActionResult SimilarProfiles(string username) {
+            var user = UserM.GetByUserName(username);
+            var users = UserM.GetList();
+            List<User> similars = new List<User>();
+            var samenames = users.Where(x=>x.Name == user.Name && x.Surname.Substring(0, 3) == user.Surname.Substring(0, 3)).ToList();
+            var sameusernames = users.Where(x=> Regex.Match(x.UserName, @"^[^\d]+").Value == Regex.Match(user.UserName, @"^[^\d]+").Value).ToList();
+            similars.AddRange(samenames);
+            foreach (var item in sameusernames)
+            {
+                if (!similars.Contains(item))
+                {
+                    similars.Add(item);
+                }
+            }
+            return View(similars);
+        }
+
+        public ActionResult GroupMates(string username)
+        {
+            var user = UserM.GetByUserName(username);
+            var users = UserM.GetList();
+            var groupmates = users.Where(x => x.Group == user.Group).ToList();
+            return View(groupmates);
+        }
+
+        public ActionResult VerifyUser(int userid)
+        {
+            var user = UserM.GetByID(userid);
+            //Sifrenin hazirlanmasi
+            const string chars = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz123456789";
+
+            Random random = new Random();
+            char[] randomArray = new char[8];
+
+            for (int i = 0; i < 8; i++)
+            {
+                randomArray[i] = chars[random.Next(chars.Length)];
+            }
+            user.Password = new string(randomArray);
+            user.Department = "Member";
+            user.Role = "Member";
+            UserM.Update(user);
+            string viewPath = "~/Views/Login/RegistrationEmail.cshtml";
+            string body = RenderViewToString(viewPath, user);
+            string mailSubject = "Rəqəmsal könüllülər təşkilatına qeydiyyatınız tamamlandı!";
+            
+            SendMail(user.EMail, mailSubject, body);
+
+            string macaddress = "";
+            foreach (NetworkInterface nic in NetworkInterface.GetAllNetworkInterfaces())
+            {
+                // Only consider Ethernet network interfaces
+                if (nic.NetworkInterfaceType == NetworkInterfaceType.Ethernet &&
+                    nic.OperationalStatus == OperationalStatus.Up)
+                {
+                    macaddress = nic.GetPhysicalAddress().ToString();
+                }
+            }
+
+            string tgmessage = $"İstifadəçilər cədvəlində '{SessionUser().Name} {SessionUser().Surname}' tərəfindən " +
+                $"'{user.Name} {user.Surname}' adlı gözləmədə olan istifadəçi təsdiqləndi.\n" +
+                $"İstifadəçi adı : {user.UserName} \n" +
+                $"MAC address: {macaddress}";
+            SendTgDatabaseMessage(tgmessage, "İstifadəçi siyahısı", $"https://www.digitalvolunteers.xyz/Admin/SelectedUsers");
+
+            return RedirectToAction("WaitingUsers");
+        }
+
         #endregion
 
         #region UserProfile
