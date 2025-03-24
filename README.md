@@ -17,5 +17,5 @@ Digital Volunteers, açıq mənbə kodlu layihə, rəqəmsal könüllülərin m�
 - **Verilənlər Bazası:** MsSql
 
 ## Üstünlüklər
-- Databazaya məlumat əlavə olunan zaman (Telegram Botu)[https://github.com/novruzoff9/DigitalVolunteers/blob/master/Controllers/AdminController.cs#L1926] -ilə mesaj göndərmə
-- (Mail əsaslı)[https://github.com/novruzoff9/DigitalVolunteers/blob/master/Controllers/AdminController.cs#L1856] qeydiyyat sistemi
+- Databazaya məlumat əlavə olunan zaman [Telegram Botu](https://github.com/novruzoff9/DigitalVolunteers/blob/master/Controllers/AdminController.cs#L1926) -ilə mesaj göndərmə
+- [Mail əsaslı](https://github.com/novruzoff9/DigitalVolunteers/blob/master/Controllers/AdminController.cs#L1856) qeydiyyat sistemi
